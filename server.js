@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const usuarioRoutes = require('./routes/usersRoutes');
+const departamentos = require('./routes/departRoutes');
+const verusuarios = require('./routes/gestionycontrol/clientesRoutes');
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.use(cors(corsOptions));
 
 // Usar las rutas
 app.use('/api', usuarioRoutes);
+app.use('/api', departamentos);
+app.use(verusuarios);
 
 // ✅ __dirname ya está definido en CommonJS, no hace falta calcularlo
 app.get('/', (req, res) => {
