@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { verClientes, insertarCliente } = require('../../controllers/gestionycontrol/clientesController');
+const { verClientes, insertarCliente, obtenerClientePorDocumento, crearClienteCompleto } = require('../../controllers/gestionycontrol/clientesController');
 
 router.get('/verclientes', verClientes);
 router.post('/crearcliente', insertarCliente);
-
+router.get('/buscarclientepordocumento/:DocumentoUsuario', obtenerClientePorDocumento);
+router.post('/crearclientecompleto', crearClienteCompleto);
 module.exports = router;

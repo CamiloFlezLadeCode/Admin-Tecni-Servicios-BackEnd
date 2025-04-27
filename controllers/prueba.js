@@ -10,10 +10,9 @@ async function ObtenerDepartamentos(req, res) {
     
     
             SELECT	
-            IdTipoDocumento AS value, 
-            Nombre AS label
+            *
         FROM
-            tipodocumento;    
+            usuarios;    
         
         `);
         // console.log("DEPARTAMENTOS OBTENIDOS CORRECTAMENTE");

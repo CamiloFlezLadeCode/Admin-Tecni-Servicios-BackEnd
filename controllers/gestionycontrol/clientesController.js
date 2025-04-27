@@ -1,4 +1,4 @@
-const { verClientesService, insertarClienteService } = require('../../services/gestionycontrol/clientesService');
+const { verClientesService, insertarClienteService, obtenerClientePorDocumentoService, crearClienteCompletoService } = require('../../services/gestionycontrol/clientesService');
 
 const verClientes = async(req, res) => {
     try {
@@ -27,7 +27,72 @@ const insertarCliente = async (req, res) => {
     }
 };
 
+const obtenerClientePorDocumento = async (req, res) => {
+    try {
+        // const clienteData = req.body; //Para POST
+        const clienteData = {
+            Identificacion: req.params.DocumentoUsuario
+        };
+        const cliente = await obtenerClientePorDocumentoService(clienteData);
+
+        // if (cliente.length > 0) {
+        //     // Si se encontró el cliente, devolverlo
+        //     res.status(200).json({
+        //         mensaje: "Cliente encontrado",
+        //         cliente: cliente
+        //     });
+        // } else {
+        //     // Si no se encontró el cliente
+        //     res.status(200).json({
+        //         mensaje: "Cliente no encontrado"
+        //     });
+        // }
+
+        if (cliente.length > 0) {
+            res.status(200).json({
+                encontrado: true,
+                cliente: cliente
+            });
+        } else {
+            res.status(200).json({
+                encontrado: false,
+                mensaje: "Cliente no encontrado"
+            });
+        }
+    } catch (error) {
+        // Manejo de errores
+        console.error(error);
+        res.status(500).json({
+            mensaje: "Error en la consulta",
+            error: error.message
+        });
+    }
+};
+
+const crearClienteCompleto = async (req, res) => {
+    try {
+        const clienteData = req.body; // Captura los datos que vienen del Frontend
+
+        const nuevoCliente = await crearClienteCompletoService(clienteData);
+
+        res.status(201).json({
+            ok: true,
+            message: 'Cliente creado exitosamente',
+            data: nuevoCliente
+        });
+    } catch (error) {
+        console.error('❌ Error en crearClienteCompleto:', error);
+        res.status(500).json({
+            ok: false,
+            message: 'Error al crear cliente',
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     verClientes,
-    insertarCliente
+    insertarCliente,
+    obtenerClientePorDocumento,
+    crearClienteCompleto
 };
