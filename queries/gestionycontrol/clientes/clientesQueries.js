@@ -1,4 +1,4 @@
-const { query } = require('../../config/db');
+const { query } = require('../../../config/db');
 
 
 const obtenerClientes = async() => {
@@ -41,54 +41,20 @@ const insertarUsuario = async (clienteData) => {
         clienteData.Direccion,
         clienteData.Telefono,
         clienteData.Celular,
-        clienteData.EstadoCliente,        
+        clienteData.Estado,        
     ]);
 };
 
-//Query Insertar Cliente
-const insertarCliente = async (documentoUsuario, datosCliente) => {
+
+const insertarClienteQuery = async (documentoUsuario, usuarioCreacion) => {
     const sql = `
         INSERT INTO clientes 
-            (DocumentoUsuario)
+            (DocumentoUsuario, UsuarioCreacion)
         VALUES
-            (?)
+            (?, ?)
     `;
-
-    return await query(sql, [documentoUsuario])
+    return await query(sql, [documentoUsuario, usuarioCreacion]);
 };
-
-
-
-// const insertarCliente = async(clienteData) => {
-//     const sql = `
-//         INSERT INTO usuarios 
-//             (
-//                 DocumentoUsuario, 
-//                 TipoDocumento,
-//                 Nombres, 
-//                 Correo, 
-//                 Direccion, 
-//                 Telefono, 
-//                 Celular,
-//                 IdEstado
-//             )                
-//             VALUES 
-//             (
-//                 ?, ?, ?, ?, ?, ?, ?, ?
-//             )
-//     `;
-
-//     return await query(sql, [
-//         clienteData.Identificacion,
-//         clienteData.TipoIdentificacion,
-//         clienteData.Nombre,
-//         clienteData.Correo,
-//         clienteData.Direccion,
-//         clienteData.Telefono,
-//         clienteData.Celular,
-//         clienteData.Estado,        
-//     ]);
-// };
 
 const obtenerClientePorDocumento = async(clienteData) => {
     const sql = `
@@ -107,14 +73,14 @@ const obtenerClientePorDocumento = async(clienteData) => {
 
 const crearClienteCompleto = async (datos) => {
     const usuarioInsertado = await insertarUsuario(datos);
-    const clienteInsertado = await insertarCliente(datos.Identificacion);
+    const clienteInsertado = await insertarClienteQuery(datos.Identificacion, datos.UsuarioCreacion);
 
     return { usuarioInsertado, clienteInsertado };
 };
 
 module.exports = {
     obtenerClientes,
-    insertarCliente,
+    insertarClienteQuery,
     obtenerClientePorDocumento,
     crearClienteCompleto
 };

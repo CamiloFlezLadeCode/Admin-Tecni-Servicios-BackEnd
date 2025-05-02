@@ -1,4 +1,4 @@
-const { verClientesService, insertarClienteService, obtenerClientePorDocumentoService, crearClienteCompletoService } = require('../../services/gestionycontrol/clientesService');
+const { verClientesService, insertarClienteService, obtenerClientePorDocumentoService, crearClienteCompletoService } = require('../../../services/gestionycontrol/clientes/clientesService');
 
 const verClientes = async(req, res) => {
     try {
@@ -14,13 +14,14 @@ const verClientes = async(req, res) => {
 
 const insertarCliente = async (req, res) => {
     try {
-        const clienteData = req.body;  // Obtén los datos del cliente desde el body de la solicitud
+        const clienteData = req.body;
 
-        console.log(clienteData);
-        // return;
-        const insertar = await insertarClienteService(clienteData);
-        console.log("CLIENTE INSERTADO CORRECTAMENTE");
-        res.json(insertar);  // Devuelve una respuesta con los resultados de la inserción
+        if (!clienteData.UsuarioCreacion) {
+            return res.status(400).json({ error: 'UsuarioCreacion es requerido' });
+        }
+
+        const resultado = await insertarClienteService(clienteData);
+        res.json({ message: 'Cliente insertado correctamente', data: resultado });
     } catch (error) {
         console.error('Error en insertarCliente:', error);
         res.status(500).json({ error: 'Error al insertar el cliente' });
