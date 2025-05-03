@@ -23,7 +23,7 @@ const crearBackup = async (req, res) => {
     const formattedHours = String(hours).padStart(2, '0');
 
     const timestamp = `${year}${month}${day} ${formattedHours}${minutes}${ampm}`;
-    const filename = `backup-${timestamp}.sql`;
+    const filename = `tecniservicios backup-${timestamp}.sql`;
     const filePath = path.join(backupsDir, filename);
 
     await mysqldump({

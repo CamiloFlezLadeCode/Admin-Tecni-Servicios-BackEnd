@@ -2,13 +2,49 @@ const { query } = require('../../../config/db');
 
 
 const obtenerClientes = async() => {
-    const sql = `
+    const sqls = `
         SELECT 
             * 
         FROM 
             usuarios
         ORDER BY
             Nombres ASC
+    `;
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
+    const sql = `
+        -- Consulta principal
+        SELECT 
+            CONCAT(COALESCE(usu.Nombres, ''), ' ', COALESCE(usu.Apellidos, '')) AS Nombre,
+            tipodocumento.Codigo AS TipoDocumento,
+            usu.DocumentoUsuario AS Documento,
+            usu.Correo AS Correo,
+            usu.Direccion AS Direccion,
+            usu.Telefono AS Telefono,
+            usu.Celular AS Celular,
+            #CONCAT(COALESCE(usu2.Nombres, ''), ' ', COALESCE(usu2.Apellidos, '')) AS CreadoPor,
+            CONCAT(SUBSTRING_INDEX(COALESCE(usu2.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu2.Apellidos, ''), ' ', 1) ) AS CreadoPor,
+            CONCAT(DAYNAME(usu.FechaCreacion), ' ', DATE_FORMAT(usu.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion, 
+            estado.Estado AS Estado,
+            rol.Rol AS Rol
+        FROM 
+            usuario usu
+        INNER JOIN
+            usuario usu2 ON usu.UsuarioCreacion = usu2.DocumentoUsuario -- corregido
+        INNER JOIN
+            tipodocumento ON usu.TipoDocumento = tipodocumento.IdTipoDocumento
+        INNER JOIN
+            estado ON usu.IdEstado = estado.IdEstado
+        INNER JOIN	
+            usuarioroles usurol ON usu.DocumentoUsuario = usurol.DocumentoUsuario
+        INNER JOIN
+            roles rol ON usurol.IdRol = rol.IdRol
+        WHERE	
+            rol.Rol = 'Cliente'
+        ORDER BY
+            usu.Nombres ASC, usu.Apellidos ASC;
     `;
     return await query(sql);
 };

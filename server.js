@@ -5,7 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet'); //Para header seguros
 require('dotenv').config();
 
-//Rutas APIS
+//RUTAS APIS
 const loginRoutes = require('./routes/login/loginRoute');
 const usuarioRoutes = require('./routes/usersRoutes');
 const departamentos = require('./routes/departRoutes');
@@ -13,9 +13,14 @@ const verusuarios = require('./routes/gestionycontrol/clientes/clientesRoutes');
 
 const crearbackup = require('./routes/backup/crearBackupRoutes');
 
+//usuarios
+const UsuariosRoutes = require('./routes/gestionycontrol/usuarios/usuariosRoutes');
 
 const app = express();
-app.use(helmet());
+//Prevención de ataques
+// app.use(helmet());
+app.use(helmet.hsts({ maxAge: 5184000, includeSubDomains: true }));
+
 
 // Middleware para parsear JSON
 app.use(express.json());
@@ -39,6 +44,10 @@ app.use('/api', usuarioRoutes);
 app.use('/api', departamentos);
 app.use(verusuarios);
 app.use(crearbackup);
+app.use(UsuariosRoutes);
+
+
+
 // Para servir archivos de backup si quieres que puedan descargarse
 app.use('/api/backups', express.static(path.join(__dirname, 'backups_bd')));
 

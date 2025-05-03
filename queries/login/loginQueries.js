@@ -31,7 +31,7 @@ const obtenerNombre = async (documentoUsuario) => {
         SELECT 
             SUBSTRING_INDEX(Nombres, ' ', 1) AS Nombre
         FROM
-            usuarios
+            usuario
         WHERE
             DocumentoUsuario = ? COLLATE utf8mb4_bin
     `;
@@ -43,7 +43,7 @@ const obtenerDocumento = async (documentoUsuario) => {
         SELECT
             DocumentoUsuario
         FROM   
-            usuarios
+            usuario
         WHERE
             DocumentoUsuario = ? COLLATE utf8mb4_bin
     `;

@@ -114,6 +114,7 @@ const pool = mysql.createPool({
     waitForConnections: true,
     queueLimit: 0,
     compress: true,
+    // multipleStatements: true // Habilita múltiples sentencias en un solo query, tener cuidado porque con esto se puede estar propenso a SQL injection si no se sanetizan muy bien los datos inputs
 });
 
 // Función para consultas
