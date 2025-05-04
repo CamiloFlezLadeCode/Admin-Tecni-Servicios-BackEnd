@@ -1,40 +1,38 @@
 const { query } = require('../../../config/db');
 const { FechaActualColombia } = require('../../../utils/FechaActualColombia');
 
-const crearUsuarioQuery = async (usuarioData) => {
+const CrearMecanicoQuery = async (mecanicoData) => {
     const sql = `
         INSERT INTO usuario 
-            ( 
+            (
                 DocumentoUsuario, 
                 TipoDocumento, 
                 Nombres, 
                 Apellidos, 
                 Correo, 
-                Direccion, 
-                Telefono, 
+                Direccion,  
                 Celular, 
-                UsuarioCreacion,
-                FechaCreacion,
+                UsuarioCreacion, 
+                FechaCreacion, 
                 IdEstado
             ) 
             VALUES 
-            ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+                ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );
     `;
-    return await query(sql, [
-        usuarioData.DocumentoUsuario,
-        usuarioData.TipoDocumento,
-        usuarioData.Nombres,
-        usuarioData.Apellidos,
-        usuarioData.Correo,
-        usuarioData.Direccion,
-        usuarioData.Telefono,
-        usuarioData.Celular,
-        usuarioData.UsuarioCreacion,
+    return query(sql, [
+        mecanicoData.Documento,
+        mecanicoData.TipoDocumento,
+        mecanicoData.Nombres,
+        mecanicoData.Apellidos,
+        mecanicoData.Correo,
+        mecanicoData.Direccion,
+        mecanicoData.Celular,
+        mecanicoData.UsuarioCreacion,
         FechaActualColombia(),
-        usuarioData.Estado
+        mecanicoData.Estado,
     ]);
 };
-const crearRolUsuarioQuery = async (DocumentoUsuario, Rol) => {
+const CrearRolesQuery = async (DocumentoUsuario, Rol) => {
     const sql = `
         INSERT INTO usuarioroles 
             (
@@ -49,6 +47,8 @@ const crearRolUsuarioQuery = async (DocumentoUsuario, Rol) => {
     ]);
 };
 module.exports = {
-    crearUsuarioQuery,
-    crearRolUsuarioQuery
+    CrearMecanicoQuery,
+    CrearRolesQuery
 };
+
+

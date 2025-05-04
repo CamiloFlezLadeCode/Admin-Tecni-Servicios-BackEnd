@@ -28,31 +28,60 @@ const insertarCliente = async (req, res) => {
     }
 };
 
+// const obtenerClientePorDocumento = async (req, res) => {
+//     try {
+//         // const clienteData = req.body; //Para POST
+//         const clienteData = {
+//             Identificacion: req.params.DocumentoUsuario
+//         };
+//         const cliente = await obtenerClientePorDocumentoService(clienteData);
+
+//         // if (cliente.length > 0) {
+//         //     // Si se encontró el cliente, devolverlo
+//         //     res.status(200).json({
+//         //         mensaje: "Cliente encontrado",
+//         //         cliente: cliente
+//         //     });
+//         // } else {
+//         //     // Si no se encontró el cliente
+//         //     res.status(200).json({
+//         //         mensaje: "Cliente no encontrado"
+//         //     });
+//         // }
+
+//         if (cliente.length > 0) {
+//             res.status(200).json({
+//                 encontrado: true,
+//                 cliente: cliente
+//             });
+//         } else {
+//             res.status(200).json({
+//                 encontrado: false,
+//                 mensaje: "Cliente no encontrado"
+//             });
+//         }
+//     } catch (error) {
+//         // Manejo de errores
+//         console.error(error);
+//         res.status(500).json({
+//             mensaje: "Error en la consulta",
+//             error: error.message
+//         });
+//     }
+// };
 const obtenerClientePorDocumento = async (req, res) => {
     try {
-        // const clienteData = req.body; //Para POST
-        const clienteData = {
-            Identificacion: req.params.DocumentoUsuario
-        };
-        const cliente = await obtenerClientePorDocumentoService(clienteData);
+        // Obtención de la identificación del cliente desde los parámetros de la URL
+        const DocumentoUsuario = req.params.DocumentoUsuario;
+        
+        // Llamada al servicio para obtener el cliente por documento
+        const cliente = await obtenerClientePorDocumentoService(DocumentoUsuario);
 
-        // if (cliente.length > 0) {
-        //     // Si se encontró el cliente, devolverlo
-        //     res.status(200).json({
-        //         mensaje: "Cliente encontrado",
-        //         cliente: cliente
-        //     });
-        // } else {
-        //     // Si no se encontró el cliente
-        //     res.status(200).json({
-        //         mensaje: "Cliente no encontrado"
-        //     });
-        // }
-
-        if (cliente.length > 0) {
+        // Verificación de la existencia del cliente
+        if (cliente && cliente.length > 0) {
             res.status(200).json({
                 encontrado: true,
-                cliente: cliente
+                cliente: cliente[0] // Asumiendo que `cliente` es un arreglo y tomamos el primer resultado
             });
         } else {
             res.status(200).json({
@@ -60,11 +89,12 @@ const obtenerClientePorDocumento = async (req, res) => {
                 mensaje: "Cliente no encontrado"
             });
         }
+        console.log(cliente);
     } catch (error) {
-        // Manejo de errores
-        console.error(error);
+        // Manejo de errores con más detalles
+        console.error('Error al obtener el cliente:', error);
         res.status(500).json({
-            mensaje: "Error en la consulta",
+            mensaje: "Error en la consulta al obtener el cliente",
             error: error.message
         });
     }

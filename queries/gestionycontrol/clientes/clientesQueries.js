@@ -1,15 +1,7 @@
 const { query } = require('../../../config/db');
 
 
-const obtenerClientes = async() => {
-    const sqls = `
-        SELECT 
-            * 
-        FROM 
-            usuarios
-        ORDER BY
-            Nombres ASC
-    `;
+const obtenerClientes = async () => {
     await query(`
         -- Ejecutar esto por separado antes del SELECT
         SET lc_time_names = 'es_ES';
@@ -25,14 +17,23 @@ const obtenerClientes = async() => {
             usu.Telefono AS Telefono,
             usu.Celular AS Celular,
             #CONCAT(COALESCE(usu2.Nombres, ''), ' ', COALESCE(usu2.Apellidos, '')) AS CreadoPor,
-            CONCAT(SUBSTRING_INDEX(COALESCE(usu2.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu2.Apellidos, ''), ' ', 1) ) AS CreadoPor,
+            #CONCAT(SUBSTRING_INDEX(COALESCE(usu2.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu2.Apellidos, ''), ' ', 1) ) AS CreadoPor,
+            #CONCAT(SUBSTRING_INDEX(COALESCE(usu2.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu2.Apellidos, ''), ' ', 1)) AS CreadoPor,
+            IFNULL(
+                CONCAT(
+                    SUBSTRING_INDEX(COALESCE(usu2.Nombres, ''), ' ', 1), ' ',
+                    SUBSTRING_INDEX(COALESCE(usu2.Apellidos, ''), ' ', 1)
+                ),
+                'Desconocido'
+            ) AS CreadoPor,
             CONCAT(DAYNAME(usu.FechaCreacion), ' ', DATE_FORMAT(usu.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion, 
             estado.Estado AS Estado,
             rol.Rol AS Rol
         FROM 
             usuario usu
-        INNER JOIN
-            usuario usu2 ON usu.UsuarioCreacion = usu2.DocumentoUsuario -- corregido
+        #INNER JOIN
+        #   usuario usu2 ON usu.UsuarioCreacion = usu2.DocumentoUsuario -- corregido
+        LEFT JOIN usuario usu2 ON usu.UsuarioCreacion = usu2.DocumentoUsuario
         INNER JOIN
             tipodocumento ON usu.TipoDocumento = tipodocumento.IdTipoDocumento
         INNER JOIN
@@ -77,7 +78,7 @@ const insertarUsuario = async (clienteData) => {
         clienteData.Direccion,
         clienteData.Telefono,
         clienteData.Celular,
-        clienteData.Estado,        
+        clienteData.Estado,
     ]);
 };
 
@@ -92,19 +93,17 @@ const insertarClienteQuery = async (documentoUsuario, usuarioCreacion) => {
     return await query(sql, [documentoUsuario, usuarioCreacion]);
 };
 
-const obtenerClientePorDocumento = async(clienteData) => {
+const obtenerClientePorDocumento = async (DocumentoUsuario) => {
     const sql = `
         SELECT 
             *
         FROM
-            usuarios
+            usuario
         WHERE
             DocumentoUsuario = ?
     `;
 
-    return await query(sql, [
-        clienteData.Identificacion,
-    ]);
+    return await query(sql, [DocumentoUsuario]);
 }
 
 const crearClienteCompleto = async (datos) => {

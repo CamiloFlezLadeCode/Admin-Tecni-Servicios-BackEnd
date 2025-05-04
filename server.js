@@ -15,6 +15,10 @@ const crearbackup = require('./routes/backup/crearBackupRoutes');
 
 //usuarios
 const UsuariosRoutes = require('./routes/gestionycontrol/usuarios/usuariosRoutes');
+//equipos
+const EquiposRoutes = require('./routes/gestionycontrol/equipos/equiposRoutes');
+//mecanicos
+const MecanicosRoutes = require('./routes/gestionycontrol/mecanicos/mecanicosRoutes');
 
 const app = express();
 //Prevención de ataques
@@ -45,6 +49,8 @@ app.use('/api', departamentos);
 app.use(verusuarios);
 app.use(crearbackup);
 app.use(UsuariosRoutes);
+app.use(EquiposRoutes);
+app.use(MecanicosRoutes);
 
 
 
