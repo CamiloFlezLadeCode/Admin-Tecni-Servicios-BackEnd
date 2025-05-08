@@ -19,6 +19,8 @@ const UsuariosRoutes = require('./routes/gestionycontrol/usuarios/usuariosRoutes
 const EquiposRoutes = require('./routes/gestionycontrol/equipos/equiposRoutes');
 //mecanicos
 const MecanicosRoutes = require('./routes/gestionycontrol/mecanicos/mecanicosRoutes');
+//para listas generales => (Clientes, Paises, Departamentos, Municipios, Sexo, Tipodocumento, )
+const ListarDatosGenerales = require('./routes/generales/GeneralesRoutes');
 
 const app = express();
 //Prevención de ataques
@@ -51,6 +53,7 @@ app.use(crearbackup);
 app.use(UsuariosRoutes);
 app.use(EquiposRoutes);
 app.use(MecanicosRoutes);
+app.use(ListarDatosGenerales);
 
 
 
