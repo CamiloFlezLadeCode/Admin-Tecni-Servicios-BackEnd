@@ -50,9 +50,22 @@ const obtenerDocumento = async (documentoUsuario) => {
     return await query(sql, [documentoUsuario]);
 };
 
+const obtenerCorreo = async (documentoUsuario) => {
+    const sql = `
+        SELECT
+            Correo
+        FROM
+            usuario
+        WHERE
+            DocumentoUsuario = ? COLLATE utf8mb4_bin
+    `;
+    return await query(sql, [documentoUsuario]);
+};  
+
 module.exports = {
     obtenerCredenciales,
     obtenerRol,
     obtenerNombre,
-    obtenerDocumento
+    obtenerDocumento,
+    obtenerCorreo
 };

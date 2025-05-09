@@ -11,7 +11,7 @@ const obtenerCredenciales = async (req, res) => {
             return res.status(400).json({ error: 'NombreUsuario y ClaveUsuario son requeridos' });
         }
 
-        const { credenciales, rol, nombre, documento } = await obtenerCredencialesService(clienteData);
+        const { credenciales, rol, nombre, documento, correo } = await obtenerCredencialesService(clienteData);
 
         if (!credenciales) {
             return res.status(401).json({ error: 'Credenciales incorrectas' });
@@ -23,7 +23,7 @@ const obtenerCredenciales = async (req, res) => {
 
         console.log(`CREDENCIALES => ${credenciales}, ROL => ${rol}`);
 
-        res.status(200).json({ credenciales, rol, nombre, documento });
+        res.status(200).json({ credenciales, rol, nombre, documento, correo });
     } catch (error) {
         console.error('Error en obtenerCredenciales => ', error);
         res.status(500).json({ error: 'Error al obtener las credenciales', message: error.message });
