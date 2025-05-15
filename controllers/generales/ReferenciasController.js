@@ -2,8 +2,12 @@ const { ListarReferenciasService } = require('../../services/generales/Referenci
 
 const ListarReferenciasController = async (req, res) => {
     try {
-        const Referencias = await ListarReferenciasService();
+        const data = await ListarReferenciasService();
         console.log("Referencias obtenidas correctamente.");
+        const Referencias = data.map(Referencia => ({
+            value: Referencia.IdReferencia,
+            label: Referencia.Referencia
+        }));
         res.status(200).json(Referencias);
     } catch (error) {
         console.error('Error en ListarReferenciasController => ', error);
