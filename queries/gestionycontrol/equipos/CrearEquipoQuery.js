@@ -6,7 +6,7 @@ const CrearEquipoQuery = async (equipoData) => {
         INSERT INTO equipo
             (
                 Nombre, 
-                IdRefencia, 
+                IdCategoria, 
                 PrecioVenta, 
                 PrecioAlquiler, 
                 PrecioReparacion, 
@@ -19,7 +19,7 @@ const CrearEquipoQuery = async (equipoData) => {
     `;
     return query(sql, [
         equipoData.NombreEquipo,
-        equipoData.ReferenciaEquipo,
+        equipoData.CategoriaEquipo,
         equipoData.PrecioVenta,
         equipoData.PrecioAlquiler,
         equipoData.PrecioReparacion,
