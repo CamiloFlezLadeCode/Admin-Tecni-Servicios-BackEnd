@@ -1,6 +1,6 @@
 const { query } = require('../../config/db');
 
-const ListarProyectosQuery = async () => {
+const ListarProyectosQuery = async (proyectosDeCliente) => {
     const sql = `
         SELECT	
             proye.IdProyecto,
@@ -14,10 +14,14 @@ const ListarProyectosQuery = async () => {
             estado AS esta ON proye.IdEstado = esta.IdEstado
         WHERE
             ( esta.Estado LIKE '%Activo%' ) 
-            #AND
-            #( proye.DocumentoCliente = '' )
+            AND
+            ( proye.DocumentoCliente = ? )
+        ORDER BY
+            proye.Nombre ASC
     `;
-    return query(sql);
+    return query(sql, [
+        proyectosDeCliente.Cliente
+    ]);
 };
 module.exports = {
     ListarProyectosQuery

@@ -1,7 +1,7 @@
 const { ListarProyectosQuery } = require('../../queries/generales/ProyectosQuery');
 
-const ListarProyectosService = async () => {
-    return await ListarProyectosQuery();
+const ListarProyectosService = async (proyectosDeCliente) => {
+    return await ListarProyectosQuery(proyectosDeCliente);
 };
 module.exports = {
     ListarProyectosService

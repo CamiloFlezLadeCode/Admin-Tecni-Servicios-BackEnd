@@ -1,21 +1,21 @@
 const { query } = require('../../config/db');
-const ListarReferenciasQuery = async () => {
+const ListarCategoriasQuery = async () => {
     const sql = `
         SELECT		
-            IdReferencia,
-            Referencia,
+            IdCategoria,
+            Categoria,
             Codigo
         FROM		
-            referencias AS refe
+            categorias AS cate
         INNER JOIN
-            estado AS esta ON refe.IdEstado = esta.IdEstado
+            estado AS esta ON cate.IdEstado = esta.IdEstado
         WHERE	
             esta.Estado LIKE '%Activo%'
         ORDER BY
-            refe.Referencia ASC
+            cate.Categoria ASC
     `;
     return query(sql);
 };
 module.exports = {
-    ListarReferenciasQuery
+    ListarCategoriasQuery
 };

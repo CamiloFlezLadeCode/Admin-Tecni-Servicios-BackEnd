@@ -9,7 +9,7 @@ const ConsultarEquiposQuery = async () => {
         SELECT	
             equi.IdEquipo AS IdEquipo,
             equi.Nombre AS NombreEquipo,
-            refe.Referencia AS ReferenciaEquipo,
+            cate.Categoria AS CategoriaEquipo,
             equi.PrecioVenta AS PrecioVenta,
             equi.PrecioAlquiler AS PrecioAlquiler,
             equi.PrecioReparacion AS PrecioReparacion,
@@ -17,13 +17,13 @@ const ConsultarEquiposQuery = async () => {
             CONCAT(DAYNAME(equi.FechaCreacion), ' ', DATE_FORMAT(equi.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion,
             esta.Estado
         FROM	
-            equipo equi
+            equipo AS equi
         INNER JOIN
-            referencias refe ON equi.IdRefencia = refe.IdReferencia
+            categorias AS cate ON equi.IdCategoria = cate.IdCategoria
+        LEFT JOIN	
+            usuario AS usu ON equi.UsuarioCreacion = usu.DocumentoUsuario
         INNER JOIN	
-            usuario usu ON equi.UsuarioCreacion = usu.DocumentoUsuario
-        INNER JOIN	
-            estado esta ON equi.IdEstado = esta.IdEstado
+            estado AS esta ON equi.IdEstado = esta.IdEstado
         ORDER BY
             equi.Nombre ASC
     `;

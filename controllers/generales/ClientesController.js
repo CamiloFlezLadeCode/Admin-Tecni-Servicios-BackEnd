@@ -3,13 +3,13 @@ const { ConsultarListarClientesService } = require('../../services/generales/Cli
 const ConsultarListarClientesController = async (req, res) => {
     try {
         const Clientes = await ConsultarListarClientesService();
-        console.log(`CLIENTES => ${JSON.stringify(Clientes)}`);
+        // console.log(`CLIENTES => ${JSON.stringify(Clientes)}`);
+        console.log(`Clientes optenidos correctamente. Total: ${Clientes.length}`);
         let data = Clientes.map(cliente => ({
             Id: cliente.IdCliente,
             value: cliente.DocumentoCliente,
             label: cliente.NombreCliente
-        }));
-        
+        }));        
         res.json(data);
     } catch (error) {
         console.error('Error en ConsultarListarClientesController:', error);

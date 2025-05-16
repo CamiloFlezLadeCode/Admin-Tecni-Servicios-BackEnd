@@ -2,7 +2,8 @@ const { ListarProyectosService } = require('../../services/generales/ProyectosSe
 
 const ListarProyectosController = async (req, res) => {
     try {
-        const info = await ListarProyectosService();
+        const Cliente = req.query;
+        const info = await ListarProyectosService(Cliente);
         const Proyectos = info.map(proyecto => ({
             value: proyecto.IdProyecto,
             label: proyecto.Nombre
