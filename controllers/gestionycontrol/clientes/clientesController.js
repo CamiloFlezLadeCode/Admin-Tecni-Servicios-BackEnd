@@ -3,8 +3,7 @@ const { verClientesService, insertarClienteService, obtenerClientePorDocumentoSe
 const verClientes = async(req, res) => {
     try {
         const clientes = await verClientesService();
-        console.log('CLIENTES => TODO CORRECTO...');
-        console.log(clientes);
+        console.log(`Clientes obtenidos correctamente. Total: ${clientes.length}`);
         res.json(clientes);
     } catch (error) {
         console.error('Error en verClientes:', error);

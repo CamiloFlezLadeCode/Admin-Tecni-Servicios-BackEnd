@@ -3,7 +3,7 @@ const { ConsultarTiposDeDocumentosService } = require('../../services/generales/
 const ConsultarTiposDeDocumentosController = async (req, res) => {
     try {
         const TipoDocumento = await ConsultarTiposDeDocumentosService();
-        console.log("Tipo de documentos cargados correctamente");
+        console.log(`Tipo de documentos cargados correctamente. Total: ${TipoDocumento.length}`);
         const TiposDeDocumentos = TipoDocumento.map(tipo => ({
             value: tipo.IdTipoDocumento,
             label: tipo.Codigo,

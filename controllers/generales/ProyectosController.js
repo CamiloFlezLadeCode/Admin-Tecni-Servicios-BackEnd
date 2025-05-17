@@ -8,6 +8,7 @@ const ListarProyectosController = async (req, res) => {
             value: proyecto.IdProyecto,
             label: proyecto.Nombre
         }));
+        console.log(`Proyectos del cliente ${Cliente.Cliente}, obtenidos correctamente. Total: ${info.length}`);
         res.status(200).json(Proyectos);
     } catch (error) {
         console.error('Error en ListarProyectosController => ', error);
