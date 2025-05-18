@@ -17,11 +17,11 @@ const obtenerRol = async (documentoUsuario) => {
         SELECT 
             roles.Rol 
         FROM
-            usuarioroles
+            usuario_roles
         INNER JOIN
-            roles ON usuarioroles.IdRol = roles.IdRol
+            roles ON usuario_roles.IdRol = roles.IdRol
         WHERE
-            usuarioroles.DocumentoUsuario = ? COLLATE utf8mb4_bin
+            usuario_roles.DocumentoUsuario = ? COLLATE utf8mb4_bin
     `;
     return await query(sql, [documentoUsuario]);
 };

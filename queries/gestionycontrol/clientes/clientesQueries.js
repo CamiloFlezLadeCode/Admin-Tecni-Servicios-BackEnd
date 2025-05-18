@@ -39,7 +39,7 @@ const obtenerClientes = async () => {
         INNER JOIN
             estado ON usu.IdEstado = estado.IdEstado
         INNER JOIN	
-            usuarioroles usurol ON usu.DocumentoUsuario = usurol.DocumentoUsuario
+            usuario_roles usurol ON usu.DocumentoUsuario = usurol.DocumentoUsuario
         INNER JOIN
             roles rol ON usurol.IdRol = rol.IdRol
         WHERE	

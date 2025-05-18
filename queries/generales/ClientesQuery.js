@@ -9,7 +9,7 @@ const ConsultarListarClientesQuery = async () => {
         FROM
             usuario AS usu 
         INNER JOIN	
-            usuarioroles AS usurol ON usu.DocumentoUsuario = usurol.DocumentoUsuario
+            usuario_roles AS usurol ON usu.DocumentoUsuario = usurol.DocumentoUsuario
         INNER JOIN
             roles AS rol ON usurol.IdRol = rol.IdRol
         WHERE
