@@ -1,10 +1,10 @@
 const { query } = require('../../../config/db');
 
 const ConsultarMecanicosQuery = async () => {
-    // await query(`
-    //     -- Ejecutar esto por separado antes del SELECT
-    //     SET lc_time_names = 'es_ES';
-    // `);
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
     const sql = `
         -- Consulta principal
         SELECT 

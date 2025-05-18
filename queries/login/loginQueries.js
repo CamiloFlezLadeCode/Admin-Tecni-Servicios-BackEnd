@@ -62,6 +62,8 @@ const obtenerCorreo = async (documentoUsuario) => {
     return await query(sql, [documentoUsuario]);
 };  
 
+// const 
+
 module.exports = {
     obtenerCredenciales,
     obtenerRol,

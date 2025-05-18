@@ -132,8 +132,8 @@ const query = async (sql, values) => {
 const testConnection = async () => {
     try {
         await pool.query('SELECT 1');
-        await pool.query("SET lc_messages = 'es_ES'"); // Establecer idioma a españo
-        await pool.query("SET lc_time_names = 'es_ES'"); // Establecer idioma a español
+        // await pool.query("SET lc_messages = 'es_ES'"); // Establecer idioma a españo
+        // await pool.query("SET lc_time_names = 'es_ES'"); // Establecer idioma a español
         console.log(`CONECTADO A LA BASE DE DATOS [${ENTORNO}]`);
     } catch (error) {
         console.error("ERROR AL CONECTAR A LA BASE DE DATOS:", error);

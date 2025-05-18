@@ -48,7 +48,22 @@ const crearRolUsuarioQuery = async (DocumentoUsuario, Rol) => {
         DocumentoUsuario, Rol
     ]);
 };
+const crearNivelUsuarioQuery = async (DocumentoUsuario, Nivel) => {
+    const sql = `
+        INSERT INTO usuario_niveles
+            (
+                DocumentoUsuario,
+                IdNivel
+            )
+        VALUES
+            ( ?, ? )
+    `;
+    return await query(sql, [
+        DocumentoUsuario, Nivel
+    ])
+}
 module.exports = {
     crearUsuarioQuery,
-    crearRolUsuarioQuery
+    crearRolUsuarioQuery,
+    crearNivelUsuarioQuery
 };

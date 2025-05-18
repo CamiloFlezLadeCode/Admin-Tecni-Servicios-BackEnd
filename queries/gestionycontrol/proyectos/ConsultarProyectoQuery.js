@@ -1,10 +1,10 @@
 const { query } = require('../../../config/db');
 
 const ConsultarProyectosQuery = async () => {
-    // await query(`
-    //     -- Ejecutar esto por separado antes del SELECT
-    //     SET lc_time_names = 'es_ES';
-    // `);
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
     const sql = `
         SELECT	
             proye.IdProyecto AS IdProyecto,

@@ -34,7 +34,7 @@ const CrearMecanicoQuery = async (mecanicoData) => {
 };
 const CrearRolesQuery = async (DocumentoUsuario, Rol) => {
     const sql = `
-        INSERT INTO usuarioroles 
+        INSERT INTO usuario_roles 
             (
                 DocumentoUsuario, 
                 IdRol
@@ -46,9 +46,24 @@ const CrearRolesQuery = async (DocumentoUsuario, Rol) => {
         DocumentoUsuario, Rol
     ]);
 };
+const CrearNivelQuery = async (DocumentoUsuario, Nivel) => {
+    const sql = `
+        INSERT INTO usuario_niveles 
+            (
+                DocumentoUsuario, 
+                IdNivel
+            ) 
+        VALUES 
+            ( ?, ? )
+    `;
+    return await query(sql, [
+        DocumentoUsuario, Nivel
+    ]);
+}
 module.exports = {
     CrearMecanicoQuery,
-    CrearRolesQuery
+    CrearRolesQuery,
+    CrearNivelQuery
 };
 
 

@@ -1,4 +1,4 @@
-const { CrearMecanicoQuery, CrearRolesQuery } = require('../../../queries/gestionycontrol/mecanicos/CrearMecanicoQuery');
+const { CrearMecanicoQuery, CrearRolesQuery, CrearNivelQuery } = require('../../../queries/gestionycontrol/mecanicos/CrearMecanicoQuery');
 
 const CrearMecanicoService = async (mecanicoData) => {
     await CrearMecanicoQuery(mecanicoData);
@@ -11,6 +11,8 @@ const CrearMecanicoService = async (mecanicoData) => {
         const Resultado = await CrearRolesQuery(DocumentoUsuario, rol);
         Resultados.push(Resultado);
     }
+    const Nivel = mecanicoData.Nivel;
+    await CrearNivelQuery(DocumentoUsuario, Nivel);
     return Resultados;
 };
 module.exports = {
