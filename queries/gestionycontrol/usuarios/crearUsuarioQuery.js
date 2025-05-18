@@ -36,7 +36,7 @@ const crearUsuarioQuery = async (usuarioData) => {
 };
 const crearRolUsuarioQuery = async (DocumentoUsuario, Rol) => {
     const sql = `
-        INSERT INTO usuarioroles 
+        INSERT INTO usuario_roles 
             (
                 DocumentoUsuario, 
                 IdRol

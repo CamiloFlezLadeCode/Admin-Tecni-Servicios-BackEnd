@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet'); //Para header seguros
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 //RUTAS APIS
@@ -29,6 +30,8 @@ const app = express();
 // app.use(helmet());
 app.use(helmet.hsts({ maxAge: 5184000, includeSubDomains: true }));
 
+app.use(cookieParser());
+
 
 // Middleware para parsear JSON
 app.use(express.json());
@@ -36,8 +39,8 @@ app.use(express.json());
 // Configuración de CORS
 const corsOptions = {
     // origin: '*',
-    // origin: 'http://localhost:3001', //Solo peticiones desde el front correcto
-    origin: process.env.DOMINIO_FRONTEND || 'NADA MORRRR',
+    origin: 'http://localhost:3001', //Solo peticiones desde el front correcto
+    // origin: process.env.DOMINIO_FRONTEND || 'NADA MORRRR',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
