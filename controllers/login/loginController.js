@@ -34,11 +34,13 @@
 //     obtenerCredenciales
 // };
 
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { obtenerCredencialesService } = require('../../services/login/loginService');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'mi_secreto_super_seguro';
-const JWT_EXPIRATION = '1h'; // puedes cambiar esto a lo que quieras
+// const JWT_EXPIRATION = '1h'; // puedes cambiar esto a lo que quieras
+const JWT_EXPIRATION = '1d';
 
 const obtenerCredenciales = async (req, res) => {
     try {

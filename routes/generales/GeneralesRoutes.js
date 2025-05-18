@@ -7,6 +7,7 @@ const { ListarProyectosController } = require('../../controllers/generales/Proye
 const { ListarEquiposController } = require('../../controllers/generales/EquiposController');
 const { ListarNivelesController } = require('../../controllers/generales/NivelesController');
 const { ListarRolesController } = require('../../controllers/generales/RolesController');
+const { ListarEstadosController } = require('../../controllers/generales/EstadosController');
 
 router.get('/listar-clientes', ConsultarListarClientesController);
 router.get('/listar-tipo-de-documentos', ConsultarTiposDeDocumentosController);
@@ -15,4 +16,5 @@ router.get('/listar-proyectos', ListarProyectosController);
 router.get('/listar-equipos', ListarEquiposController);
 router.get('/listar-niveles', ListarNivelesController);
 router.get('/listar-roles', ListarRolesController);
+router.get('/listar-estados', ListarEstadosController);
 module.exports = router;
