@@ -3,6 +3,7 @@ const { ListarRolesService } = require('../../services/generales/RolesService');
 const ListarRolesController = async (req, res) => {
     try {
         const data = await ListarRolesService();
+        console.log(`Roles obtenidos correctamente. Total: ${data.length}`);
         const Roles = data.map(Rol => ({
             value: Rol.IdRol,
             label: Rol.Rol
