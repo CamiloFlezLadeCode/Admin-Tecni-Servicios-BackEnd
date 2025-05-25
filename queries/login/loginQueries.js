@@ -1,11 +1,23 @@
 const { query } = require('../../config/db');
 
 const obtenerCredenciales = async (clienteData) => {
+    const sql_original = `
+        SELECT
+            DocumentoUsuario, ClaveUsuario, 
+        FROM
+            credenciales
+        WHERE
+            NombreUsuario = ? COLLATE utf8mb4_bin AND ClaveUsuario = ? COLLATE utf8mb4_bin
+    `;
     const sql = `
         SELECT
-            DocumentoUsuario, ClaveUsuario
+            credenciales.DocumentoUsuario, ClaveUsuario, Esta.Estado
         FROM
-            Credenciales
+            credenciales
+		INNER JOIN
+        	usuario AS usu ON credenciales.DocumentoUsuario = usu.DocumentoUsuario
+		INNER JOIN 
+        	estado AS esta ON usu.IdEstado = esta.IdEstado
         WHERE
             NombreUsuario = ? COLLATE utf8mb4_bin AND ClaveUsuario = ? COLLATE utf8mb4_bin
     `;

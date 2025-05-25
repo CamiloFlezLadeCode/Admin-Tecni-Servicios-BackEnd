@@ -50,7 +50,7 @@ const obtenerCredenciales = async (req, res) => {
             return res.status(400).json({ error: 'NombreUsuario y ClaveUsuario son requeridos' });
         }
 
-        const { credenciales, rol, nombre, documento, correo } = await obtenerCredencialesService({ NombreUsuario, ClaveUsuario });
+        const { credenciales, rol, nombre, documento, correo, accesohabilitado } = await obtenerCredencialesService({ NombreUsuario, ClaveUsuario });
 
         if (!credenciales) {
             return res.status(401).json({ error: 'Credenciales incorrectas' });
@@ -60,12 +60,21 @@ const obtenerCredenciales = async (req, res) => {
             return res.status(401).json({ error: 'Rol no encontrado para el usuario' });
         }
 
-        // 🔐 Generar token JWT
-        const token = jwt.sign(
-            { id: credenciales, rol, nombre, documento, correo },
-            JWT_SECRET,
-            { expiresIn: JWT_EXPIRATION }
-        );
+        let token;
+        if (accesohabilitado === true) {
+            // 🔐 Generar token JWT
+            token = jwt.sign(
+                { id: credenciales, rol, nombre, documento, correo },
+                JWT_SECRET,
+                { expiresIn: JWT_EXPIRATION }
+            );
+        }
+        // // 🔐 Generar token JWT
+        // const token = jwt.sign(
+        //     { id: credenciales, rol, nombre, documento, correo },
+        //     JWT_SECRET,
+        //     { expiresIn: JWT_EXPIRATION }
+        // );
 
         // 🍪 Enviar token como cookie HttpOnly
         // res.cookie('token', token, {
@@ -84,7 +93,7 @@ const obtenerCredenciales = async (req, res) => {
             path: '/',
         });
         // ✅ También puedes retornar parte de los datos si necesitas
-        res.status(200).json({ message: 'Login exitoso', rol, nombre, documento, correo });
+        res.status(200).json({ message: 'Login exitoso', rol, nombre, documento, correo, token, accesohabilitado });
 
         console.log(`Token generado correctamente. Token: ${token}`);
     } catch (error) {

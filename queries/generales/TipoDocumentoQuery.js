@@ -3,7 +3,7 @@ const { query } = require('../../config/db');
 const ConsultarTiposDeDocumentosQuery = async () => {
     const sql = `
         SELECT
-            IdTipoDocumento,
+            CAST(IdTipoDocumento AS CHAR) AS IdTipoDocumento,
             Codigo,
             Nombre
         FROM

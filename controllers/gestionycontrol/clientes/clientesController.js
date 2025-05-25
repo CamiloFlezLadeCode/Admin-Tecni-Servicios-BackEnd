@@ -1,13 +1,13 @@
 const { verClientesService, insertarClienteService, obtenerClientePorDocumentoService, crearClienteCompletoService } = require('../../../services/gestionycontrol/clientes/clientesService');
 
-const verClientes = async(req, res) => {
+const verClientes = async (req, res) => {
     try {
         const clientes = await verClientesService();
         console.log(`Clientes obtenidos correctamente. Total: ${clientes.length}`);
         res.json(clientes);
     } catch (error) {
         console.error('Error en verClientes:', error);
-        res.status(500).json({error: 'Error al ver los clientes'});
+        res.status(500).json({ error: 'Error al ver los clientes' });
     }
 };
 
@@ -72,23 +72,24 @@ const obtenerClientePorDocumento = async (req, res) => {
     try {
         // Obtención de la identificación del cliente desde los parámetros de la URL
         const DocumentoUsuario = req.params.DocumentoUsuario;
-        
+
         // Llamada al servicio para obtener el cliente por documento
         const cliente = await obtenerClientePorDocumentoService(DocumentoUsuario);
 
         // Verificación de la existencia del cliente
         if (cliente && cliente.length > 0) {
+            console.log('Usuario encontradro');
             res.status(200).json({
                 encontrado: true,
                 cliente: cliente[0] // Asumiendo que `cliente` es un arreglo y tomamos el primer resultado
             });
         } else {
+            console.log('Usuario no encontradro');
             res.status(200).json({
                 encontrado: false,
                 mensaje: "Cliente no encontrado"
             });
         }
-        console.log(cliente);
     } catch (error) {
         // Manejo de errores con más detalles
         console.error('Error al obtener el cliente:', error);
