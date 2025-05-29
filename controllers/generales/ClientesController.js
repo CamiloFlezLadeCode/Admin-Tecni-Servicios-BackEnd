@@ -4,7 +4,7 @@ const ConsultarListarClientesController = async (req, res) => {
     try {
         const Clientes = await ConsultarListarClientesService();
         // console.log(`CLIENTES => ${JSON.stringify(Clientes)}`);
-        console.log(`Clientes optenidos correctamente. Total: ${Clientes.length}`);
+        console.log(`Clientes obtenidos correctamente. Total: ${Clientes.length}`);
         let data = Clientes.map(cliente => ({
             Id: cliente.IdCliente,
             value: cliente.DocumentoCliente,

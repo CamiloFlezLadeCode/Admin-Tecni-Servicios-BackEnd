@@ -11,7 +11,7 @@ const obtenerCredenciales = async (clienteData) => {
     `;
     const sql = `
         SELECT
-            credenciales.DocumentoUsuario, ClaveUsuario, Esta.Estado
+            credenciales.DocumentoUsuario, ClaveUsuario, esta.Estado
         FROM
             credenciales
 		INNER JOIN
@@ -19,7 +19,8 @@ const obtenerCredenciales = async (clienteData) => {
 		INNER JOIN 
         	estado AS esta ON usu.IdEstado = esta.IdEstado
         WHERE
-            NombreUsuario = ? COLLATE utf8mb4_bin AND ClaveUsuario = ? COLLATE utf8mb4_bin
+            NombreUsuario = ? COLLATE utf8mb4_bin AND ClaveUsuario = ?
+             COLLATE utf8mb4_bin
     `;
     return await query(sql, [clienteData.NombreUsuario, clienteData.ClaveUsuario]);
 };
