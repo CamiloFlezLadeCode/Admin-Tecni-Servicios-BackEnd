@@ -23,9 +23,9 @@ const ConsultarUsuariosGeneralesQuery = async () => {
         esta.Estado AS Estado
         FROM
         usuario AS usu 
-        INNER JOIN 
+        LEFT JOIN 
         usuario_roles AS usurol ON usu.DocumentoUsuario = usurol.DocumentoUsuario
-        INNER JOIN 
+        LEFT JOIN 
         roles AS rol ON usurol.IdRol = rol.IdRol
         LEFT JOIN
         usuario_niveles AS usunivel ON usu.DocumentoUsuario = usunivel.DocumentoUsuario

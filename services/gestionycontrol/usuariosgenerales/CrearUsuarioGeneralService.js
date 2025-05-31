@@ -75,4 +75,4 @@ const RegistrarUsuarioGeneralService = async (DatosUsuarioGeneral) => {
 };
 module.exports = {
     RegistrarUsuarioGeneralService
-}
+};

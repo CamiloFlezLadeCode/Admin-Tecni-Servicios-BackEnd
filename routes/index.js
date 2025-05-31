@@ -10,5 +10,7 @@ module.exports = [
   require('./generales/GeneralesRoutes'),
   require('./gestionycontrol/proyectos/proyectosRoutes'),
   require('./gestionycontrol/usuariosgenerales/usuariosgeneralesRoutes'),
-  require('./gestionycontrol/vehiculos/vehiculosRoutes')
+  require('./gestionycontrol/vehiculos/vehiculosRoutes'),
+  require('./comercial/remisiones/remisionesRoutes'),
+  require('./comercial/devoluciones/devolucionesRoutes'),
 ];
