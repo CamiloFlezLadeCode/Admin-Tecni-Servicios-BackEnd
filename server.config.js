@@ -25,7 +25,8 @@ const applyMiddlewares = (app) => {
         'https://mi-app.com',
         'http://192.168.0.14:3001',
         'http://127.0.0.1:3001',
-        'https://admintecniservicios.com'
+        'https://admintecniservicios.com',
+        // 'https://admin-tecni-servicios.vercel.app'
     ];
     const corsOptions = {
         origin: (origin, callback) => {

@@ -12,10 +12,12 @@ const CrearEquipoQuery = async (equipoData) => {
                 PrecioReparacion, 
                 UsuarioCreacion,
                 FechaCreacion,
-                IdEstado
+                IdEstado,
+                Cantidad,
+                DocumentoSubarrendatario
             )
             VALUES 
-            ( ?, ?, ?, ?, ?, ?, ?, ? )
+            ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
     `;
     return query(sql, [
         equipoData.NombreEquipo,
@@ -26,6 +28,8 @@ const CrearEquipoQuery = async (equipoData) => {
         equipoData.UsuarioCreacion,
         FechaActualColombia(),
         equipoData.EstadoEquipo,
+        equipoData.Cantidad,
+        equipoData.DocumentoSubarrendatario
     ]);
 };
 module.exports = {
