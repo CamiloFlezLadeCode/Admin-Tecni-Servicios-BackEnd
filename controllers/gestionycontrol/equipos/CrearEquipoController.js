@@ -1,4 +1,5 @@
 const { CrearEquipoService } = require('../../../services/gestionycontrol/equipos/CrearEquipoService');
+const { obtenerSocketServer } = require('../../../utils/WebSocket') ;
 
 const CrearEquipoController = async (req, res) => {
     try {
@@ -8,6 +9,14 @@ const CrearEquipoController = async (req, res) => {
         }
         const resultado = await CrearEquipoService(equipoData);
         console.log("Equipo creado correctamente");
+        //Se emite el evento socket al cliente
+        const io = obtenerSocketServer();
+        if (io) {
+            io.emit('equipo-creado', equipoData);
+        } else {
+            console.warn("⚠️ Socket.IO no está inicializado");
+        }
+        //...
         res.status(200).json({ message: 'Equipo creado correctamente', data: resultado });
     } catch (error) {
         console.error('Error en CrearEquipoController => ', error);

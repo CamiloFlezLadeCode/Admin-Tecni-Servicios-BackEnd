@@ -20,6 +20,7 @@
 
 
 const { RegistrarUsuarioGeneralService } = require('../../../services/gestionycontrol/usuariosgenerales/CrearUsuarioGeneralService');
+const { obtenerSocketServer } = require('../../../utils/WebSocket');
 
 const CrearUsuarioGeneralController = async (req, res) => {
     try {
@@ -34,7 +35,14 @@ const CrearUsuarioGeneralController = async (req, res) => {
         const resultado = await RegistrarUsuarioGeneralService(DatosUsuarioGeneral);
 
         console.log("✅ Usuario general creado correctamente");
-
+        //Se emite el evento Socket al cliente
+        const io = obtenerSocketServer();
+        if (io) {
+            io.emit('usuario-creado', DatosUsuarioGeneral);
+        } else {
+            console.warn("⚠️ Socket.IO no está inicializado");
+        }
+        //...
         res.status(201).json({
             message: 'Usuario general creado correctamente',
             data: resultado,
