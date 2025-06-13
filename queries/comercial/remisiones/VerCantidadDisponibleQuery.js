@@ -3,7 +3,10 @@ const { query } = require('../../../config/db');
 const VerCantidadDisponibleQuery = async (IdEquipo) => {
     const sql = `
         SELECT
-            Cantidad
+            Cantidad,
+            PrecioVenta,
+            PrecioAlquiler,
+            PrecioReparacion
         FROM
             equipo
         WHERE

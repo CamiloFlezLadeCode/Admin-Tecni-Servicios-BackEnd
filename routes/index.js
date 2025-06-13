@@ -9,6 +9,7 @@ module.exports = [
   require('./gestionycontrol/mecanicos/mecanicosRoutes'),
   require('./generales/GeneralesRoutes'),
   require('./gestionycontrol/proyectos/proyectosRoutes'),
+  require('./gestionycontrol/repuestos/repuestosRoutes'),
   require('./gestionycontrol/usuariosgenerales/usuariosgeneralesRoutes'),
   require('./gestionycontrol/vehiculos/vehiculosRoutes'),
   require('./comercial/remisiones/remisionesRoutes'),

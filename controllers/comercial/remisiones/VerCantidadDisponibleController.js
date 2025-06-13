@@ -8,7 +8,10 @@ const VerCantidadDisponibleController = async (req, res) => {
         }
         const Cantidad = await VerCantidadDisponibleService(IdEquipo);
         const CantidadMapeada = Cantidad.map(cantidad => ({
-            CantidadDisponible: cantidad.Cantidad
+            CantidadDisponible: cantidad.Cantidad,
+            PrecioAlquiler: cantidad.PrecioAlquiler,
+            PrecioVenta: cantidad.PrecioVenta,
+            PrecioReparacion: cantidad.PrecioReparacion
         }));
         console.log(`Cantidad del equipo con Id ${IdEquipo}, obtenida correctamente ${CantidadMapeada[0].CantidadDisponible}`);
         res.status(200).json(CantidadMapeada);
