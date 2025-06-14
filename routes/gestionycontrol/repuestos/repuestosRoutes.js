@@ -8,5 +8,5 @@ const { ActualizarRepuestoController } = require('../../../controllers/gestionyc
 router.post('/crear-repuesto', CrearRepuestoController);
 router.get('/ver-repuestos', ConsultarRepuestosController);
 router.get('/ver-repuesto/:IdRepuesto', ConsultarRepuestoPorIdController);
-router.post('/actualizar-repuesto', ActualizarRepuestoController);
+router.put('/actualizar-repuesto', ActualizarRepuestoController);
 module.exports = router;

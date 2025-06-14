@@ -10,6 +10,7 @@ router.get('/perfil', verificarToken, (req, res) => {
     nombre: req.user.nombre,
     documento: req.user.documento,
     correo: req.user.correo,
+    rol: req.user.rol
   });
 });
 

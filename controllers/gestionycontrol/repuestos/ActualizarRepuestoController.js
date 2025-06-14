@@ -14,7 +14,7 @@ const ActualizarRepuestoController = async (req, res) => {
         }
         // ...
         console.log(`Repuesto actualizado correctamente`);
-        res.status(204).sen();
+        res.status(204).send();
     } catch (error) {
         console.error('Error en ActualizarRepuestoController => ', error);
         res.status(500).json({ error: `Error al actualizar el repuesto => ${error}` });
