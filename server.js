@@ -159,8 +159,34 @@ const { applyMiddlewares } = require('./server.config'); // middlewares
 const RutasApis = require('./routes'); // rutas API
 const { Server } = require('socket.io');
 const { setSocketServer } = require('./utils/WebSocket'); // util para manejar io global
+require('dotenv').config();
 
 const app = express();
+
+// 👇 Esto debe ir ANTES de cualquier otra ruta
+// app.use(
+//     '/uploads',
+//     (req, res, next) => {
+//         res.setHeader('Access-Control-Allow-Origin', process.env.DOMINIO_FRONTEND);
+//         res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+//         next();
+//     },
+//     express.static(path.join(__dirname, 'uploads'))
+// );
+
+app.use(
+  '/uploads',
+  (req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', process.env.DOMINIO_FRONTEND);
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin'); // Opcional pero útil
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp'); // Opcional
+    next();
+  },
+  express.static(path.join(__dirname, 'uploads'))
+);
+
+
 
 // Aplica middlewares globales (seguridad, CORS, cookies, etc.)
 applyMiddlewares(app);
@@ -170,6 +196,9 @@ RutasApis.forEach(route => app.use(route));
 
 // Archivos estáticos o rutas públicas
 app.use('/api/backups', express.static(path.join(__dirname, 'backups_bd')));
+// app.use('/uploads/avatar', express.static(path.join(__dirname, 'uploads/avatar')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
