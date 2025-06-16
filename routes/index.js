@@ -16,4 +16,5 @@ module.exports = [
   require('./comercial/remisiones/remisionesRoutes'),
   require('./comercial/devoluciones/devolucionesRoutes'),
   require('./gestionycontrol/ajustes/ajustesRoutes'),
+  require('./configuraciones/configuracionesRoutes'),
 ];
