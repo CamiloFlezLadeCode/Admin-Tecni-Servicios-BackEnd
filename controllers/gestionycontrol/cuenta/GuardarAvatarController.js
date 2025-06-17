@@ -39,11 +39,11 @@ const upload = multer({
     storage,
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
     fileFilter: (req, file, cb) => {
-        const tiposPermitidos = ['image/png', 'image/jpeg', 'image/jpg'];
+        const tiposPermitidos = ['image/png', 'image/jpeg', 'image/jpg', 'image/x-icon'];
         if (tiposPermitidos.includes(file.mimetype)) {
             cb(null, true);
         } else {
-            cb(new Error('Solo se permiten imágenes PNG y JPG'));
+            cb(new Error('Solo se permiten imágenes PNG, JPG e ICO'));
         }
     },
 }).single('imagen');

@@ -155,7 +155,7 @@ const ConsultarAvatarController = async (req, res) => {
         const archivos = fs.readdirSync(avatarDir);
 
         // Filtrar archivos que empiecen con el documento y tengan extensión válida
-        const extensiones = ['.png', '.jpg', '.jpeg'];
+        const extensiones = ['.png', '.jpg', '.jpeg', '.ico'];
         const archivosUsuario = archivos
             .filter(f => {
                 const base = path.basename(f, path.extname(f));
@@ -177,7 +177,19 @@ const ConsultarAvatarController = async (req, res) => {
         const rutaFinal = path.join(avatarDir, ultimoArchivo);
 
         // Cabeceras CORS / CORP
-        res.setHeader('Access-Control-Allow-Origin', process.env.DOMINIO_FRONTEND || '*');
+        const ENTORNO = process.env.VARIABLE_ENV_ENTORNO || 'Desarrollo';
+        switch (ENTORNO) {
+            case 'Produccion':
+                res.setHeader('Access-Control-Allow-Origin', process.env.DOMINIO_FRONTEND);
+                break;
+            case 'Desarrollo':
+                res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+                break;
+            default:
+                res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
+        }
+        // res.setHeader('Access-Control-Allow-Origin', process.env.DOMINIO_FRONTEND || '*');
+        // res.setHeader('Access-Control-Allow-Origin', Entorno);
         res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
 
         // Enviar el archivo más reciente
