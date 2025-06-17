@@ -6,7 +6,7 @@ const ListarEstadosQuery = async () => {
             IdEstado,
             Estado
         FROM
-            Estado
+            estado
         ORDER BY
             IdEstado ASC
     `;

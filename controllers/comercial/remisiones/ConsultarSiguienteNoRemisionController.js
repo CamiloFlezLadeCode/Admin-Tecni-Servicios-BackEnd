@@ -6,7 +6,7 @@ const ConsultarSiguienteNoRemisionController = async (req, res) => {
         res.status(200).json(SiguienteNoRemision);
     } catch (error) {
         console.error('Error en ConsultarSiguienteNoRemisionController => ', error);
-        res.status(500).json({ error: `Error al crear equipo => error` });
+        res.status(500).json({ error: `Error al consultar el siguiente número de remisión => ${error}` });
     }
 };
 module.exports = {
