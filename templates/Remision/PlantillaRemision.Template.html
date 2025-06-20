@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remisión</title>
+  <style>
+    /* SE INYECTAN LOS ESTILOS CSS CON NODEJS AVANZADO */
+  </style>
+</head>
+
+<body>
+  <header class="Encabezado">
+    <table class="TablaEncabezado">
+      <tr>
+        <td class="ColumnaEncabezado1">
+          <img class="LogoEmpresa" src="{{LogoImagenBase64}}">
+        </td>
+        <td class="ColumnaEncabezado2">
+          <h3 class="Titulo">REMISIÓN</h3>
+        </td>
+        <td class="ColumnaEncabezado3">
+          <div class="ContenedorTextoColumnaEncabezado3">
+            <span class="TextospanContenedorTextoColumnaEncabezado3">Código: GTH-F-8</span>
+          </div>
+          <div class="ContenedorTextoColumnaEncabezado3">
+            <span class="TextospanContenedorTextoColumnaEncabezado3">Versión: 01</span>
+          </div>
+          <div class="ContenedorTextoColumnaEncabezado3">
+            <span class="TextospanContenedorTextoColumnaEncabezado3">Vigencia: Marzo 2025</span>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </header>
+
+  <main class="Contenido">
+    <table class="TablaInfoEmpresa">
+      <tr>
+        <th class="NombreEmpresa">
+          <span class="TextoNombreEmpresa">TECNISERVICIOS J.F S.A.S</span><br>
+          <span class="TextoMisionEmpresa">Reparación y alquiler de equipos para la construcción.</span>
+        </th>
+      </tr>
+      <tr>
+        <th class="NombreEmpresa">
+          <h4 class="TextoNombreEmpresa">NIT. 901893972-3</h4>
+        </th>
+      </tr>
+      <tr>
+        <td>
+          <div class="MisionEmpresa">
+            <span class="TextoRemision">Remisión:</span>
+            <span class="NumeroRemision">Nº {{NoRemision}}</span>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <table class="TablaFecha">
+      <tr>
+        <td class="FechaRemisionTexto">
+          <strong>FECHA:</strong>
+        </td>
+        <td class="FechaRemisionValor">
+          <span>{{FechaRemision}}</span>
+        </td>
+      </tr>
+    </table>
+
+    <table class="TablaCliente">
+      <tr>
+        <td class="TablaClienteItem1"><strong>CLIENTE:</strong></td>
+        <td class="TablaClienteValor1"><span>{{Cliente}}</span></td>
+        <td class="TablaClienteItem2"><strong>NIT:</strong></td>
+        <td class="TablaClienteValor2"><span>{{DocumentoCliente}}</span></td>
+      </tr>
+      <tr>
+        <td class="TablaClienteItem1"><strong>DIRECCIÓN:</strong></td>
+        <td class="TablaClienteValor1"><span>{{DireccionProyecto}}</span></td>
+        <td class="TablaClienteItem2"><strong>OBRA/PROYECTO:</strong></td>
+        <td class="TablaClienteValor2">{{Proyecto}}</td>
+      </tr>
+      <tr>
+        <td class="TablaClienteItem1"><strong>TELÉFONO:</strong></td>
+        <td class="TablaClienteValor1">{{Celular}}</td>
+        <td class="TablaClienteItem2"><strong>CONTACTO:</strong></td>
+        <td class="TablaClienteValor2">{{En revisión}}</td>
+      </tr>
+    </table>
+
+    <table>
+      <thead>
+        <tr>
+          <th>CANTIDAD</th>
+          <th>EQUIPO</th>
+          <th>OBSERVACIONES</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{rows}}
+      </tbody>
+    </table>
+  </main>
+
+  <footer class="PieDePagina">
+    <div class="FooterItem">
+      <img src="{{IconoWhatsApp}}" alt="WhatsApp" class="IconoFooter" />
+      <span>3016184573 - 3228376688 - 3112099877</span>
+    </div>
+    <div class="FooterItem">
+      <img src="{{IconoDireccion}}" alt="Dirección" class="IconoFooter" />
+      <span>Calle 56 # 33 - 96 Parque de Boston - Medellín</span>
+    </div>
+    <div class="FooterItem">
+      <img src="{{IconoEmail}}" alt="Correo" class="IconoFooter" />
+      <span>tecniserviciossas2024@gmail.com</span>
+    </div>
+  </footer>
+</body>
+
+</html>
