@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Remisión</title>
+  <link rel="stylesheet" href="Style.css">
   <style>
     /* SE INYECTAN LOS ESTILOS CSS CON NODEJS AVANZADO */
   </style>
@@ -12,7 +13,7 @@
 
 <body>
   <header class="Encabezado">
-    <table class="TablaEncabezado">
+    <table class="TablaEncabezado SinBordesDobles">
       <tr>
         <td class="ColumnaEncabezado1">
           <img class="LogoEmpresa" src="{{LogoImagenBase64}}">
@@ -20,14 +21,14 @@
         <td class="ColumnaEncabezado2">
           <h3 class="Titulo">REMISIÓN</h3>
         </td>
-        <td class="ColumnaEncabezado3">
+        <td class="ColumnaEncabezado3 SinBordeInferior">
           <div class="ContenedorTextoColumnaEncabezado3">
             <span class="TextospanContenedorTextoColumnaEncabezado3">Código: GTH-F-8</span>
           </div>
           <div class="ContenedorTextoColumnaEncabezado3">
             <span class="TextospanContenedorTextoColumnaEncabezado3">Versión: 01</span>
           </div>
-          <div class="ContenedorTextoColumnaEncabezado3">
+          <div class="ContenedorTextoColumnaEncabezado3 SinBordeInferior">
             <span class="TextospanContenedorTextoColumnaEncabezado3">Vigencia: Marzo 2025</span>
           </div>
         </td>
@@ -36,18 +37,19 @@
   </header>
 
   <main class="Contenido">
-    <table class="TablaInfoEmpresa">
+    <table class="TablaInfoEmpresa SinBordesDobles">
       <tr>
         <th class="NombreEmpresa">
           <span class="TextoNombreEmpresa">TECNISERVICIOS J.F S.A.S</span><br>
-          <span class="TextoMisionEmpresa">Reparación y alquiler de equipos para la construcción.</span>
+          <span class="TextoMisionEmpresa">Reparación y alquiler de equipos para la construcción.</span><br>
+          <span class="TextoNITEmpresa">NIT. 901893972-3</span><br>
         </th>
       </tr>
-      <tr>
+      <!-- <tr>
         <th class="NombreEmpresa">
           <h4 class="TextoNombreEmpresa">NIT. 901893972-3</h4>
         </th>
-      </tr>
+      </tr> -->
       <tr>
         <td>
           <div class="MisionEmpresa">
@@ -58,9 +60,9 @@
       </tr>
     </table>
 
-    <table class="TablaFecha">
+    <table class="TablaFecha BordesNegros1px SinBordesDobles">
       <tr>
-        <td class="FechaRemisionTexto">
+        <td class="FechaRemisionTexto BordesNegros1px SinBordesDobles">
           <strong>FECHA:</strong>
         </td>
         <td class="FechaRemisionValor">
@@ -69,38 +71,81 @@
       </tr>
     </table>
 
-    <table class="TablaCliente">
+    <table class="TablaCliente BordesNegros1px SinBordesDobles">
       <tr>
-        <td class="TablaClienteItem1"><strong>CLIENTE:</strong></td>
-        <td class="TablaClienteValor1"><span>{{Cliente}}</span></td>
-        <td class="TablaClienteItem2"><strong>NIT:</strong></td>
-        <td class="TablaClienteValor2"><span>{{DocumentoCliente}}</span></td>
+        <td class="TablaClienteItem1 BordesNegros1px"><strong>CLIENTE:</strong></td>
+        <td class="TablaClienteValor1 BordesNegros1px"><span>{{Cliente}}</span></td>
+        <td class="TablaClienteItem2 BordesNegros1px"><strong>NIT:</strong></td>
+        <td class="TablaClienteValor2 BordesNegros1px"><span>{{DocumentoCliente}}</span></td>
       </tr>
       <tr>
-        <td class="TablaClienteItem1"><strong>DIRECCIÓN:</strong></td>
-        <td class="TablaClienteValor1"><span>{{DireccionProyecto}}</span></td>
-        <td class="TablaClienteItem2"><strong>OBRA/PROYECTO:</strong></td>
-        <td class="TablaClienteValor2">{{Proyecto}}</td>
+        <td class="TablaClienteItem1 BordesNegros1px"><strong>DIRECCIÓN:</strong></td>
+        <td class="TablaClienteValor1 BordesNegros1px"><span>{{DireccionProyecto}}</span></td>
+        <td class="TablaClienteItem2 BordesNegros1px"><strong>OBRA/PROYECTO:</strong></td>
+        <td class="TablaClienteValor2 BordesNegros1px">{{Proyecto}}</td>
       </tr>
       <tr>
-        <td class="TablaClienteItem1"><strong>TELÉFONO:</strong></td>
-        <td class="TablaClienteValor1">{{Celular}}</td>
-        <td class="TablaClienteItem2"><strong>CONTACTO:</strong></td>
-        <td class="TablaClienteValor2">{{En revisión}}</td>
+        <td class="TablaClienteItem1 BordesNegros1px"><strong>TELÉFONO:</strong></td>
+        <td class="TablaClienteValor1 BordesNegros1px">{{Celular}}</td>
+        <td class="TablaClienteItem2 BordesNegros1px"><strong>CONTACTO:</strong></td>
+        <td class="TablaClienteValor2 BordesNegros1px">{{En revisión}}</td>
       </tr>
     </table>
 
-    <table>
+    <table class="SinBordesDobles TableInfoItems BordesNegros1px">
       <thead>
         <tr>
-          <th>CANTIDAD</th>
-          <th>EQUIPO</th>
-          <th>OBSERVACIONES</th>
+          <th class="ColumnaCantidadItem BordesNegros1px">CANTIDAD</th>
+          <th class="ColumnaNombreItem BordesNegros1px">EQUIPO</th>
+          <th class="ColumnaObservacionItem BordesNegros1px">OBSERVACIONES</th>
         </tr>
       </thead>
       <tbody>
         {{rows}}
       </tbody>
+    </table>
+
+    <table class="TablaFirmas SinBordesDobles">
+      <tr>
+        <td class="CeldaContenedorFirma">
+          <div class="ContenedorFirma">
+            <span>{{Bodeguero}}</span>
+          </div>
+          <span>Bodeguero</span>
+        </td>
+        <td class="CeldaContenedorFirma">
+          <div class="ContenedorFirma">
+            <span>{{Despachador}}</span>
+          </div>
+          <span>Despachador</span>
+        </td>
+        <td class="CeldaContenedorFirma">
+          <div class="ContenedorFirma">
+            <span>{{Transportador}}</span>
+          </div>
+          <span>Transportador</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="CeldaContenedorFirma">
+          <div class="ContenedorFirma">
+            <span>{{PlacaVehiculo}}</span>
+          </div>
+          <span>Vehículo</span>
+        </td>
+        <td class="CeldaContenedorFirma">
+          <div class="ContenedorFirma">
+            <span>{{PersonaQueRecibe}}</span>
+          </div>
+          <span>Recibe</span>
+        </td>
+        <td class="CeldaContenedorFirma">
+          <div class="ContenedorFirma">
+            <span>{{PlacaVehiculoRecibe}}</span>
+          </div>
+          <span>Placa</span>
+        </td>
+      </tr>
     </table>
   </main>
 

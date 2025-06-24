@@ -26,6 +26,7 @@ const InfoPDFQuery = async (IdRemision) => {
             CONCAT(COALESCE(bodeguero.Nombres, ''), ' ', COALESCE(bodeguero.Apellidos, '')) AS Bodeguero,
             CONCAT(COALESCE(despachador.Nombres, ''), ' ', COALESCE(despachador.Apellidos, '')) AS Despachador,
             CONCAT(COALESCE(transportador.Nombres, ''), ' ', COALESCE(transportador.Apellidos, '')) AS 				Transportador,
+            vehi.Placa AS PlacaVehiculo,
             remi.NombrePersonaRecibe AS PersonaQueRecibe,
             remi.PlacaVehiculoRecibe AS PlacaVehiculoRecibe,
             deta_remi.ObservacionesCliente AS ObservacionesClienteItem
@@ -46,6 +47,8 @@ const InfoPDFQuery = async (IdRemision) => {
             usuario AS despachador ON remi.DocumentoDespachador = despachador.DocumentoUsuario
         INNER JOIN
             usuario AS transportador ON remi.DocumentoTransportador = transportador.DocumentoUsuario
+		INNER JOIN		
+        	vehiculos AS vehi ON remi.IdVehiculo = vehi.IdVehiculo
         WHERE
             remi.IdRemision = ?
     `;

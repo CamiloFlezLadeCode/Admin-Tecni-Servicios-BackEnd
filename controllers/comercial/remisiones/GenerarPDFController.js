@@ -108,40 +108,75 @@ const GenerarPDFRemisionController = async (req, res) => {
                 observaciones: d.ObservacionesClienteItem || ''
             }));
 
+            // return res.status(200).json(
+            //     data
+            // )
+
             // Carga la plantilla HTML
             const templatePath = path.join(__dirname, '../../../templates/Remision/PlantillaRemision.Template.html');
             let html = fs.readFileSync(templatePath, 'utf8');
 
             // Genera las filas de la tabla
             const rows = items.map(item => `
-                <tr>
-                    <td>${item.cantidad}</td>    
-                    <td>${item.nombre}</td>
-                    <td>${item.observaciones}</td>
+                <tr class="SinBordesDobles">
+                    <td class="BordesNegros1px SinBordesDobles">${item.cantidad}</td>    
+                    <td class="BordesNegros1px SinBordesDobles">${item.nombre}</td>
+                    <td class="BordesNegros1px SinBordesDobles">${item.observaciones}</td>
                 </tr>
             `).join('');
 
-            // Se lee archivo css con estilos 
+            // // Se lee archivo css con estilos 
             const css = fs.readFileSync(path.join(__dirname, '../../../templates/Remision/Style.css'), 'utf8');
-            // Reemplaza los valores en el template
-            html = html
-                .replace('</head>', `<style>${css}</style></head>`)
-                .replace('{{LogoImagenBase64}}', LogoImagenBase64)
-                // .replace('{{NoRemision}}', cabecera.NoRemision)
-                .replace(/{{NoRemision}}/g, cabecera.NoRemision)
-                .replace('{{Cliente}}', cabecera.Cliente)
-                .replace('{{Proyecto}}', cabecera.Proyecto)
-                .replace('{{rows}}', rows)
-                .replace('{{IconoWhatsApp}}', IconoWhatsApp)
-                .replace('{{IconoDireccion}}', IconoDireccion)
-                .replace('{{IconoEmail}}', IconoEmail)
-                .replace('{{FechaRemision}}', cabecera.FechaCreacion)
-                .replace('{{Cliente}}', cabecera.Cliente)
-                .replace('{{DocumentoCliente}}', cabecera.DocumentoCliente)
-                .replace('{{DireccionProyecto}}', cabecera.DireccionProyecto)
-                .replace('{{Proyecto}}', cabecera.Proyecto)
-                .replace('{{Celular}}', cabecera.Celular)
-                ;
+
+            // // Reemplaza los valores en el template
+            // html = html
+            //     .replace('</head>', `<style>${css}</style></head>`)
+            //     .replace('{{LogoImagenBase64}}', LogoImagenBase64)
+            //     // .replace('{{NoRemision}}', cabecera.NoRemision)
+            //     .replace(/{{NoRemision}}/g, cabecera.NoRemision)
+            //     .replace('{{Cliente}}', cabecera.Cliente)
+            //     .replace('{{Proyecto}}', cabecera.Proyecto)
+            //     .replace('{{rows}}', rows)
+            //     .replace('{{IconoWhatsApp}}', IconoWhatsApp)
+            //     .replace('{{IconoDireccion}}', IconoDireccion)
+            //     .replace('{{IconoEmail}}', IconoEmail)
+            //     .replace('{{FechaRemision}}', cabecera.FechaCreacion)
+            //     .replace('{{Cliente}}', cabecera.Cliente)
+            //     .replace('{{DocumentoCliente}}', cabecera.DocumentoCliente)
+            //     .replace('{{DireccionProyecto}}', cabecera.DireccionProyecto)
+            //     .replace('{{Proyecto}}', cabecera.Proyecto)
+            //     .replace('{{Celular}}', cabecera.Celular)
+            //     ;
+
+            const reemplazos = {
+                '{{LogoImagenBase64}}': LogoImagenBase64,
+                '{{NoRemision}}': cabecera.NoRemision,
+                '{{Cliente}}': cabecera.Cliente,
+                '{{Proyecto}}': cabecera.Proyecto,
+                '{{rows}}': rows,
+                '{{IconoWhatsApp}}': IconoWhatsApp,
+                '{{IconoDireccion}}': IconoDireccion,
+                '{{IconoEmail}}': IconoEmail,
+                '{{FechaRemision}}': cabecera.FechaCreacion,
+                '{{DocumentoCliente}}': cabecera.DocumentoCliente,
+                '{{DireccionProyecto}}': cabecera.DireccionProyecto,
+                '{{Celular}}': cabecera.Celular ?? 'No Registra',
+                '{{Bodeguero}}': cabecera.Bodeguero,
+                '{{Despachador}}': cabecera.Despachador,
+                '{{Transportador}}': cabecera.Transportador,
+                '{{PersonaQueRecibe}}': cabecera.PersonaQueRecibe,
+                '{{PlacaVehiculo}}': cabecera.PlacaVehiculo,
+                '{{PlacaVehiculoRecibe}}': cabecera.PlacaVehiculoRecibe
+            };
+
+            // Reemplazo múltiple usando regex global
+            for (const [clave, valor] of Object.entries(reemplazos)) {
+                html = html.replace(new RegExp(clave, 'g'), valor);
+            }
+
+            // Inserta los estilos CSS antes del cierre de </head>
+            html = html.replace('</head>', `<style>${css}</style></head>`);
+
 
             // Usa Playwright para renderizar y generar el PDF
             const browser = await chromium.launch();
