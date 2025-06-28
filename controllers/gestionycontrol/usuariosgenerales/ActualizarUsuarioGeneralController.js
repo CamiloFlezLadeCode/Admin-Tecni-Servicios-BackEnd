@@ -64,11 +64,10 @@ const ActualizarUsuarioGeneralController = async (req, res) => {
         } else {
             console.warn("⚠️ Socket.IO no está inicializado");
         }
-
-        res.status(204).send(); // No Content
+        return res.status(204).send(); // No Content
     } catch (error) {
         console.error('Error en ActualizarUsuarioGeneralController => ', error);
-        res.status(500).json({ error: 'Error al actualizar el usuario' });
+        return res.status(500).json({ error: 'Error al actualizar el usuario' });
     }
 };
 

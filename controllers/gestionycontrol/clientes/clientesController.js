@@ -7,7 +7,7 @@ const verClientes = async (req, res) => {
         res.json(clientes);
     } catch (error) {
         console.error('Error en verClientes:', error);
-        res.status(500).json({ error: 'Error al ver los clientes' });
+        return res.status(500).json({ error: 'Error al ver los clientes' });
     }
 };
 
@@ -23,7 +23,7 @@ const insertarCliente = async (req, res) => {
         res.json({ message: 'Cliente insertado correctamente', data: resultado });
     } catch (error) {
         console.error('Error en insertarCliente:', error);
-        res.status(500).json({ error: 'Error al insertar el cliente' });
+        return res.status(500).json({ error: 'Error al insertar el cliente' });
     }
 };
 
@@ -79,13 +79,13 @@ const obtenerClientePorDocumento = async (req, res) => {
         // Verificación de la existencia del cliente
         if (cliente && cliente.length > 0) {
             console.log('Usuario encontradro');
-            res.status(200).json({
+            return res.status(200).json({
                 encontrado: true,
                 cliente: cliente[0] // Asumiendo que `cliente` es un arreglo y tomamos el primer resultado
             });
         } else {
             console.log('Usuario no encontradro');
-            res.status(200).json({
+            return res.status(200).json({
                 encontrado: false,
                 mensaje: "Cliente no encontrado"
             });
@@ -93,7 +93,7 @@ const obtenerClientePorDocumento = async (req, res) => {
     } catch (error) {
         // Manejo de errores con más detalles
         console.error('Error al obtener el cliente:', error);
-        res.status(500).json({
+        return res.status(500).json({
             mensaje: "Error en la consulta al obtener el cliente",
             error: error.message
         });
@@ -106,14 +106,14 @@ const crearClienteCompleto = async (req, res) => {
 
         const nuevoCliente = await crearClienteCompletoService(clienteData);
 
-        res.status(201).json({
+        return res.status(201).json({
             ok: true,
             message: 'Cliente creado exitosamente',
             data: nuevoCliente
         });
     } catch (error) {
         console.error('❌ Error en crearClienteCompleto:', error);
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             message: 'Error al crear cliente',
             error: error.message

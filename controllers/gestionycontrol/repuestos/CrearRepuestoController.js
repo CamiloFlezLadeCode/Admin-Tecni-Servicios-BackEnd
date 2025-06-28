@@ -14,10 +14,10 @@ const CrearRepuestoController = async (req, res) => {
             console.warn("⚠️ Socket.IO no está inicializado");
         }
         // ...
-        res.status(200).json('Repuesto creado correctamente');
+        return res.status(200).json('Repuesto creado correctamente');
     } catch (error) {
         console.error('Error en CrearRepuestoController => ', error);
-        res.status(500).json({ error: `Error al crear el repuesto => ${error}` });
+        return res.status(500).json({ error: `Error al crear el repuesto => ${error}` });
     }
 };
 module.exports = {

@@ -16,7 +16,7 @@ const ActualizarInfoUsuarioController = async (req, res) => {
         return res.status(204).send();
     } catch (error) {
         console.error('Error en ActualizarInfoUsuarioController => ', error);
-        res.status(500).json({ error: `Error al actualizar información del usuario => ${error}` });
+        return res.status(500).json({ error: `Error al actualizar información del usuario => ${error}` });
     }
 };
 module.exports = {

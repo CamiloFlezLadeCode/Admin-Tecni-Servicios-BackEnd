@@ -5,10 +5,10 @@ const ConsultarVehiculoController = async (req, res) => {
         const IdVehiculo = req.params.IdVehiculo;
         const Vehiculo = await ConsultarVehiculoService(IdVehiculo);
         console.log(`Vehículo con id: ${IdVehiculo}, obtenido correctamente.`);
-        res.status(200).json(Vehiculo);
+        return res.status(200).json(Vehiculo);
     } catch (error) {
         console.error('Error en ConsultarVehiculoController => ', error);
-        res.status(500).json({ error: `Error al consultar el vehículo => error` });
+        return res.status(500).json({ error: `Error al consultar el vehículo => error` });
     }
 };
 module.exports = {

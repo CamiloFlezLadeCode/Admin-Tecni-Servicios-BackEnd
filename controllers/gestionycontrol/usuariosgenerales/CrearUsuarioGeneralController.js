@@ -43,7 +43,7 @@ const CrearUsuarioGeneralController = async (req, res) => {
             console.warn("⚠️ Socket.IO no está inicializado");
         }
         //...
-        res.status(201).json({
+        return res.status(201).json({
             message: 'Usuario general creado correctamente',
             data: resultado,
         });
@@ -52,7 +52,7 @@ const CrearUsuarioGeneralController = async (req, res) => {
         console.error('❌ Error en CrearUsuarioGeneralController =>', error);
 
         // Puedes diferenciar errores específicos si lo deseas
-        res.status(500).json({
+        return res.status(500).json({
             error: 'Error al crear el usuario general',
             detalle: error.message || error,
         });

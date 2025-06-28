@@ -28,10 +28,10 @@ FROM
 
         console.log("DEPARTAMENTOS OBTENIDOS CORRECTAMENTE");
         // console.log(response);
-        res.json(departamentos);
+        return res.status(200).res.json(departamentos);
     } catch (error) {
         console.error('Error al obtener departamentos:', error);
-        res.status(500).json({ error: 'Error al obtener departamentos' }); // Enviar error
+        return res.status(500).json({ error: 'Error al obtener departamentos' }); // Enviar error
     }
 }
 

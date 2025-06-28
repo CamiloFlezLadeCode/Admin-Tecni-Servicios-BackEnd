@@ -15,10 +15,10 @@ const ActualizarVehiculoController = async (req, res) => {
         } else {
             console.warn("⚠️ Socket.IO no está inicializado");
         }
-        res.status(204).send();
+        return res.status(204).send();
     } catch (error) {
         console.error('Error en ActualizarVehiculoController => ', error);
-        res.status(500).json({ error: `Error al actualizar el vehículo con id: ${DatosVehiculoAActualizar.IdVehiculo}. Error: ${error}` });
+        return res.status(500).json({ error: `Error al actualizar el vehículo con id: ${DatosVehiculoAActualizar.IdVehiculo}. Error: ${error}` });
     }
 };
 module.exports = {

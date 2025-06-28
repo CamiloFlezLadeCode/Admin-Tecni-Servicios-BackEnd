@@ -17,7 +17,7 @@ const ActualizarRepuestoController = async (req, res) => {
         return res.status(204).send();
     } catch (error) {
         console.error('Error en ActualizarRepuestoController => ', error);
-        res.status(500).json({ error: `Error al actualizar el repuesto => ${error}` });
+        return res.status(500).json({ error: `Error al actualizar el repuesto => ${error}` });
     }
 };
 module.exports = {

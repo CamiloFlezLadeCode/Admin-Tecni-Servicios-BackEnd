@@ -15,14 +15,14 @@ const EliminarVehiculoController = async (req, res) => {
             console.warn("⚠️ Socket.IO no está inicializado");
         }
         // ...
-        res.status(200).json({ mensaje: 'Vehículo eliminado exitosamente' });
+        return res.status(200).json({ mensaje: 'Vehículo eliminado exitosamente' });
     } catch (error) {
         console.error('Error en EliminarVehiculoController =>', error.message);
         if (error.message.includes('remisiones asociadas')) {
             // return res.status(409).json({ error: error.message }); // 409: Conflict
             return res.status(409).json({ mensaje: 'remisiones asociadas' });
         }
-        res.status(500).json({ error: `Error al eliminar el vehículo => ${error.message}` });
+        return res.status(500).json({ error: `Error al eliminar el vehículo => ${error.message}` });
     }
 };
 

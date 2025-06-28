@@ -14,10 +14,10 @@ const ActualizarEquipoController = async (req, res) => {
             console.warn("⚠️ Socket.IO no está inicializado");
         }
         //...
-        res.status(204).send();
+        return res.status(204).send();
     } catch (error) {
         console.error('Error en ActualizarEquipoController => ', error);
-        res.status(500).json({ error: `Error al crear equipo => error` });
+        return res.status(500).json({ error: `Error al crear equipo => error` });
     }
 };
 module.exports = {

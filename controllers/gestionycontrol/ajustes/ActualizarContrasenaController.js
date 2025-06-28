@@ -8,7 +8,7 @@ const ActualizarContrasenaController = async (req, res) => {
         return res.status(204).send();
     } catch (error) {
         console.error('Error en ActualizarContrasenaController => ', error);
-        res.status(500).json({ error: `Error al actualizar la contraseña => ${error}` });
+        return res.status(500).json({ error: `Error al actualizar la contraseña => ${error}` });
     }
 };
 module.exports = {

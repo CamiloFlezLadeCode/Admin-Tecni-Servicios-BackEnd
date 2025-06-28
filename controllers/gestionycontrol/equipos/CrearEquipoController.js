@@ -1,5 +1,5 @@
 const { CrearEquipoService } = require('../../../services/gestionycontrol/equipos/CrearEquipoService');
-const { obtenerSocketServer } = require('../../../utils/WebSocket') ;
+const { obtenerSocketServer } = require('../../../utils/WebSocket');
 
 const CrearEquipoController = async (req, res) => {
     try {
@@ -17,10 +17,10 @@ const CrearEquipoController = async (req, res) => {
             console.warn("⚠️ Socket.IO no está inicializado");
         }
         //...
-        res.status(200).json({ message: 'Equipo creado correctamente', data: resultado });
+        return res.status(200).json({ message: 'Equipo creado correctamente', data: resultado });
     } catch (error) {
         console.error('Error en CrearEquipoController => ', error);
-        res.status(500).json({ error: `Error al crear equipo => ${error}` });
+        return res.status(500).json({ error: `Error al crear equipo => ${error}` });
     }
 };
 module.exports = {

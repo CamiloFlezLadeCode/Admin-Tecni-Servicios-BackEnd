@@ -13,10 +13,10 @@ const CrearVehiculoController = async (req, res) => {
         } else {
             console.warn("⚠️ Socket.IO no está inicializado");
         };
-        res.status(200).json('Vehículo creado correctamente.');
+        return res.status(200).json('Vehículo creado correctamente.');
     } catch (error) {
         console.error('Error en CrearVehiculoController => ', error);
-        res.status(500).json({ error: `Error al crear el vehiculo => ${error}` });
+        return res.status(500).json({ error: `Error al crear el vehiculo => ${error}` });
     }
 };
 module.exports = {
