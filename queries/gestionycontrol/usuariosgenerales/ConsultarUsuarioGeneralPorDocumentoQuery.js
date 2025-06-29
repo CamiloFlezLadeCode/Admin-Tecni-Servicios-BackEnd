@@ -12,7 +12,8 @@ const ConsultarUsuarioGeneralPorDocumentoQuery = async (DocumentoUsuarioGeneral)
             usu.Correo AS Correo,
             usu.IdEstado AS Estado,
             GROUP_CONCAT(rol.IdRol SEPARATOR ', ') AS Roles,
-            nivel.IdNivel AS Nivel
+            nivel.IdNivel AS Nivel,
+            usu.Contacto AS Contacto
         FROM
             usuario AS usu 
         LEFT JOIN 

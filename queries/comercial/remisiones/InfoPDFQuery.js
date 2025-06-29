@@ -16,6 +16,7 @@ const InfoPDFQuery = async (IdRemision) => {
             cliente.Celular AS Celular,
             cliente.Telefono AS Telefono,
             cliente.Direccion AS DireccionCliente,
+            cliente.Contacto,
             #DATOS DETALLES DE LA REMISIÓN
             deta_remi.Cantidad AS Cantidad,
             equi.Nombre AS NombreEquipo,

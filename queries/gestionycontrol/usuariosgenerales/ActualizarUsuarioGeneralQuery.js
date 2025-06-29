@@ -18,7 +18,8 @@ const ActualizarUsuarioGeneralQuery = async (DatosUsuarioAActualizar) => {
                 Direccion = ?, 
                 Telefono = ?, 
                 Celular = ?, 
-                IdEstado = ? 
+                IdEstado = ?,
+                Contacto = ?
             WHERE
                 DocumentoUsuario = ?
         `;
@@ -34,6 +35,7 @@ const ActualizarUsuarioGeneralQuery = async (DatosUsuarioAActualizar) => {
             // DatosUsuarioAActualizar.UsuarioCreacion,
             // FechaActualColombia(), // Actualiza la fecha de creación si es necesario
             DatosUsuarioAActualizar.Estado,
+            DatosUsuarioAActualizar.Contacto,
             DatosUsuarioAActualizar.Documento // Usar el Documento para la condición WHERE
         ]);
 

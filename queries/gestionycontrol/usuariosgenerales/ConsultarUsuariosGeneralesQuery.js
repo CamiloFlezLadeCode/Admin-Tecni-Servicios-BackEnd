@@ -20,7 +20,8 @@ const ConsultarUsuariosGeneralesQuery = async () => {
         GROUP_CONCAT(rol.IdRol SEPARATOR ', ') AS RolesValue,
         nivel.Nivel AS Nivel,
         CONCAT(SUBSTRING_INDEX(COALESCE(usu2.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu2.Apellidos, ''), ' ', 1)) AS UsuarioCreacion,DATE_FORMAT(usu.FechaCreacion, '%W %d/%m/%Y a las %l:%i:%s %p') AS FechaCreacion,
-        esta.Estado AS Estado
+        esta.Estado AS Estado,
+        usu.Contacto AS Contacto
         FROM
         usuario AS usu 
         LEFT JOIN 
