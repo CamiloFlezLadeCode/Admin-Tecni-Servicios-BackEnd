@@ -1,4 +1,5 @@
 const { CrearRemisionService } = require('../../../services/comercial/remisiones/CrearRemisionService');
+const { obtenerSocketServer } = require('../../../utils/WebSocket');
 
 const CrearRemisionController = async (req, res) => {
     try {
@@ -14,8 +15,16 @@ const CrearRemisionController = async (req, res) => {
         console.log("✅ Remisión creada correctamente");
         //...
 
+        // Se emite evento socket al cliente
+        const io = obtenerSocketServer();
+        if (io) {
+            io.emit('remision-creada', '');
+        } else {
+            console.warn("⚠️ Socket.IO no está inicializado");
+        }
+        // ...
+
         //Se retorna respuesta al frontend/cliente
-        // res.status(200).send({});
         return res.status(200).json({
             message: 'Remisión creada correctamente',
             data: Resultado

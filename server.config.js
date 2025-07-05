@@ -44,7 +44,7 @@ const applyMiddlewares = (app) => {
     // Limitar peticiones
     app.use(rateLimit({
         windowMs: 15 * 60 * 1000, // 15 minutos
-        max: 1000,
+        max: 30000,
         message: 'Demasiadas peticiones, intenta más tarde.',
     }));
 

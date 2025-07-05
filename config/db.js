@@ -19,7 +19,7 @@ const config = {
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
         port: process.env.DB_PORT || 3306,
-        connectionLimit: 50, // tráfico de producción más alto
+        connectionLimit: 100, // tráfico de producción más alto
     }
 };
 
