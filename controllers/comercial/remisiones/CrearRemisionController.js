@@ -16,14 +16,14 @@ const CrearRemisionController = async (req, res) => {
 
         //Se retorna respuesta al frontend/cliente
         // res.status(200).send({});
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Remisión creada correctamente',
             data: Resultado
         })
         //...
     } catch (error) {
         console.error('Error en CrearRemisionController => ', error);
-        res.status(500).json({ error: `Error al crear la remisión => ${error}` });
+        return res.status(500).json({ error: `Error al crear la remisión => ${error}` });
     }
 };
 module.exports = {

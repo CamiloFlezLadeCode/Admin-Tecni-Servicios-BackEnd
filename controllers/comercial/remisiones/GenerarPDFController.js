@@ -185,10 +185,32 @@ const GenerarPDFRemisionController = async (req, res) => {
 
             await page.setContent(html, { waitUntil: 'domcontentloaded' });
 
+            // const pdfBuffer = await page.pdf({
+            //     format: 'A4',
+            //     printBackground: true,
+            //     margin: { top: '0px', bottom: '4px', left: '10px', right: '10px' }
+            // });
+
+            //Otra forma con A4 es incrementar el maring-bottom 
+            // const pdfBuffer = await page.pdf({
+            //     format: 'A4',  // o 'letter' si es requerido
+            //     printBackground: true,
+            //     margin: { top: '0px', bottom: '20px', left: '10px', right: '10px' }
+            // });
+
+            //Formato con medidas manuales
+            // const pdfBuffer = await page.pdf({
+            //     width: '8.5in',    // Ancho carta (EEUU) = 8.5 pulgadas
+            //     height: '11in',    // Alto carta = 11 pulgadas
+            //     printBackground: true,
+            //     margin: { top: '0px', bottom: '4px', left: '10px', right: '10px' }
+            // });
+
+            //Formato letter estandar de playwright
             const pdfBuffer = await page.pdf({
-                format: 'A4',
+                format: 'letter',  // Formato carta estándar (EEUU/Canadá/México)
                 printBackground: true,
-                margin: { top: '0px', bottom: '4px', left: '10px', right: '10px' }
+                margin: { top: '0px', bottom: '12px', left: '10px', right: '10px' }
             });
 
             await browser.close();
@@ -247,10 +269,10 @@ const GenerarPDFRemisionController = async (req, res) => {
 
         } catch (error) {
             console.error('Error generando PDF:', error);
-            res.status(500).json({ error: 'Error generando PDF' });
+            return res.status(500).json({ error: 'Error generando PDF' });
         }
     } else {
-        res.status(500).json({ error: 'Herramienta desconocida para generar PDF' });
+        return res.status(500).json({ error: 'Herramienta desconocida para generar PDF' });
     }
 }
 

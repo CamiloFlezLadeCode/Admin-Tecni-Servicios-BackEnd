@@ -20,6 +20,7 @@ const { ListarBodeguerosController } = require('../../controllers/generales/Bode
 const { ListarDespachadoresController } = require('../../controllers/generales/DespachadoresController');
 const { ListarTransportadoresController } = require('../../controllers/generales/TransportadoresController');
 const { ListarVehiculosController } = require('../../controllers/generales/VehiculosController');
+const { ListarMecanicosController } = require('../../controllers/generales/MecanicosController');
 //...
 
 //Se crean las rutas/apis con su respectivo controlador
@@ -36,6 +37,7 @@ router.get('/listar-bodegueros', ListarBodeguerosController);
 router.get('/listar-despachadores', ListarDespachadoresController);
 router.get('/listar-transportadores', ListarTransportadoresController);
 router.get('/listar-vehiculos', ListarVehiculosController);
+router.get('/listar-mecanicos', ListarMecanicosController);
 //...
 
 //Se exportan las rutas/apis para ser levantadas en el servidor

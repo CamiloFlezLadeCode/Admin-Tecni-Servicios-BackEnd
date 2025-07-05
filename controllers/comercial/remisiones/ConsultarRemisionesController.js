@@ -9,7 +9,7 @@ const ConsultarRemisionesController = async (req, res) => {
         );
     } catch (error) {
         console.error('Error en ConsultarRemisionesController => ', error);
-        res.status(500).json({ error: `Error al consultar las remisiones => ${error}` });
+        return res.status(500).json({ error: `Error al consultar las remisiones => ${error}` });
     }
 };
 module.exports = {

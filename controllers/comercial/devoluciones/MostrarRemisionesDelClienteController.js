@@ -6,7 +6,7 @@ const MostrarRemisionesDelClienteController = async (req, res) => {
         const Remisiones = await MostrarRemisionesDelClienteService(Datos);
         console.log(`Remisiones del cliente obtenidas correctamente - Total: ${Remisiones.length}`)
         const RemisionesMapeadas = Remisiones.map(remision => ({
-            label: remision.NoRemision,
+            label: `No: ${remision.NoRemision} Fecha: ${remision.FechaCreacion}`,
             value: remision.IdRemision
         }));
         return res.status(200).json(
@@ -14,7 +14,7 @@ const MostrarRemisionesDelClienteController = async (req, res) => {
         );
     } catch (error) {
         console.error('Error en MostrarRemisionesDelClienteController => ', error);
-        res.status(500).json({ error: `Error al consultar las remisiones del cliente => ${error}` });
+        return res.status(500).json({ error: `Error al consultar las remisiones del cliente => ${error}` });
     }
 };
 module.exports = {
