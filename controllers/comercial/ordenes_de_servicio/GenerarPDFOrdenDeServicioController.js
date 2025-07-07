@@ -116,7 +116,7 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
         const replacements = {
             // INFO ENCABEZADO
             '{{LogoImagenBase64}}': pdfGenerator.loadImageAsBase64('LogoCompany.png'),
-            '{{TituloDocumento}}': 'ÓRDEN DE SERVICIO',
+            '{{TituloDocumento}}': 'ORDEN DE SERVICIO',
             '{{CodigoDocumento}}': 'GTH-F-8',
             '{{VersionDocumento}}': '01',
             '{{VigenciaDocumento}}': 'Marzo 2025',
@@ -125,7 +125,7 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
             '{{MisionEmpresa}}': 'Reparación y alquiler de equipos para la construcción.',
             '{{NITEmpresa}}': '901893972-3',
             // TIPO Y NO CONSECUTIVO DOCUMENTO
-            '{{TipoDocumento}}': 'Órden de servicio',
+            '{{TipoDocumento}}': 'Orden de servicio',
             '{{NoDocumento}}': cabecera.NoOrdenDeServicio,
             // INFORMACIÓN DE CLIENTE
             '{{FechaDocumento}}': cabecera.FechaCreacion,
