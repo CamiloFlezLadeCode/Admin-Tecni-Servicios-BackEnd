@@ -7,6 +7,24 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.marca-de-agua {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 700px; /* Ajusta según el tamaño deseado */
+  height: auto;
+  transform: translate(-50%, -50%);
+  opacity: 0.1; /* Transparencia */
+  z-index: 0;
+  pointer-events: none; /* Para que no interfiera con el contenido encima */
+}
+
+.marca-de-agua img {
+  width: 100%;
+  height: auto;
+}
+
+
 /* ESTILOS PARA EL ENCABEZADO DEL PDF */
 .Entabezado {
     width: 100%;

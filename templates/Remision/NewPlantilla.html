@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remisión {{NoRemision}} | {{NombreEmpresa}}</title>
+  <style>
+    /* ESTILOS BASE - INYECTADOS POR NODEJS */
+    :root {
+      --color-primario: #2c3e50;
+      --color-secundario: #3498db;
+      --color-texto: #333333;
+      --color-borde: #dddddd;
+      --color-fondo-header: #f8f9fa;
+      --color-fondo-footer: #2c3e50;
+      --color-texto-footer: #ffffff;
+      --margen-pagina: 15mm;
+    }
+
+    @page {
+      size: letter;
+      margin: var(--margen-pagina);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--color-texto);
+      line-height: 1.5;
+      font-size: 12px;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ESTRUCTURA PRINCIPAL */
+    .documento-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header, footer {
+      flex-shrink: 0;
+    }
+
+    main {
+      flex-grow: 1;
+    }
+
+    /* ENCABEZADO */
+    .encabezado {
+      background-color: var(--color-fondo-header);
+      padding: 10px 0;
+      border-bottom: 2px solid var(--color-primario);
+      margin-bottom: 15px;
+    }
+
+    .logo-empresa {
+      height: 80px;
+      max-width: 200px;
+      object-fit: contain;
+    }
+
+    .titulo-documento {
+      color: var(--color-primario);
+      text-align: center;
+      margin: 0;
+      font-size: 1.8em;
+      text-transform: uppercase;
+    }
+
+    .info-documento {
+      text-align: right;
+      font-size: 0.9em;
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    .info-empresa {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .nombre-empresa {
+      font-weight: bold;
+      font-size: 1.3em;
+      color: var(--color-primario);
+    }
+
+    .mision-empresa {
+      font-style: italic;
+      color: #666;
+    }
+
+    .nit-empresa {
+      font-size: 0.9em;
+    }
+
+    .numero-remision {
+      font-weight: bold;
+      font-size: 1.1em;
+      color: var(--color-secundario);
+    }
+
+    /* TABLAS */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    th, td {
+      padding: 8px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .tabla-datos th {
+      background-color: var(--color-primario);
+      color: white;
+      font-weight: normal;
+      text-transform: uppercase;
+      font-size: 0.9em;
+    }
+
+    .tabla-datos td, .tabla-datos th {
+      border: 1px solid var(--color-borde);
+    }
+
+    .tabla-encabezado {
+      margin-bottom: 10px;
+    }
+
+    .tabla-firmas {
+      margin-top: 30px;
+    }
+
+    .firma {
+      border-top: 1px solid var(--color-borde);
+      padding-top: 5px;
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .firma-nombre {
+      font-weight: bold;
+    }
+
+    .firma-cargo {
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    /* PIE DE PÁGINA */
+    .pie-pagina {
+      background-color: var(--color-fondo-footer);
+      color: var(--color-texto-footer);
+      padding: 10px 0;
+      font-size: 0.9em;
+      margin-top: 20px;
+    }
+
+    .contacto-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .icono-contacto {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+    }
+
+    /* UTILIDADES */
+    .texto-centrado {
+      text-align: center;
+    }
+
+    .texto-derecha {
+      text-align: right;
+    }
+
+    .borde-superior {
+      border-top: 1px solid var(--color-borde);
+    }
+
+    .borde-inferior {
+      border-bottom: 1px solid var(--color-borde);
+    }
+
+    .sin-borde {
+      border: none !important;
+    }
+
+    .margen-superior {
+      margin-top: 15px;
+    }
+
+    /* RESPONSIVO PARA PDF */
+    @media print {
+      body {
+        font-size: 11px;
+      }
+      
+      .salto-pagina {
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="documento-container">
+    <!-- ENCABEZADO -->
+    <header class="encabezado">
+      <table class="tabla-encabezado sin-borde">
+        <tr>
+          <td width="25%">
+            <img class="logo-empresa" src="{{LogoImagenBase64}}" alt="Logo {{NombreEmpresa}}">
+          </td>
+          <td width="50%" class="texto-centrado">
+            <h1 class="titulo-documento">Remisión</h1>
+          </td>
+          <td width="25%" class="texto-derecha">
+            <div class="info-documento">
+              <div>Código: {{CodigoDocumento}}</div>
+              <div>Versión: {{VersionDocumento}}</div>
+              <div>Vigencia: {{VigenciaDocumento}}</div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main>
+      <!-- INFORMACIÓN EMPRESA -->
+      <div class="info-empresa">
+        <div class="nombre-empresa">{{NombreEmpresa}}</div>
+        <div class="mision-empresa">{{MisionEmpresa}}</div>
+        <div class="nit-empresa">NIT: {{NITEmpresa}}</div>
+        <div class="margen-superior">
+          <span>Remisión:</span>
+          <span class="numero-remision">Nº {{NoRemision}}</span>
+        </div>
+      </div>
+
+      <!-- FECHA -->
+      <table class="sin-borde">
+        <tr>
+          <td width="15%"><strong>FECHA:</strong></td>
+          <td>{{FechaRemision}}</td>
+        </tr>
+      </table>
+
+      <!-- DATOS CLIENTE -->
+      <table class="tabla-datos">
+        <tr>
+          <td width="15%"><strong>CLIENTE:</strong></td>
+          <td width="35%">{{Cliente}}</td>
+          <td width="15%"><strong>NIT/CC:</strong></td>
+          <td width="35%">{{DocumentoCliente}}</td>
+        </tr>
+        <tr>
+          <td><strong>DIRECCIÓN:</strong></td>
+          <td>{{DireccionProyecto}}</td>
+          <td><strong>OBRA/PROYECTO:</strong></td>
+          <td>{{Proyecto}}</td>
+        </tr>
+        <tr>
+          <td><strong>TELÉFONO:</strong></td>
+          <td>{{Celular}}</td>
+          <td><strong>CONTACTO:</strong></td>
+          <td>{{Contacto}}</td>
+        </tr>
+      </table>
+
+      <!-- ITEMS -->
+      <table class="tabla-datos">
+        <thead>
+          <tr>
+            <th width="10%">CANTIDAD</th>
+            <th width="50%">DESCRIPCIÓN</th>
+            <th width="40%">OBSERVACIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{rows}}
+        </tbody>
+      </table>
+
+      <!-- FIRMAS -->
+      <table class="tabla-firmas sin-borde">
+        <tr>
+          <td width="33%" class="texto-centrado">
+            <div class="firma">
+              <div class="firma-nombre">{{Bodeguero}}</div>
+              <div class="firma-cargo">Bodeguero</div>
+            </div>
+          </td>
+          <td width="33%" class="texto-centrado">
+            <div class="firma">
+              <div class="firma-nombre">{{Despachador}}</div>
+              <div class="firma-cargo">Despachador</div>
+            </div>
+          </td>
+          <td width="33%" class="texto-centrado">
+            <div class="firma">
+              <div class="firma-nombre">{{Transportador}}</div>
+              <div class="firma-cargo">Transportador</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="texto-centrado">
+            <div class="firma">
+              <div class="firma-nombre">{{PlacaVehiculo}}</div>
+              <div class="firma-cargo">Vehículo</div>
+            </div>
+          </td>
+          <td class="texto-centrado">
+            <div class="firma">
+              <div class="firma-nombre">{{PersonaQueRecibe}}</div>
+              <div class="firma-cargo">Recibe</div>
+            </div>
+          </td>
+          <td class="texto-centrado">
+            <div class="firma">
+              <div class="firma-nombre">{{PlacaVehiculoRecibe}}</div>
+              <div class="firma-cargo">Placa</div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="pie-pagina">
+      <div class="contacto-item">
+        <img src="{{IconoWhatsApp}}" alt="WhatsApp" class="icono-contacto">
+        <span>{{Telefono1}} - {{Telefono2}}</span>
+      </div>
+      <div class="contacto-item">
+        <img src="{{IconoDireccion}}" alt="Dirección" class="icono-contacto">
+        <span>{{DireccionEmpresa}}</span>
+      </div>
+      <div class="contacto-item">
+        <img src="{{IconoEmail}}" alt="Correo" class="icono-contacto">
+        <span>{{EmailEmpresa}}</span>
+      </div>
+    </footer>
+  </div>
+</body>
+
+</html>

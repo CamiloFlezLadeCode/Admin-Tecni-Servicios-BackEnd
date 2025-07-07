@@ -5,7 +5,93 @@ html {
 
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    /* padding-bottom: 300px !important; */
+    /* Espacio para el footer */
 }
+
+/* POLÍTICAS - ÚLTIMA PÁGINA */
+.PoliticasDeLaEmpresa {
+    page-break-before: always;
+    margin-top: 1.5cm;
+    /* padding: 1.5cm 1.5cm 4cm; */
+    padding-right: 20px;
+    /* Más espacio abajo para el footer */
+    box-sizing: border-box;
+
+    /* Evita que el contenido se divida */
+    page-break-inside: avoid;
+    break-inside: avoid-page;
+
+    /* Ajuste para contenido dinámico */
+    display: flow-root;
+
+    /* text-align: center; */
+
+    width: 100%;
+}
+
+.TituloPoliticasDeEmpresa {
+    text-align: center;
+    justify-content: center;
+}
+
+.Politicas {
+    width: 100%;
+    font-size: 15px;
+}
+
+.Politicas li {
+    text-align: justify !important;
+    line-height: 1.6;
+}
+
+/* Estilos para la marca de agua en todas las páginas */
+@page {
+    size: letter;
+    /* margin: 1.5cm; */
+
+    /* Márgenes personalizados si es necesario */
+    @top-left {
+        content: "";
+    }
+
+    @bottom-right {
+        content: "";
+    }
+}
+
+/* Marca de agua fija en todas las páginas */
+.marca-de-agua {
+    width: 70%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* opacity: 0.2; */
+    z-index: -1;
+    pointer-events: none;
+}
+
+.marca-de-agua img {
+    width: 100%;
+    height: auto;
+    opacity: 0.2;
+}
+
+/* Contenedor principal para el contenido */
+.contenido-principal {
+    position: relative;
+    z-index: 1;
+}
+
+/* Estilo específico para la página de políticas */
+.pagina-politicas {
+    page-break-before: always;
+    padding-top: 2cm;
+}
+
 
 /* ESTILOS PARA EL ENCABEZADO DEL PDF */
 .Entabezado {
@@ -237,6 +323,10 @@ td {
     width: 100%;
 }
 
+.TextoDescripcion {
+    text-align: justify;
+}
+
 /* .Bodeguero {
     border: solid 1px #000000;
     width: 30%;
@@ -287,6 +377,22 @@ td {
 /* ... */
 
 /* ESTILOS PARA EL FOOTER DE LA REMISIÓN */
+/* .PieDePagina {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f8f8f8;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 14px;
+    z-index: 100;
+    box-sizing: border-box;
+} */
+
 .PieDePagina {
     position: fixed;
     bottom: 0;
@@ -297,11 +403,18 @@ td {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 10px 0px;
+    padding: 10px 0;
     font-size: 14px;
-    z-index: 999;
-    /* Asegura que quede encima */
+    /* z-index: 1000;  */
+    box-sizing: border-box;
+    /* Nuevas propiedades clave: */
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* Sombra para efecto de elevación */
+    pointer-events: none; /* Permite clicks a través del footer */
 }
+
+
+
+
 
 .FooterItem {
     display: flex;
@@ -325,6 +438,14 @@ td {
 
 .SinBordeInferior {
     border-bottom: none;
+}
+
+.TextoJustificado {
+    text-align: justify;
+}
+
+.BordesNegros1Pixel {
+    border: solid #000000 1px;
 }
 
 /* ... */

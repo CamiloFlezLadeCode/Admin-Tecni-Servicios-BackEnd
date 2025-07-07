@@ -1,0 +1,121 @@
+html {
+    font-size: 14px;
+    /* tamaño base */
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* ESTILOS PARA EL ENCABEZADO DEL PDF */
+.Entabezado {
+    width: 100%;
+}
+
+.ColumnaEncabezado1 {
+    width: 33%;
+    align-items: center;
+    text-align: center;
+}
+
+.ColumnaEncabezado2 {
+    width: 33%;
+    text-align: center;
+}
+
+.ColumnaEncabezado3 {
+    width: 33%;
+    height: 100%;
+    padding: 0;
+    vertical-align: top;
+}
+
+.LogoEmpresa {
+    width: 150px;
+    height: 70px;
+    margin: 0;
+}
+
+.TablaEncabezado {
+    width: 100%;
+    height: 90px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    /* ← fuerza que los widths se respeten */
+}
+
+
+
+.ContenedorTextoColumnaEncabezado3 {
+    border-bottom: 1px solid #000000;
+    margin: 0;
+    /* padding: 0; */
+    height: 30px;
+}
+
+.ContenedorTextoColumnaEncabezado3:last-child {
+    border-bottom: none;
+}
+
+.TextoLabelContenedorTextoColumnaEncabezado3 {
+    width: 100%;
+    margin-left: 10px;
+}
+
+
+
+.Titulo {
+    margin: 0 auto;
+}
+
+.TablaEncabezado {
+    border: 1px solid #000000;
+    /* padding: 8px; */
+    text-align: left;
+}
+
+.ColumnaEncabezado1,
+.ColumnaEncabezado2,
+.ColumnaEncabezado3 {
+    border: 1px solid #000000;
+}
+
+.ContenedorTextoColumnaEncabezado3 {
+    padding-left: 4px;
+}
+
+/* ... */
+
+
+
+/* ESTILOS PARA EL FOOTER DE LA REMISIÓN */
+.PieDePagina {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f8f8f8;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0px;
+    font-size: 14px;
+    z-index: 999;
+    /* Asegura que quede encima */
+}
+
+.FooterItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.IconoFooter {
+    /* width: 16px;
+    height: 16px; */
+    width: 26px;
+    height: 26px;
+}
+
+/* ... */

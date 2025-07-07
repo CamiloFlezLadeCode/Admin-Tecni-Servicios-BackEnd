@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TituloDocumentoPDF}}</title>
+    <style>
+        /* Los estilos CSS se inyectarán desde Node.js */
+    </style>
+    <link rel="stylesheet" href="StyleClasica.css">
+</head>
+
+<body>
+    <div class="marca-de-agua">
+        <img src="{{LogoImagenBase64}}" alt="Marca de agua">
+    </div>
+
+    <!-- ENCABEZADO (ESTRUCTURA ORIGINAL) -->
+    <header class="Encabezado">
+        <table class="TablaEncabezado SinBordesDobles">
+            <tr>
+                <td class="ColumnaEncabezado1">
+                    <img class="LogoEmpresa" src="{{LogoImagenBase64}}">
+                </td>
+                <td class="ColumnaEncabezado2">
+                    <h3 class="Titulo">{{TituloDocumento}}</h3>
+                </td>
+                <td class="ColumnaEncabezado3 SinBordeInferior">
+                    <div class="ContenedorTextoColumnaEncabezado3">
+                        <span>Código: {{CodigoDocumento}}</span>
+                    </div>
+                    <div class="ContenedorTextoColumnaEncabezado3">
+                        <span>Versión: {{VersionDocumento}}</span>
+                    </div>
+                    <div class="ContenedorTextoColumnaEncabezado3 SinBordeInferior">
+                        <span>Vigencia: {{VigenciaDocumento}}</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL (ESTRUCTURA ORIGINAL) -->
+    <main class="Contenido">
+        <!-- INFORMACIÓN EMPRESA -->
+        <table class="TablaInfoEmpresa SinBordesDobles">
+            <tr>
+                <th class="NombreEmpresa BordesNegros1px">
+                    <span class="TextoNombreEmpresa">{{NombreEmpresa}}</span><br>
+                    <span class="TextoMisionEmpresa">{{MisionEmpresa}}</span><br>
+                    <span class="TextoNITEmpresa">NIT. {{NITEmpresa}}</span><br>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="MisionEmpresa">
+                        <span class="TextoRemision">{{TipoDocumento}}:</span>
+                        <span class="NumeroRemision">Nº {{NoDocumento}}</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- FECHA -->
+        <table class="TablaFecha BordesNegros1px SinBordesDobles">
+            <tr>
+                <td class="FechaRemisionTexto BordesNegros1px SinBordesDobles">
+                    <strong>FECHA:</strong>
+                </td>
+                <td class="FechaRemisionValor">
+                    <span>{{FechaDocumento}}</span>
+                </td>
+            </tr>
+        </table>
+
+        <!-- DATOS CLIENTE -->
+        <table class="TablaCliente BordesNegros1px SinBordesDobles">
+            <tr>
+                <td class="TablaClienteItem1 BordesNegros1px"><strong>CLIENTE:</strong></td>
+                <td class="TablaClienteValor1 BordesNegros1px"><span>{{Cliente}}</span></td>
+                <td class="TablaClienteItem2 BordesNegros1px"><strong>NIT/CC:</strong></td>
+                <td class="TablaClienteValor2 BordesNegros1px"><span>{{DocumentoCliente}}</span></td>
+            </tr>
+            <tr>
+                <td class="TablaClienteItem1 BordesNegros1px"><strong>DIRECCIÓN:</strong></td>
+                <td class="TablaClienteValor1 BordesNegros1px"><span>{{DireccionProyecto}}</span></td>
+                <td class="TablaClienteItem2 BordesNegros1px"><strong>OBRA/PROYECTO:</strong></td>
+                <td class="TablaClienteValor2 BordesNegros1px">{{Proyecto}}</td>
+            </tr>
+            <tr>
+                <td class="TablaClienteItem1 BordesNegros1px"><strong>TELÉFONO:</strong></td>
+                <td class="TablaClienteValor1 BordesNegros1px">{{Celular}}</td>
+                <td class="TablaClienteItem2 BordesNegros1px"><strong>CONTACTO:</strong></td>
+                <td class="TablaClienteValor2 BordesNegros1px">{{Contacto}}</td>
+            </tr>
+        </table>
+
+        <!-- CONTENIDO DINÁMICO -->
+        {{{contenido}}}
+
+        <!-- FIRMAS (ESTILO ORIGINAL) -->
+        <!-- <table class="TablaFirmas SinBordesDobles">
+            <tr>
+                <td class="CeldaContenedorFirma">
+                    <div class="ContenedorFirma">
+                        <span>{{Bodeguero}}</span>
+                    </div>
+                    <span>Bodeguero</span>
+                </td>
+                <td class="CeldaContenedorFirma">
+                    <div class="ContenedorFirma">
+                        <span>{{Despachador}}</span>
+                    </div>
+                    <span>Despachador</span>
+                </td>
+                <td class="CeldaContenedorFirma">
+                    <div class="ContenedorFirma">
+                        <span>{{Transportador}}</span>
+                    </div>
+                    <span>Transportador</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="CeldaContenedorFirma">
+                    <div class="ContenedorFirma">
+                        <span>{{PlacaVehiculo}}</span>
+                    </div>
+                    <span>Vehículo</span>
+                </td>
+                <td class="CeldaContenedorFirma">
+                    <div class="ContenedorFirma">
+                        <span>{{PersonaQueRecibe}}</span>
+                    </div>
+                    <span>Recibe</span>
+                </td>
+                <td class="CeldaContenedorFirma">
+                    <div class="ContenedorFirma">
+                        <span>{{PlacaVehiculoRecibe}}</span>
+                    </div>
+                    <span>Placa</span>
+                </td>
+            </tr>
+        </table> -->
+    </main>
+
+    <!-- POLÍTICAS DE LA EMPRESA -->
+    <div class="PoliticasDeLaEmpresa">
+        <h3 class="TituloPoliticasDeEmpresa">POLITICAS GENERALES DE ALQUILER Y REPOSICIÓN DE EQUIPOS</h3>
+        <div class="Politicas">
+            <ul>
+                <li>La facturación se genera por cada día calendario en que el equipo permanece alquilado, incluidos
+                    domingos y festivos, y se cobrará hasta el día en que sea anunciada la devolución.</li>
+                <li>Al firmar la remisión o devolución, el arrendatario acepta que recibe los equipos a satisfacción y
+                    en las cantidades registradas.</li>
+                <li>La persona que recibe y/o entrega el equipo y firma la remisión y/o devolución, se presume de
+                    derecho que está autorizada por el representante legal de la arrendataria para recibir, entregar y
+                    comprometer a la empresa en cuestión.</li>
+                <li>El costo del transporte no está incluido en los precios de alquiler y corre por cuenta del
+                    arrendatario, genera cobro por cada viaje o trayecto según cotización.</li>
+                <li>No se autoriza el traslado de equipos de una obra a otra sin la debida autorización y documentación
+                    de TECNISERVICIOS J.F S.A.S</li>
+                <li>TECNISERVICIOS J.F S.A.S no asume ninguna responsabilidad por accidentes personales a terceros, ni
+                    daños materiales que se puedan presentar en el manejo de los equipos.</li>
+                <li>Los equipos deben ser operados por personal debidamente capacitado, entrenado y con experiencia en
+                    el manejo de los mismos. Los daños ocasionados a los equipos por descuido u operación inadecuada,
+                    generan cobro por reparación, repuestos y mano de obra.</li>
+                <li>Son obligaciones del arrendatario ejercer todos los actos tendientes al buen uso y conservación del
+                    equipo, con la obligación de emplear el mayor cuidado en su conservación.</li>
+                <li>Los equipos se entregan limpios y en perfectas condiciones de funcionamiento; en iguales condiciones
+                    deben ser devueltos, en caso contrario se cobrará su limpieza o mantenimiento.</li>
+                <li>Antes de poner en funcionamiento los equipos electromecánicos, se debe tener en cuenta las
+                    recomendaciones de uso, ya sea eléctricos o a combustión, manera adecuada de transportarse, niveles
+                    de líquidos y preoperacionales en general.</li>
+                <li>El personal de TECNISERVICIOS J.F S.A.S autorizado para recoger los equipos, harán una inspección
+                    inicial de los equipos en obra, y los mismos serán trasladados a nuestras instalaciones donde el
+                    personal técnico capacitado hará una revisión exhaustiva; los daños o averías que se encuentren en
+                    el equipo serán informados al arrendatario lo antes posible al igual que el cobro generado por este
+                    concepto.</li>
+            </ul>
+            <strong>En caso de pérdida o hurto de los equipos:</strong>
+            <ul>
+                <li>Desde el momento de la entrega de los equipos el arrendatario en bodega u obra, las
+                    responsabilidades originadas por robo, hurto total o parcial, operación e instalación son por cuenta
+                    del arrendatario.</li>
+                <li>Los equipos no se encuentran asegurados por parte de TECNISERVICIOS J.F S.A.S por lo tanto quedan
+                    por cuenta y riesgo del arrendatario desde que acepta la remisión hasta que se efectúa la
+                    devolución. Se sugiere incluir los equipos en pólizas de seguros de las obras.</li>
+                <li>El valor pagado por alquiler no constituye parte de pago en caso de faltantes o averías en los
+                    equipos.</li>
+                <li>Los elementos o accesorios faltantes después de la devolución, ya sea total o parcial se cobrarán
+                    por su valor comercial al día del evento.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA (ESTILO ORIGINAL) -->
+    <footer class="PieDePagina">
+        <div class="FooterItem">
+            <img src="{{IconoWhatsApp}}" alt="WhatsApp" class="IconoFooter">
+            <span>{{Telefono1}} - {{Telefono2}}</span>
+        </div>
+        <div class="FooterItem">
+            <img src="{{IconoDireccion}}" alt="Dirección" class="IconoFooter">
+            <span>{{DireccionEmpresa}}</span>
+        </div>
+        <div class="FooterItem">
+            <img src="{{IconoEmail}}" alt="Correo" class="IconoFooter">
+            <span>{{EmailEmpresa}}</span>
+        </div>
+    </footer>
+</body>
+
+</html>

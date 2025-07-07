@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TituloDocumento}} | {{NombreEmpresa}}</title>
+    <style>
+        /* VARIABLES GLOBALES - EDITABLES */
+        :root {
+            /* Colores corporativos */
+            --color-primario: #2c3e50;
+            --color-secundario: #3498db;
+            --color-acento: #e74c3c;
+            --color-texto: #333333;
+            --color-borde: #dddddd;
+            --color-fondo-header: #f8f9fa;
+
+            /* Tipografía */
+            --fuente-principal: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --fuente-secundaria: Arial, Helvetica, sans-serif;
+
+            /* Espaciados */
+            --espaciado-base: 8px;
+            --espaciado-doble: 16px;
+            --espaciado-triple: 24px;
+
+            /* Bordes */
+            --grosor-borde: 1px;
+            --estilo-borde: solid;
+            --radio-borde: 4px;
+
+            /* Tamaños fijos */
+            --altura-encabezado: 100px;
+            --altura-pie: 80px;
+        }
+
+        /* RESET Y ESTILOS BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--fuente-principal);
+            color: var(--color-texto);
+            line-height: 1.5;
+            font-size: 12px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: var(--espaciado-doble);
+        }
+
+        th,
+        td {
+            padding: var(--espaciado-base) var(--espaciado-doble);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        /* ESTRUCTURA MODULAR */
+        .documento-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ENCABEZADO REUTILIZABLE */
+        .encabezado-documento {
+            height: var(--altura-encabezado);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--espaciado-base);
+            border-bottom: var(--grosor-borde) var(--estilo-borde) var(--color-borde);
+            margin-bottom: var(--espaciado-doble);
+        }
+
+        .logo-empresa {
+            height: 80px;
+            max-width: 200px;
+            object-fit: contain;
+        }
+
+        .titulo-documento {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            /* top: var(--espaciado-base); */
+            margin: 0;
+            color: var(--color-primario);
+            text-align: center;
+            font-size: 1.8em;
+            /* text-transform: uppercase;
+      margin: 0 var(--espaciado-doble); */
+        }
+
+        .metadatos-documento {
+            text-align: right;
+            font-size: 0.9em;
+        }
+
+        .metadatos-documento div {
+            margin-bottom: var(--espaciado-base);
+        }
+
+        /* SECCIONES COMPARTIDAS */
+        .seccion-empresa {
+            text-align: center;
+            margin-bottom: var(--espaciado-doble);
+        }
+
+        .nombre-empresa {
+            font-weight: bold;
+            font-size: 1.3em;
+            color: var(--color-primario);
+        }
+
+        .mision-empresa {
+            font-style: italic;
+            color: #666;
+        }
+
+        .nit-empresa {
+            font-size: 0.9em;
+        }
+
+        .numero-remision {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: var(--color-secundario);
+        }
+
+        .tabla-datos {
+            width: 100%;
+            border: var(--grosor-borde) var(--estilo-borde) var(--color-borde);
+        }
+
+        .tabla-datos th {
+            background-color: var(--color-primario);
+            color: white;
+            font-weight: normal;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+
+        .tabla-datos td,
+        .tabla-datos th {
+            border: var(--grosor-borde) var(--estilo-borde) var(--color-borde);
+        }
+
+        /* PIE DE PÁGINA REUTILIZABLE */
+        .pie-documento-horizontal {
+            background-color: var(--color-primario);
+            color: white;
+            padding: var(--espaciado-doble) 0;
+            margin-top: var(--espaciado-triple);
+        }
+
+        .contenedor-contactos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 var(--espaciado-doble);
+        }
+
+        .pie-documento-horizontal .contacto-item {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+            padding: 0 var(--espaciado-base);
+        }
+
+        .pie-documento-horizontal .icono-contacto {
+            width: 16px;
+            height: 16px;
+            margin-right: var(--espaciado-base);
+            filter: brightness(-1) invert(1);
+        }
+
+        /* CONTENIDO DINÁMICO */
+        .contenido-dinamico {
+            flex: 1;
+            padding: 0 var(--espaciado-doble);
+        }
+
+        /* UTILIDADES */
+        .texto-centrado {
+            text-align: center;
+        }
+
+        .texto-derecha {
+            text-align: right;
+        }
+
+        .texto-izquierda {
+            text-align: left;
+        }
+
+        .negrita {
+            font-weight: bold;
+        }
+
+        .mayusculas {
+            text-transform: uppercase;
+        }
+
+        .margen-inferior {
+            margin-bottom: var(--espaciado-doble);
+        }
+
+        .sin-borde {
+            border: none !important;
+        }
+
+        /* MEDIA QUERIES PARA IMPRESIÓN */
+        @media print {
+            body {
+                font-size: 11px;
+            }
+
+            .encabezado-documento,
+            .pie-documento-horizontal {
+                position: fixed;
+                width: 100%;
+            }
+
+            .encabezado-documento {
+                top: 0;
+            }
+
+            .pie-documento-horizontal {
+                bottom: 0;
+            }
+
+            .contenido-dinamico {
+                margin-top: var(--altura-encabezado);
+                margin-bottom: var(--altura-pie);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="documento-container">
+        <!-- ENCABEZADO MODULAR -->
+        <header class="encabezado-documento">
+            <div class="logo-container">
+                <img class="logo-empresa" src="{{LogoImagenBase64}}" alt="Logo {{NombreEmpresa}}">
+            </div>
+
+            <h1 class="titulo-documento">{{TituloDocumento}}</h1>
+
+            <div class="metadatos-documento">
+                <div>Código: {{CodigoDocumento}}</div>
+                <div>Versión: {{VersionDocumento}}</div>
+                <div>Vigencia: {{VigenciaDocumento}}</div>
+            </div>
+        </header>
+        <!-- CONTENIDO DINÁMICO -->
+        <main class="contenido-dinamico">
+            <!-- SECCIÓN INFORMACIÓN EMPRESA (COMPARTIDA) -->
+            <div class="seccion-empresa">
+                <div class="nombre-empresa">{{NombreEmpresa}}</div>
+                <div class="mision-empresa">{{MisionEmpresa}}</div>
+                <div class="nit-empresa">NIT: {{NITEmpresa}}</div>
+                <div class="margen-inferior">
+                    <span>{{TipoDocumento}}:</span>
+                    <span class="numero-remision">Nº {{NoDocumento}}</span>
+                </div>
+            </div>
+
+            <!-- SECCIÓN FECHA (COMPARTIDA) -->
+            <table class="sin-borde">
+                <tr>
+                    <td width="15%"><strong>FECHA:</strong></td>
+                    <td>{{FechaDocumento}}</td>
+                </tr>
+            </table>
+
+            <!-- SECCIÓN CLIENTE (COMPARTIDA) -->
+            <table class="tabla-datos">
+                <tr>
+                    <td width="15%"><strong>CLIENTE:</strong></td>
+                    <td width="35%">{{Cliente}}</td>
+                    <td width="15%"><strong>NIT/CC:</strong></td>
+                    <td width="35%">{{DocumentoCliente}}</td>
+                </tr>
+                <tr>
+                    <td><strong>DIRECCIÓN:</strong></td>
+                    <td>{{DireccionProyecto}}</td>
+                    <td><strong>OBRA/PROYECTO:</strong></td>
+                    <td>{{Proyecto}}</td>
+                </tr>
+                <tr>
+                    <td><strong>TELÉFONO:</strong></td>
+                    <td>{{Celular}}</td>
+                    <td><strong>CONTACTO:</strong></td>
+                    <td>{{Contacto}}</td>
+                </tr>
+            </table>
+
+            <!-- CONTENIDO ESPECÍFICO (INYECTADO) -->
+            {{{contenido}}}
+        </main>
+
+        <!-- PIE DE PÁGINA MODULAR -->
+        <footer class="pie-documento-horizontal">
+            <div class="contenedor-contactos">
+                <div class="contacto-item">
+                    <img src="{{IconoWhatsApp}}" alt="WhatsApp" class="icono-contacto">
+                    <span>{{Telefono1}} - {{Telefono2}}</span>
+                </div>
+                <div class="contacto-item">
+                    <img src="{{IconoDireccion}}" alt="Dirección" class="icono-contacto">
+                    <span>{{DireccionEmpresa}}</span>
+                </div>
+                <div class="contacto-item">
+                    <img src="{{IconoEmail}}" alt="Correo" class="icono-contacto">
+                    <span>{{EmailEmpresa}}</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

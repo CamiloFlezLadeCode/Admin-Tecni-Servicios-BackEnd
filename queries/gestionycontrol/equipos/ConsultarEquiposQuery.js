@@ -17,6 +17,7 @@ const ConsultarEquiposQuery = async () => {
             CONCAT(DAYNAME(equi.FechaCreacion), ' ', DATE_FORMAT(equi.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion,
             esta.Estado,
             equi.Cantidad AS Cantidad,
+            equi.CantidadDisponible AS CantidadDisponible,
             CONCAT(SUBSTRING_INDEX(COALESCE(usu_arrendatario.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu_arrendatario.Apellidos, ''), ' ', 1) ) AS Subarrendatario
         FROM	
             equipo AS equi

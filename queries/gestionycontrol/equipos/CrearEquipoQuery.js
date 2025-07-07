@@ -14,10 +14,11 @@ const CrearEquipoQuery = async (equipoData) => {
                 FechaCreacion,
                 IdEstado,
                 Cantidad,
+                CantidadDisponible,
                 DocumentoSubarrendatario
             )
             VALUES 
-            ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+            ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
     `;
     return query(sql, [
         equipoData.NombreEquipo,
@@ -28,6 +29,7 @@ const CrearEquipoQuery = async (equipoData) => {
         equipoData.UsuarioCreacion,
         FechaActualColombia(),
         equipoData.EstadoEquipo,
+        equipoData.Cantidad,
         equipoData.Cantidad,
         equipoData.DocumentoSubarrendatario
     ]);
