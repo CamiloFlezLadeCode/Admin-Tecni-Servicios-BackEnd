@@ -65,7 +65,7 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 5px;" colspan="2" class="BordesNegros1Pixel">
+                <td style="padding: 5px;" colspan="2" class="BordesNegros1Pixel">
                         <p style="margin: 0; color: red; text-align: justify; font-size: 16px; font-weight: normal;">
                             Después de reparada la herramienta, tiene plazo de 45 días calendario para reclamarla, de lo contrario se le cobrará hasta 50% del arreglo o reparación por concepto de recargo y bodegaje
                         </p>

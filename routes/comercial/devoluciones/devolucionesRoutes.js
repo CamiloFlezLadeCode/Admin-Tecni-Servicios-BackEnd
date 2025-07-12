@@ -6,6 +6,7 @@ const { ConsultarSiguienteNoDevolucionController } = require('../../../controlle
 const { CrearDevolucionController } = require('../../../controllers/comercial/devoluciones/CrearDevolucionController');
 const { VerTodasLasDevolucionesController } = require('../../../controllers/comercial/devoluciones/VerTodasLasDevolucionesController');
 const { GenerarPDFDevolucionController } = require('../../../controllers/comercial/devoluciones/GenerarPDFDevolucionController');
+const { EliminarDevolucionController } = require('../../../controllers/comercial/devoluciones/EliminarDevolucionController');
 
 router.get('/ver-remisiones-cliente', MostrarRemisionesDelClienteController);
 router.get('/ver-items-remision', MostrarItemsRemisionController);
@@ -13,4 +14,5 @@ router.get('/siguiente-no-devolucion', ConsultarSiguienteNoDevolucionController)
 router.post('/crear-devolucion', CrearDevolucionController);
 router.get('/ver-todas-las-devoluciones', VerTodasLasDevolucionesController);
 router.get('/obtener-pdf-devolucion', GenerarPDFDevolucionController);
+router.delete('/eliminar-devolucion', EliminarDevolucionController);
 module.exports = router;
