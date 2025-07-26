@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
+require('dotenv').config();
 
 const applyMiddlewares = (app) => {
     // Seguridad con Helmet
@@ -19,15 +20,18 @@ const applyMiddlewares = (app) => {
     app.use(cookieParser());
     app.use(require('express').json());
 
+    // Se capturas las cors seguras desde las variables de entorno
+    const CorsSeguras = process.env.CORS_SEGURAS_SERVER_CONFIG;
+    const CorsSegurasIdividuales = CorsSeguras.split(',');
     // CORS seguro
     const whitelist = [
-        'http://localhost:3001',
-        'https://mi-app.com',
-        'http://192.168.0.14:3001',
-        'http://127.0.0.1:3001',
-        'https://admintecniservicios.com',
         // 'https://admin-tecni-servicios.vercel.app'
     ];
+    for (let cors = 0; cors < CorsSegurasIdividuales.length; cors++) {
+        const element = CorsSegurasIdividuales[cors];
+        whitelist.push(element);
+    }
+    // console.log(whitelist)
     const corsOptions = {
         origin: (origin, callback) => {
             if (!origin || whitelist.includes(origin)) {
