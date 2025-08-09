@@ -19,4 +19,5 @@ module.exports = [
   require('./comercial/estado_de_cuenta/estadoDeCuentaRoutes'),
   require('./gestionycontrol/ajustes/ajustesRoutes'),
   require('./configuraciones/configuracionesRoutes'),
+  require('./gestionycontrol/bodegas/bodegasRoutes')
 ];
