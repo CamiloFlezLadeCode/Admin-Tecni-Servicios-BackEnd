@@ -5,7 +5,6 @@ const CrearBodegaController = async (req, res) => {
     try {
         const DatosNuevaBodega = req.body;
         await CrearBodegaService(DatosNuevaBodega);
-        console.log(`BODEBA CREADA CORRECTAMENTE. ${JSON.stringify(DatosNuevaBodega)}`);
         const io = obtenerSocketServer();
         if (io) {
             io.emit('bodega-creada', '');

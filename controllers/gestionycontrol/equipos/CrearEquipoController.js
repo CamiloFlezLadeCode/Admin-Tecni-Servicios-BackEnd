@@ -8,7 +8,7 @@ const CrearEquipoController = async (req, res) => {
             return res.status(400).json({ error: 'UsuarioCreacion es requerido' });
         }
         const resultado = await CrearEquipoService(equipoData);
-        console.log("Equipo creado correctamente");
+        console.log("Equipo creado correctamente", equipoData);
         //Se emite el evento socket al cliente
         const io = obtenerSocketServer();
         if (io) {
