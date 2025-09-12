@@ -138,3 +138,6 @@ dist
 
 # Carpeta de backups
 backups_bd/
+
+# Configuraciones del Visual Studio Code
+.vscode
