@@ -7,6 +7,7 @@ const { ConsultarRemisionesController } = require('../../../controllers/comercia
 const { GenerarPDFRemisionController } = require('../../../controllers/comercial/remisiones/GenerarPDFController')
 const { EliminarRemisionController } = require('../../../controllers/comercial/remisiones/EliminarRemisionController');
 const { VerDisponibilidadEquiposController } = require('../../../controllers/comercial/remisiones/VerDisponibilidadEquiposController');
+const { VerDisponibilidadEquiposGeneralesController } = require('../../../controllers/comercial/remisiones/VerDisponibilidadEquiposGeneralesController');
 
 router.post('/crear-remision', CrearRemisionController);
 router.get('/ver-cantidad-disponible-equipo/:IdEquipo', VerCantidadDisponibleController);
@@ -15,4 +16,5 @@ router.get('/ver-remisiones', ConsultarRemisionesController);
 router.get('/obtener-pdf-remision/:IdRemision', GenerarPDFRemisionController);
 router.delete('/eliminar-remision', EliminarRemisionController);
 router.get('/ver-disponibilidad-equipos', VerDisponibilidadEquiposController);
+router.get('/ver-disponibilidad-equipos-generales', VerDisponibilidadEquiposGeneralesController);
 module.exports = router;
