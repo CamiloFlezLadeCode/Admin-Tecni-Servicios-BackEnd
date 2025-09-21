@@ -46,9 +46,11 @@ const InfoPDFQuery = async (IdRemision) => {
             usuario AS bodeguero ON remi.DocumentoBodeguero = bodeguero.DocumentoUsuario    
         INNER JOIN
             usuario AS despachador ON remi.DocumentoDespachador = despachador.DocumentoUsuario
-        INNER JOIN
+        #INNER JOIN
+        LEFT JOIN
             usuario AS transportador ON remi.DocumentoTransportador = transportador.DocumentoUsuario
-		INNER JOIN		
+		#INNER JOIN		
+        LEFT JOIN
         	vehiculos AS vehi ON remi.IdVehiculo = vehi.IdVehiculo
         WHERE
             remi.IdRemision = ?
