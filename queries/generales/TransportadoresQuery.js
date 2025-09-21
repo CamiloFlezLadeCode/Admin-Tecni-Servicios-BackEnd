@@ -13,7 +13,7 @@ const ListarTransportadoresQuery = async () => {
         INNER JOIN
             roles AS rol ON usurol.IdRol = rol.IdRol
         WHERE
-            rol.Rol = 'Transportador'
+            rol.Rol = 'Conductor'
         ORDER BY	
 	        usu.Nombres ASC, usu.Apellidos ASC
     `;

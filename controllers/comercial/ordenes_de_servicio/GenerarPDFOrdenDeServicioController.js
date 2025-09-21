@@ -140,7 +140,7 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
             // INFO_FOOTER
             '{{Telefono1}}': '3016184573',
             '{{Telefono2}}': '3228376688',
-            '{{DireccionEmpresa}}': 'Calle 56 # 33 - 96 Parque de Boston - Medellín',
+            '{{DireccionEmpresa}}': 'CRA 36 # 42-42 EL SALVADOR',
             '{{EmailEmpresa}}': 'tecniserviciossas2024@gmail.com',
             '{{IconoWhatsApp}}': pdfGenerator.loadImageAsBase64('icono-whatsapp.svg', 'image/svg+xml'),
             '{{IconoDireccion}}': pdfGenerator.loadImageAsBase64('icono-direccion.svg', 'image/svg+xml'),
