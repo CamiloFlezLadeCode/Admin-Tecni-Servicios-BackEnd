@@ -82,7 +82,7 @@ const GenerarPDFDevolucionController = async (req, res) => {
             '{{TituloDocumentoPDF}}': `Devolución_${cabecera.NoDevolucion}_${cabecera.Cliente}`,
             '{{LogoImagenBase64}}': pdfGenerator.loadImageAsBase64('LogoCompany.png'),
             '{{TituloDocumento}}': 'DEVOLUCIÓN',
-            '{{CodigoDocumento}}': 'GTH-F-8',
+            '{{CodigoDocumento}}': 'GTH-F-10',
             '{{VersionDocumento}}': '01',
             '{{VigenciaDocumento}}': 'Marzo 2025',
             // INFO EMPRESA PRINCIPAL

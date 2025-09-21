@@ -308,7 +308,7 @@ const GenerarPDFRemisionController = async (req, res) => {
             // INFO ENCABEZADO
             '{{LogoImagenBase64}}': pdfGenerator.loadImageAsBase64('LogoCompany.png'),
             '{{TituloDocumento}}': 'REMISIÓN',
-            '{{CodigoDocumento}}': 'GTH-F-8',
+            '{{CodigoDocumento}}': 'GTH-F-10',
             '{{VersionDocumento}}': '01',
             '{{VigenciaDocumento}}': 'Marzo 2025',
             // INFO EMPRESA PRINCIPAL
