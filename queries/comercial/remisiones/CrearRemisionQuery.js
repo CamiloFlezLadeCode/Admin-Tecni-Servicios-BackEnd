@@ -165,10 +165,10 @@ const CrearRemisionQuery = async (DatosRemision) => {
     const connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
-        
+
         // 1. Configurar timeout para evitar operaciones colgadas
         // await connection.query('SET SESSION wait_timeout = 30');
-        
+
         // 2. Validar tipos de datos numéricos
         const validarNumero = (valor, nombreCampo) => {
             const num = Number(valor);
@@ -186,7 +186,7 @@ const CrearRemisionQuery = async (DatosRemision) => {
                 NombrePersonaRecibe, ObservacionesEmpresa, 
                 UsuarioCreacion, FechaCreacion, IdEstado
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        
+
         const [ResultadoRemision] = await connection.query(InsertarRemision, [
             DatosRemision.NoRemision,
             DatosRemision.DocumentoCliente,
@@ -217,12 +217,12 @@ const CrearRemisionQuery = async (DatosRemision) => {
                 IdEquipo, Cantidad, PrecioUnidad,
                 PrecioTotal, ObservacionesCliente
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-        
+
         for (const detalle of DatosRemision.Detalles) {
             if (!detalle.IdEquipo || !detalle.Cantidad) {
                 throw new Error('Detalle de remisión incompleto');
             }
-            
+
             await connection.query(InsertarDetallesRemision, [
                 IdRemision,
                 detalle.DocumentoSubarrendatario || null,
@@ -241,23 +241,40 @@ const CrearRemisionQuery = async (DatosRemision) => {
             SET CantidadDisponible = GREATEST(0, CantidadDisponible - ?),
                 IdEstado = CASE WHEN (CantidadDisponible - ?) <= 0 THEN 4 ELSE IdEstado END
             WHERE IdEquipo = ?`;
-        
+
+        // for (const equipo of DatosRemision.Detalles) {
+        //     const cantidad = validarNumero(equipo.Cantidad, 'Cantidad');
+        //     const [result] = await connection.query(ActualizarInventario, [
+        //         cantidad, 
+        //         cantidad, 
+        //         equipo.IdEquipo
+        //     ]);
+
+        //     if (result.affectedRows === 0) {
+        //         throw new Error(`No se encontró el equipo con Id ${equipo.IdEquipo}`);
+        //     }
+        // }
+
         for (const equipo of DatosRemision.Detalles) {
             const cantidad = validarNumero(equipo.Cantidad, 'Cantidad');
-            const [result] = await connection.query(ActualizarInventario, [
-                cantidad, 
-                cantidad, 
-                equipo.IdEquipo
-            ]);
-            
-            if (result.affectedRows === 0) {
-                throw new Error(`No se encontró el equipo con Id ${equipo.IdEquipo}`);
+
+            // ⚡️ Solo descontar inventario si es de la empresa anfitriona
+            if (!equipo.DocumentoSubarrendatario || equipo.DocumentoSubarrendatario === 'ABC') {
+                const [result] = await connection.query(ActualizarInventario, [
+                    cantidad,
+                    cantidad,
+                    equipo.IdEquipo
+                ]);
+
+                if (result.affectedRows === 0) {
+                    throw new Error(`No se encontró el equipo con Id ${equipo.IdEquipo}`);
+                }
             }
         }
 
         await connection.commit();
         return { success: true, IdRemision };
-        
+
     } catch (error) {
         await connection.rollback();
         console.error('Error en CrearRemisionQuery:', error);
