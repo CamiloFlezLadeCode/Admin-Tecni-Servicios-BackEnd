@@ -111,7 +111,7 @@ ORDER BY r.DocumentoCliente, r.FechaCreacion DESC;
 
     const sql = `
         SELECT 
-            dr.IdDetalleRemision AS 'IdDetalleRemison',
+            dr.IdDetalleRemision AS 'IdDetalleRemision',
             CONCAT(SUBSTRING_INDEX(COALESCE(cliente.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(cliente.Apellidos, ''), ' ', 1)) AS Cliente,
             r.DocumentoCliente,
             r.NoRemision,
@@ -185,7 +185,8 @@ ORDER BY r.DocumentoCliente, r.FechaCreacion DESC;
             r.DocumentoCliente = ?
         GROUP BY 
             r.DocumentoCliente, r.NoRemision, r.FechaCreacion, p.Nombre, 
-            c.Categoria, e.Nombre, dr.Cantidad, dr.PrecioUnidad, devueltos.CantidadDevuelta
+            c.Categoria, e.Nombre, dr.Cantidad, dr.PrecioUnidad, devueltos.CantidadDevuelta,
+            dr.IdDetalleRemision
         ORDER BY 
             r.DocumentoCliente, r.FechaCreacion DESC;
     `;
