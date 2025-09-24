@@ -319,7 +319,7 @@ const GenerarPDFRemisionController = async (req, res) => {
             '{{TipoDocumento}}': 'Remisión',
             '{{NoDocumento}}': cabecera.NoRemision,
             // INFORMACIÓN DE CLIENTE
-            '{{FechaDocumento}}': cabecera.FechaCreacion,
+            '{{FechaDocumento}}': cabecera.FechaRemision,
             '{{Cliente}}': cabecera.Cliente,
             '{{DocumentoCliente}}': cabecera.DocumentoCliente,
             '{{DireccionProyecto}}': cabecera.DireccionProyecto,
