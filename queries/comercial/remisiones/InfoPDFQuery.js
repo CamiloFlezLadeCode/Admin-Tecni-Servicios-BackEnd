@@ -23,7 +23,8 @@ const InfoPDFQuery = async (IdRemision) => {
             remi.ObservacionesEmpresa AS ObservacionesEmpresa,
             #DATOS REMISIÓN
             remi.NoRemision AS NoRemision,
-            CONCAT(DAYNAME(remi.FechaCreacion), ' ', DATE_FORMAT(remi.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion, 
+            CONCAT(DAYNAME(remi.FechaCreacion), ' ', DATE_FORMAT(remi.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion,
+            CONCAT(DAYNAME(remi.FechaRemision), ' ', DATE_FORMAT(remi.FechaRemision, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaRemision, 
             CONCAT(COALESCE(bodeguero.Nombres, ''), ' ', COALESCE(bodeguero.Apellidos, '')) AS Bodeguero,
             CONCAT(COALESCE(despachador.Nombres, ''), ' ', COALESCE(despachador.Apellidos, '')) AS Despachador,
             CONCAT(COALESCE(transportador.Nombres, ''), ' ', COALESCE(transportador.Apellidos, '')) AS 				Transportador,
