@@ -27,7 +27,12 @@ const InfoPDFQuery = async (IdRemision) => {
             CONCAT(COALESCE(bodeguero.Nombres, ''), ' ', COALESCE(bodeguero.Apellidos, '')) AS Bodeguero,
             CONCAT(COALESCE(despachador.Nombres, ''), ' ', COALESCE(despachador.Apellidos, '')) AS Despachador,
             CONCAT(COALESCE(transportador.Nombres, ''), ' ', COALESCE(transportador.Apellidos, '')) AS 				Transportador,
-            vehi.Placa AS PlacaVehiculo,
+            #vehi.Placa AS PlacaVehiculo,
+            CASE	
+            	WHEN vehi.Placa IS NULL THEN ''
+                ELSE 
+                	vehi.Placa
+			END AS PlacaVehiculo, 
             remi.NombrePersonaRecibe AS PersonaQueRecibe,
             remi.PlacaVehiculoRecibe AS PlacaVehiculoRecibe,
             deta_remi.ObservacionesCliente AS ObservacionesClienteItem

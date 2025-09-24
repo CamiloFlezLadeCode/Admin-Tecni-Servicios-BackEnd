@@ -22,6 +22,7 @@ const GenerarPDFOrdenDeServicioQuery = async (IdOrdenDeServicio) => {
             os.IdOrdenDeServicio AS IdOrdenDeServicio,
             os.NoOrdenDeServicio AS NoOrdenDeServicio,
             CONCAT(DAYNAME(os.FechaCreacion), ' ', DATE_FORMAT(os.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion, 
+            CONCAT(DAYNAME(os.FechaOrdenDeServicio), ' ', DATE_FORMAT(os.FechaOrdenDeServicio, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaOrdenDeServicio, 
             detaos.Cantidad AS Cantidad,
             detaos.DescripcionEquipo,
             CONCAT(COALESCE(persona_entrega.Nombres, ''), ' ', COALESCE(persona_entrega.Apellidos, '')) AS PersonaQueEntrega,

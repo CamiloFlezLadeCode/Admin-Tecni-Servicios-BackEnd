@@ -25,7 +25,7 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
             cantidad: d.Cantidad,
             observaciones: d.DescripcionEquipo || ''
         }));
-        
+
         const tablaHTML = `
         <table class="SinBordesDobles TableInfoItems BordesNegros1px" style="width: 100%; margin-top: 20px;">
             <thead>
@@ -127,7 +127,8 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
             '{{TipoDocumento}}': 'Orden de servicio',
             '{{NoDocumento}}': cabecera.NoOrdenDeServicio,
             // INFORMACIÓN DE CLIENTE
-            '{{FechaDocumento}}': cabecera.FechaCreacion,
+            // '{{FechaDocumento}}': cabecera.FechaCreacion,
+            '{{FechaDocumento}}': cabecera.FechaOrdenDeServicio,
             '{{Cliente}}': cabecera.Cliente,
             '{{DocumentoCliente}}': cabecera.DocumentoCliente,
             '{{DireccionProyecto}}': cabecera.DireccionProyecto,

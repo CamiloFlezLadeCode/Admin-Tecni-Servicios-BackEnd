@@ -65,10 +65,11 @@ const CrearOrdenDeServicioQuery = async (DatosOrdenDeServicio) => {
                         PersonaQueRecibe, 
                         UsuarioCreacion, 
                         FechaCreacion, 
-                        IdEstado
+                        IdEstado,
+                        FechaOrdenDeServicio
                     ) 
             VALUES 
-                ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );
+                ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );
         `;
         const [ResultadoOrdenDeServicio] = await connection.query(InsertarOrdenDeServicio, [
             DatosOrdenDeServicio.NoOrdenDeServicio,
@@ -82,7 +83,8 @@ const CrearOrdenDeServicioQuery = async (DatosOrdenDeServicio) => {
             DatosOrdenDeServicio.PersonaQueRecibe,
             DatosOrdenDeServicio.UsuarioCreacion,
             FechaActualColombia(),
-            DatosOrdenDeServicio.IdEstado
+            DatosOrdenDeServicio.IdEstado,
+            DatosOrdenDeServicio.FechaOrdenDeServicio
         ]);
         // ...
 
