@@ -30,8 +30,6 @@ const { obtenerSocketServer } = require('../../../utils/WebSocket');
 const ActualizarEquipoController = async (req, res) => {
     try {
         const DatosEquipoAActualizar = req.body;
-        // console.table(DatosEquipoAActualizar);
-        // return;
         // Validar que Cantidad no sea negativa
         if (DatosEquipoAActualizar.Cantidad < 0) {
             return res.status(400).json({

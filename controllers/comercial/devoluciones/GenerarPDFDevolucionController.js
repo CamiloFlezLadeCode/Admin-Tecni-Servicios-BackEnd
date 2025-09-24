@@ -93,7 +93,8 @@ const GenerarPDFDevolucionController = async (req, res) => {
             '{{TipoDocumento}}': 'Devolución',
             '{{NoDocumento}}': cabecera.NoDevolucion,
             // INFORMACIÓN DE CLIENTE
-            '{{FechaDocumento}}': cabecera.FechaCreacion,
+            // '{{FechaDocumento}}': cabecera.FechaCreacion,
+            '{{FechaDocumento}}': cabecera.FechaDevolucion,
             '{{Cliente}}': cabecera.Cliente,
             '{{DocumentoCliente}}': cabecera.DocumentoCliente,
             '{{DireccionProyecto}}': cabecera.DireccionProyecto,

@@ -184,8 +184,8 @@ const CrearRemisionQuery = async (DatosRemision) => {
                 IdBodega, DocumentoBodeguero, DocumentoDespachador,
                 DocumentoTransportador, IdVehiculo, PlacaVehiculoRecibe,
                 NombrePersonaRecibe, ObservacionesEmpresa, 
-                UsuarioCreacion, FechaCreacion, IdEstado
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                UsuarioCreacion, FechaCreacion, IdEstado, FechaRemision
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const [ResultadoRemision] = await connection.query(InsertarRemision, [
             DatosRemision.NoRemision,
@@ -204,7 +204,8 @@ const CrearRemisionQuery = async (DatosRemision) => {
             DatosRemision.ObservacionesEmpresa,
             DatosRemision.UsuarioCreacion,
             FechaActualColombia(),
-            validarNumero(DatosRemision.IdEstado, 'IdEstado')
+            validarNumero(DatosRemision.IdEstado, 'IdEstado'),
+            DatosRemision.FechaRemision
         ]);
 
         const IdRemision = ResultadoRemision.insertId;

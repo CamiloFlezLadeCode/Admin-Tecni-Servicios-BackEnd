@@ -25,8 +25,7 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
             cantidad: d.Cantidad,
             observaciones: d.DescripcionEquipo || ''
         }));
-        // console.table(cabecera);
-        // return;
+        
         const tablaHTML = `
         <table class="SinBordesDobles TableInfoItems BordesNegros1px" style="width: 100%; margin-top: 20px;">
             <thead>
