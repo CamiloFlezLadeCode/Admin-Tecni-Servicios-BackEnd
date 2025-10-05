@@ -88,7 +88,7 @@ const VerTodasLasDevolucionesQuery = async () => {
             devo.FechaCreacion,
             esta.Estado
         ORDER BY
-            FechaCreacion DESC
+            IdDevolucion DESC
     `;
     return query(sql);
 };
