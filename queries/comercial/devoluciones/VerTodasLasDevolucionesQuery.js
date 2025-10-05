@@ -88,7 +88,8 @@ const VerTodasLasDevolucionesQuery = async () => {
             devo.FechaCreacion,
             esta.Estado
         ORDER BY
-            IdDevolucion DESC
+            CAST(devo.NoDevolucion AS UNSIGNED) DESC,
+    		FechaCreacion DESC;  -- Orden secundario por fecha
     `;
     return query(sql);
 };
