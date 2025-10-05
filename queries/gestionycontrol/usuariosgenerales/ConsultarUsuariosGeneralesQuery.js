@@ -19,7 +19,8 @@ const ConsultarUsuariosGeneralesQuery = async () => {
         GROUP_CONCAT(rol.Rol SEPARATOR ', ') AS RolesLabel,
         GROUP_CONCAT(rol.IdRol SEPARATOR ', ') AS RolesValue,
         nivel.Nivel AS Nivel,
-        CONCAT(SUBSTRING_INDEX(COALESCE(usu2.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu2.Apellidos, ''), ' ', 1)) AS UsuarioCreacion,DATE_FORMAT(usu.FechaCreacion, '%W %d/%m/%Y a las %l:%i:%s %p') AS FechaCreacion,
+        IFNULL(NULLIF(CONCAT(SUBSTRING_INDEX(COALESCE(usu2.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu2.Apellidos, ''), ' ', 1)), ''), 'Desarrollador') AS UsuarioCreacion,
+        DATE_FORMAT(usu.FechaCreacion, '%W %d/%m/%Y a las %l:%i:%s %p') AS FechaCreacion,
         esta.Estado AS Estado,
         usu.Contacto AS Contacto
         FROM
@@ -32,7 +33,7 @@ const ConsultarUsuariosGeneralesQuery = async () => {
         usuario_niveles AS usunivel ON usu.DocumentoUsuario = usunivel.DocumentoUsuario
         LEFT JOIN
         niveles AS nivel ON usunivel.IdNivel = nivel.IdNivel
-        INNER JOIN
+        LEFT JOIN
         usuario AS usu2 ON usu.UsuarioCreacion = usu2.DocumentoUsuario
         INNER JOIN
         tipodocumento AS tipodocu ON usu.TipoDocumento = tipodocu.IdTipoDocumento

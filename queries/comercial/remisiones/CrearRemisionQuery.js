@@ -155,6 +155,7 @@
 
 const { query, pool } = require('../../../config/db');
 const { FechaActualColombia } = require('../../../utils/FechaActualColombia');
+const { EmpresaAnfitriona } = require('../../../utils/constant/default');
 
 const CrearRemisionQuery = async (DatosRemision) => {
     // Validación inicial
@@ -260,7 +261,7 @@ const CrearRemisionQuery = async (DatosRemision) => {
             const cantidad = validarNumero(equipo.Cantidad, 'Cantidad');
 
             // ⚡️ Solo descontar inventario si es de la empresa anfitriona
-            if (!equipo.DocumentoSubarrendatario || equipo.DocumentoSubarrendatario === 'ABC') {
+            if (!equipo.DocumentoSubarrendatario || equipo.DocumentoSubarrendatario === EmpresaAnfitriona.value) {
                 const [result] = await connection.query(ActualizarInventario, [
                     cantidad,
                     cantidad,
