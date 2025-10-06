@@ -23,19 +23,19 @@
 
 const { query } = require('../../config/db');
 
-const ListarBodegasPorSubarrendatarioQuery = async (DocumentoSubarrendatario) => {
+const ListarBodegasPorSubarrendatarioQuery = async (IdTipoBodega) => {
     try {
         const sql = `
             SELECT 
                 NombreBodega, IdBodega
             FROM
                 bodegas
-            #WHERE
-            #    DocumentoSubarrendatario = ?
+            WHERE
+                IdTipoBodega = ?
             ORDER BY
                 NombreBodega ASC
         `;
-        const results = await query(sql);
+        const results = await query(sql, [IdTipoBodega]);
 
         // Asegurar que siempre devuelva un array
         return Array.isArray(results) ? results : [];
