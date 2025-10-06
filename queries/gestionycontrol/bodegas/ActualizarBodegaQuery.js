@@ -5,7 +5,6 @@ const ActualizarBodegaQuery = async (NuevosDatosBodega) => {
         UPDATE 
             bodegas 
         SET 
-            DocumentoSubarrendatario = ?, 
             NombreBodega = ?, 
             Descripcion = ?, 
             IdTipoBodega = ?, 
@@ -14,7 +13,6 @@ const ActualizarBodegaQuery = async (NuevosDatosBodega) => {
             bodegas.IdBodega = ?;
     `;
     return query(sql, [
-        NuevosDatosBodega.DocumentoSubarrendatario,
         NuevosDatosBodega.NombreDeBodega,
         NuevosDatosBodega.Descripcion,
         NuevosDatosBodega.TipoDeBodega,

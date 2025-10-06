@@ -3,7 +3,6 @@ const { query } = require('../../../config/db');
 const ConsultarBodegaPorIdQuery = async (IdBodega) => {
     const sql = `
         SELECT	
-            DocumentoSubarrendatario,
             NombreBodega,
             Descripcion,
             IdTipoBodega,

@@ -36,16 +36,9 @@ const VerBodegasQuery = async () => {
             CONCAT(SUBSTRING_INDEX(COALESCE(usu.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu.Apellidos, ''), ' ', 1) ) AS UsuarioCreacion,
             CONCAT(DAYNAME(bode.FechaCreacion), ' ', DATE_FORMAT(bode.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion,
             esta.Estado AS EstadoBodega,
-            tipo.TipoBodega AS TipoBodega,
-            CASE	
-                WHEN tipo.TipoBodega = 'Propia' THEN 'TECNISERVICIOS J.F S.A.S'
-            ELSE 
-                CONCAT(SUBSTRING_INDEX(COALESCE(subarrendatario.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(subarrendatario.Apellidos, ''), ' ', 1) )
-            END AS 'Subarrendatario'    
+            tipo.TipoBodega AS TipoBodega  
         FROM
             bodegas AS bode
-        LEFT JOIN
-            usuario AS subarrendatario ON bode.DocumentoSubarrendatario = subarrendatario.DocumentoUsuario
         INNER JOIN 
             usuario AS usu ON bode.UsuarioCreacion = usu.DocumentoUsuario
         INNER JOIN	

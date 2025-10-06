@@ -5,7 +5,6 @@ const CrearBodegaQuery = async (DatosNuevaBodega) => {
     const sql = `
         INSERT INTO bodegas 
             (
-                DocumentoSubarrendatario,
                 NombreBodega, 
                 Descripcion,
                 UsuarioCreacion,
@@ -14,10 +13,9 @@ const CrearBodegaQuery = async (DatosNuevaBodega) => {
                 IdEstado
             ) 
         VALUES 
-            ( ?, ?, ?, ?, ?, ?, ? );
+            ( ?, ?, ?, ?, ?, ? );
     `;
     return query(sql, [
-        DatosNuevaBodega.DocumentoSubarrendatario,
         DatosNuevaBodega.NombreDeBodega,
         DatosNuevaBodega.Descripcion,
         DatosNuevaBodega.UsuarioCreacion,
