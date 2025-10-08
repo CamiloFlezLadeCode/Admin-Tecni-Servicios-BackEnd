@@ -6,6 +6,7 @@ const CrearRepuestoQuery = async (DatosRepuesto) => {
         INSERT INTO 
             repuestos 
                 (
+                    IdBodega,
                     Nombre, 
                     Cantidad, 
                     UsuarioCreacion,
@@ -13,9 +14,10 @@ const CrearRepuestoQuery = async (DatosRepuesto) => {
                     IdEstado
                 ) 
         VALUES 
-            ( ?, ?, ?, ?, ? );
+            ( ?, ?, ?, ?, ?, ? );
     `;
     return query(sql, [
+        DatosRepuesto.Bodega,
         DatosRepuesto.NombreRepuesto,
         DatosRepuesto.Cantidad,
         DatosRepuesto.UsuarioCreacion,

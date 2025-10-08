@@ -20,32 +20,71 @@ const MostrarSubarrendatariosConRemisionAsignadaQuery = async (DatosConsulta) =>
     //     ORDER BY
     //         CONCAT(COALESCE(usu.Nombres, ''), ' ', COALESCE(usu.Apellidos, '')) ASC
     // `;
+    // const sql = `
+    //     SELECT DISTINCT
+    //         usu.DocumentoUsuario AS DocumentoSubarrendatario,
+    //         CONCAT(
+    //             COALESCE(usu.Nombres, ''), 
+    //             ' ', 
+    //             COALESCE(usu.Apellidos, '')
+    //         ) AS Subarrendatario
+    //     FROM remisiones AS remi
+    //     INNER JOIN detalles_remisiones AS detaremi 
+    //         ON remi.IdRemision = detaremi.IdRemision
+    //     INNER JOIN proyectos AS proye 
+    //         ON remi.IdProyecto = proye.IdProyecto
+    //     LEFT JOIN usuario AS usu 
+    //         ON detaremi.DocumentoSubarrendatario = usu.DocumentoUsuario
+    //     WHERE 
+    //         remi.DocumentoCliente = ? 
+    //         AND remi.IdProyecto = ?
+    //         AND usu.DocumentoUsuario IS NOT NULL
+    //     ORDER BY 
+    //         Subarrendatario ASC;
+
+    // `;
+
     const sql = `
-        SELECT DISTINCT
+        SELECT 
             usu.DocumentoUsuario AS DocumentoSubarrendatario,
             CONCAT(
                 COALESCE(usu.Nombres, ''), 
                 ' ', 
                 COALESCE(usu.Apellidos, '')
-            ) AS Subarrendatario
+            ) AS Subarrendatario,
+            SUM(detaremi.Cantidad) AS CantidadAlquilada,
+            SUM(COALESCE(detadevo.CantidadDevuelta, 0)) AS CantidadDevuelta,
+            (SUM(detaremi.Cantidad) - SUM(COALESCE(detadevo.CantidadDevuelta, 0))) AS Total
         FROM remisiones AS remi
         INNER JOIN detalles_remisiones AS detaremi 
             ON remi.IdRemision = detaremi.IdRemision
         INNER JOIN proyectos AS proye 
             ON remi.IdProyecto = proye.IdProyecto
-        LEFT JOIN usuario AS usu 
+        INNER JOIN usuario AS usu 
             ON detaremi.DocumentoSubarrendatario = usu.DocumentoUsuario
+        LEFT JOIN (
+            SELECT IdRemision, IdEquipo, SUM(Cantidad) AS CantidadDevuelta
+            FROM detalles_devoluciones
+            GROUP BY IdRemision, IdEquipo
+        ) AS detadevo
+            ON detaremi.IdRemision = detadevo.IdRemision
+            AND detaremi.IdEquipo = detadevo.IdEquipo
         WHERE 
-            remi.DocumentoCliente = ? 
+            remi.DocumentoCliente = ?
             AND remi.IdProyecto = ?
-            AND usu.DocumentoUsuario IS NOT NULL
+        GROUP BY 
+            usu.DocumentoUsuario, usu.Nombres, usu.Apellidos
+        HAVING 
+           (SUM(detaremi.Cantidad) - SUM(COALESCE(detadevo.CantidadDevuelta, 0))) > ?
         ORDER BY 
             Subarrendatario ASC;
+    `
 
-    `;
+    const CantidadPendientePorDevolver = 0;
     return query(sql, [
         DatosConsulta.DocumentoCliente,
-        DatosConsulta.IdProyecto
+        DatosConsulta.IdProyecto,
+        CantidadPendientePorDevolver
     ]);
 };
 module.exports = {
