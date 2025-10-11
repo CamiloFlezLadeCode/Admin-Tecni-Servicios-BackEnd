@@ -24,7 +24,7 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
         const items = data.map(d => ({
             cantidad: d.Cantidad || '',
             observaciones: d.DescripcionEquipo || '',
-            repuesto: d.NombreRepuesto
+            repuesto: d.NombreRepuesto || ''
         }));
 
         const tablaHTML = `

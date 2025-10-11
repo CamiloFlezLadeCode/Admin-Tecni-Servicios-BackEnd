@@ -42,7 +42,8 @@ const GenerarPDFOrdenDeServicioQuery = async (IdOrdenDeServicio) => {
             detalles_ordenes_de_servicio AS detaos ON os.IdOrdenDeServicio = detaos.IdOrdenDeServicio
         INNER JOIN
             usuario AS persona_entrega ON os.PersonaQueEntrega = persona_entrega.DocumentoUsuario
-		INNER JOIN
+		#INNER JOIN
+        LEFT JOIN
         	repuestos AS repues ON detaos.IdRepuesto = repues.IdRepuesto        
         INNER JOIN
         	equipo AS equi ON os.IdEquipoCliente = equi.IdEquipo                
