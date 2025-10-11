@@ -18,6 +18,7 @@ const GenerarPDFOrdenDeServicioQuery = async (IdOrdenDeServicio) => {
             cliente.Direccion AS DireccionCliente,
             cliente.Contacto,
             #DETALLES DE LA ORDEN DE SERVICIO
+            equi.Nombre AS NombreEquipo,
             os.Garantia AS Garantia,
             os.IdOrdenDeServicio AS IdOrdenDeServicio,
             os.NoOrdenDeServicio AS NoOrdenDeServicio,
@@ -42,7 +43,9 @@ const GenerarPDFOrdenDeServicioQuery = async (IdOrdenDeServicio) => {
         INNER JOIN
             usuario AS persona_entrega ON os.PersonaQueEntrega = persona_entrega.DocumentoUsuario
 		INNER JOIN
-        	repuestos AS repues ON detaos.IdRepuesto = repues.IdRepuesto            
+        	repuestos AS repues ON detaos.IdRepuesto = repues.IdRepuesto        
+        INNER JOIN
+        	equipo AS equi ON os.IdEquipoCliente = equi.IdEquipo                
         WHERE
             os.IdOrdenDeServicio = ?
     `;

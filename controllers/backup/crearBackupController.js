@@ -36,12 +36,23 @@ const crearBackup = async (req, res) => {
     // Entorno: 'Produccion' o 'Desarrollo'
     const ENTORNO = process.env.VARIABLE_ENV_ENTORNO;
     const ConfiguracionSegunEntorno = {
+      // Sin Docker
+      // Desarrollo: {
+      //     host: 'localhost',
+      //     user: 'root',
+      //     password: null,
+      //     database: 'tecniservicios',
+      //     port: 3306,
+      //     connectionLimit: 10, // tráfico local
+      // },
+      // Con Docker
       Desarrollo: {
         host: 'localhost',
-        user: 'root',
-        password: '',
+        user: 'devuser',
+        password: 'devpass',
         database: 'tecniservicios',
         port: 3306,
+        connectionLimit: 10, // tráfico local
       },
       Produccion: {
         host: process.env.DB_HOST,

@@ -28,7 +28,16 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
         }));
 
         const tablaHTML = `
-        <table class="SinBordesDobles TableInfoItems BordesNegros1px" style="width: 100%; margin-top: 20px;">
+        <table class="SinBordesDobles TableInfoItems BordesNegros1px" style="width: 100%; margin-top: 20px; border-bottom: none;">
+            <tr>
+                <th class="BordesNegros1px" style="width: 12%; padding: 4px; text-align: left;">EQUIPO</th>
+                <td class="BordesNegros1px" style="width: 88%; padding: 4px; text-align: left;">${cabecera.NombreEquipo}</td>
+            </tr>
+            <tr>
+                <th colspan="2" style="text-align: center;">REPUESTOS</th>
+            </tr>
+        </table>
+        <table class="SinBordesDobles TableInfoItems BordesNegros1px" style="width: 100%; margin: 0px;">
             <thead>
                 <tr>
                     <th class="BordesNegros1px" style="width: 12%; padding: 4px; text-align: left;">CANTIDAD</th>
