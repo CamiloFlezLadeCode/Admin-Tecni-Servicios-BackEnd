@@ -11,7 +11,8 @@ const VerCantidadDisponibleController = async (req, res) => {
             CantidadDisponible: cantidad.Cantidad,
             PrecioAlquiler: cantidad.PrecioAlquiler,
             PrecioVenta: cantidad.PrecioVenta,
-            PrecioReparacion: cantidad.PrecioReparacion
+            PrecioReparacion: cantidad.PrecioReparacion,
+            UnidadDeMedida: cantidad.UnidadDeMedida
         }));
         console.log(`Cantidad del equipo con Id ${IdEquipo}, obtenida correctamente ${CantidadMapeada[0].CantidadDisponible}`);
         return res.status(200).json(CantidadMapeada);

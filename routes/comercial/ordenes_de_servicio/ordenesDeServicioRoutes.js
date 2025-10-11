@@ -5,10 +5,16 @@ const { ConsultarSiguienteNoOrdenDeServicioController } = require('../../../cont
 const { VerTodasLasOrdenesDeServicioController } = require('../../../controllers/comercial/ordenes_de_servicio/VerTodasLasOrdenesDeServicioController');
 const { GenerarPDFOrdenDeServicioController } = require('../../../controllers/comercial/ordenes_de_servicio/GenerarPDFOrdenDeServicioController');
 const { EliminarOrdenDeServicioController } = require('../../../controllers/comercial/ordenes_de_servicio/EliminarOrdenDeServicioController');
+const { VerEquiposClienteController } = require('../../../controllers/comercial/ordenes_de_servicio/VerEquiposClienteController');
+const { VerRepuestosDisponiblesController } = require('../../../controllers/comercial/ordenes_de_servicio/VerRepuestosDisponiblesController');
+const { VerDisponibilidadRepuestoController } = require('../../../controllers/comercial/ordenes_de_servicio/VerDisponibilidadRepuestoController');
 
 router.post('/crear-orden-de-servicio', CrearOrdenDeServicioController);
 router.get('/siguiente-no-orden-de-servicio', ConsultarSiguienteNoOrdenDeServicioController);
 router.get('/ver-todas-las-ordenes-de-servicio', VerTodasLasOrdenesDeServicioController);
 router.get('/obtener-pdf-orden-de-servicio', GenerarPDFOrdenDeServicioController);
 router.delete('/eliminar-orden-de-servicio', EliminarOrdenDeServicioController);
+router.get('/ver-equipos-del-cliente', VerEquiposClienteController);
+router.get('/ver-repuestos-disponibles', VerRepuestosDisponiblesController);
+router.get('/ver-disponibilidad-de-repuesto', VerDisponibilidadRepuestoController);
 module.exports = router;

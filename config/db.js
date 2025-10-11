@@ -5,10 +5,20 @@ const mysql = require('mysql2/promise');
 const ENTORNO = process.env.VARIABLE_ENV_ENTORNO;
 // Configuraciones base
 const config = {
+    // Sin Docker
+    // Desarrollo: {
+    //     host: 'localhost',
+    //     user: 'root',
+    //     password: null,
+    //     database: 'tecniservicios',
+    //     port: 3306,
+    //     connectionLimit: 10, // tráfico local
+    // },
+    // Con Docker
     Desarrollo: {
         host: 'localhost',
-        user: 'root',
-        password: null,
+        user: 'devuser',
+        password: 'devpass',
         database: 'tecniservicios',
         port: 3306,
         connectionLimit: 10, // tráfico local

@@ -22,8 +22,9 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
 
         const cabecera = data[0];
         const items = data.map(d => ({
-            cantidad: d.Cantidad,
-            observaciones: d.DescripcionEquipo || ''
+            cantidad: d.Cantidad || '',
+            observaciones: d.DescripcionEquipo || '',
+            repuesto: d.NombreRepuesto
         }));
 
         const tablaHTML = `
@@ -38,7 +39,7 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
                 ${items.map(item => `
                 <tr class="SinBordesDobles">
                     <td class="BordesNegros1px SinBordesDobles" style="padding: 4px; text-align: center;">${item.cantidad}</td>
-                    <td class="BordesNegros1px SinBordesDobles" style="padding: 4px;">${item.observaciones}</td>
+                    <td class="BordesNegros1px SinBordesDobles" style="padding: 4px;">${item.repuesto}</td>
                 </tr>
                 `).join('')}
                 <!-- <tr>

@@ -28,17 +28,21 @@ const GenerarPDFOrdenDeServicioQuery = async (IdOrdenDeServicio) => {
             CONCAT(COALESCE(persona_entrega.Nombres, ''), ' ', COALESCE(persona_entrega.Apellidos, '')) AS PersonaQueEntrega,
             os.PersonaQueRecibe AS PersonaQueRecibe,
             os.Descripcion AS Descripcion,
-            os.Observaciones AS Observaciones
+            os.Observaciones AS Observaciones,
+            repues.Nombre AS NombreRepuesto
         FROM 
             ordenes_de_servicio AS os
         INNER JOIN
             usuario AS cliente ON os.DocumentoCliente = cliente.DocumentoUsuario
         INNER JOIN
             proyectos AS proyec ON os.IdProyecto = proyec.IdProyecto
-        INNER JOIN
+        #INNER JOIN
+        LEFT JOIN
             detalles_ordenes_de_servicio AS detaos ON os.IdOrdenDeServicio = detaos.IdOrdenDeServicio
         INNER JOIN
             usuario AS persona_entrega ON os.PersonaQueEntrega = persona_entrega.DocumentoUsuario
+		INNER JOIN
+        	repuestos AS repues ON detaos.IdRepuesto = repues.IdRepuesto            
         WHERE
             os.IdOrdenDeServicio = ?
     `;

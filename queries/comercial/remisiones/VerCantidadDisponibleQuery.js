@@ -7,9 +7,12 @@ const VerCantidadDisponibleQuery = async (IdEquipo) => {
             CantidadDisponible AS Cantidad,
             PrecioVenta,
             PrecioAlquiler,
-            PrecioReparacion
+            PrecioReparacion,
+            uni.Nombre AS UnidadDeMedida
         FROM
             equipo
+        INNER JOIN
+            unidad AS uni ON equipo.IdUnidadDeMedida = uni.IdUnidad
         WHERE
             IdEquipo = ?;
     `;
