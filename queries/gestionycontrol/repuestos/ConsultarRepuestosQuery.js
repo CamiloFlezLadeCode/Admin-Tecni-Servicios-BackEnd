@@ -10,6 +10,7 @@ const ConsultarRepuestosQuery = async () => {
             repu.IdRepuesto AS IdRepuesto,
             repu.Nombre AS NombreRepuesto,
             repu.Cantidad AS CantidadRepuesto,   
+            repu.CantidadDisponible AS CantidadDisponibleRepuesto,
             #CONCAT(COALESCE(usu.Nombres, ''), ' ', SUBSTRING_INDEX(COALESCE(usu.Apellidos, ''), ' ', 1)) AS UsuarioCreacion,
             #IFNULL(CONCAT(COALESCE(usu.Nombres, ''), ' ', SUBSTRING_INDEX(COALESCE(usu.Apellidos, ''), ' ', 1)), 'Usuario desconocido') AS UsuarioCreacion,
             IFNULL(CONCAT(COALESCE(usu.Nombres, ''), ' ', SUBSTRING_INDEX(COALESCE(usu.Apellidos, NULL), ' ', 1)), 'Sin usuario de creación') AS UsuarioCreacion,

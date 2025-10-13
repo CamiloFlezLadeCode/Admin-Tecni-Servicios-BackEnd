@@ -1,7 +1,5 @@
 module.exports = [
   require('./login/loginRoute'),
-  require('./usersRoutes'),
-  require('./departRoutes'),
   require('./gestionycontrol/cuenta/cuentaRoutes'),
   require('./gestionycontrol/clientes/clientesRoutes'),
   require('./backup/crearBackupRoutes'),

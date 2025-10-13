@@ -306,7 +306,7 @@ const actualizarStockDeRepuesto = async (connection, detalles) => {
             if (detalle.IdRepuesto && detalle.Cantidad) {
                 const actualizarStock = `
                     UPDATE repuestos
-                    SET Cantidad = (Cantidad - ?)
+                    SET CantidadDisponible = (CantidadDisponible - ?)
                     WHERE IdRepuesto = ?
                 `;
                 const [result] = await connection.query(actualizarStock, [

@@ -5,7 +5,7 @@ const VerDisponiblidadRepuestoQuery = async (ParametrosBusquedaCantidadRepuestoD
         SELECT 
             repues.IdRepuesto AS IdRepuesto,
             repues.Nombre AS NombreRepuesto,
-            repues.Cantidad AS CantidadDisponibleRepuesto
+            repues.CantidadDisponible AS CantidadDisponibleRepuesto
         FROM 
             repuestos AS repues
         INNER JOIN 
