@@ -9,7 +9,7 @@ const obtenerCredenciales = async (clienteData) => {
         WHERE
             NombreUsuario = ? COLLATE utf8mb4_bin AND ClaveUsuario = ? COLLATE utf8mb4_bin
     `;
-    const sql = `
+    const sqlold = `
         SELECT
             credenciales.DocumentoUsuario, ClaveUsuario, esta.Estado
         FROM
@@ -22,7 +22,20 @@ const obtenerCredenciales = async (clienteData) => {
             NombreUsuario = ? COLLATE utf8mb4_bin AND ClaveUsuario = ?
              COLLATE utf8mb4_bin
     `;
-    return await query(sql, [clienteData.NombreUsuario, clienteData.ClaveUsuario]);
+    const sql = `
+        SELECT
+            credenciales.DocumentoUsuario, ClaveUsuario, esta.Estado
+        FROM
+            credenciales
+		INNER JOIN
+        	usuario AS usu ON credenciales.DocumentoUsuario = usu.DocumentoUsuario
+		INNER JOIN 
+        	estado AS esta ON usu.IdEstado = esta.IdEstado
+        WHERE
+            NombreUsuario = ? COLLATE utf8mb4_bin 
+            #AND ClaveUsuario = ? COLLATE utf8mb4_bin
+    `;
+    return await query(sql, [clienteData.NombreUsuario]);
 };
 
 const obtenerRol = async (documentoUsuario) => {
@@ -73,7 +86,7 @@ const obtenerCorreo = async (documentoUsuario) => {
             DocumentoUsuario = ? COLLATE utf8mb4_bin
     `;
     return await query(sql, [documentoUsuario]);
-};  
+};
 
 // const 
 
