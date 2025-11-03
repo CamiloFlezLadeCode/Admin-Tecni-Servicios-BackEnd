@@ -59,17 +59,17 @@ const config = {
     client: 'mysql2',
     connection: {
       host: 'localhost',
-      user: 'root',
-      password: null,
+      user: 'devuser',
+      password: 'devpass',
       database: 'tecniservicios'
     },
     pool: { min: 2, max: 10 },
     migrations: {
-      directory: './migrations',
+      directory: './database/migrations',
       tableName: 'knex_migrations'
     },
     seeds: {
-      directory: './seeds'
+      directory: './database/seeds'
     }
   },
 
@@ -83,11 +83,11 @@ const config = {
     },
     pool: { min: 2, max: 10 },
     migrations: {
-      directory: './migrations',
+      directory: './database/migrations',
       tableName: 'knex_migrations'
     },
     seeds: {
-      directory: './seeds'
+      directory: './database/seeds'
     }
   }
 }

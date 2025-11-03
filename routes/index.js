@@ -1,21 +1,30 @@
 module.exports = [
+  // Rutas login
   require('./login/loginRoute'),
+  // Rutas backups
+  require('./backup/crearBackupRoutes'),
+  // Rutas gestion y control
   require('./gestionycontrol/cuenta/cuentaRoutes'),
   require('./gestionycontrol/clientes/clientesRoutes'),
-  require('./backup/crearBackupRoutes'),
   require('./gestionycontrol/usuarios/usuariosRoutes'),
   require('./gestionycontrol/equipos/equiposRoutes'),
   require('./gestionycontrol/mecanicos/mecanicosRoutes'),
-  require('./generales/GeneralesRoutes'),
   require('./gestionycontrol/proyectos/proyectosRoutes'),
   require('./gestionycontrol/repuestos/repuestosRoutes'),
   require('./gestionycontrol/usuariosgenerales/usuariosgeneralesRoutes'),
   require('./gestionycontrol/vehiculos/vehiculosRoutes'),
+  require('./gestionycontrol/bodegas/bodegasRoutes'),
+  require('./gestionycontrol/ajustes/ajustesRoutes'),
+  // Rutas generales
+  require('./generales/GeneralesRoutes'),
+  // Rutas comercial
   require('./comercial/remisiones/remisionesRoutes'),
   require('./comercial/devoluciones/devolucionesRoutes'),
   require('./comercial/ordenes_de_servicio/ordenesDeServicioRoutes'),
   require('./comercial/estado_de_cuenta/estadoDeCuentaRoutes'),
-  require('./gestionycontrol/ajustes/ajustesRoutes'),
+  // Rutas configuraciones
   require('./configuraciones/configuracionesRoutes'),
-  require('./gestionycontrol/bodegas/bodegasRoutes')
+  // Rutas inventario
+  require('./inventario/equipos/equiposRoutes'),
+  require('./inventario/repuestos/repuestosRoutes')
 ];
