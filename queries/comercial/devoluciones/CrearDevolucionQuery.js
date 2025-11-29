@@ -299,8 +299,13 @@ const CrearDevolucionQuery = async (DatosDevolucion) => {
                     detalle.IdRemision // ✅ Esta es la fuente de verdad
                 ]);
 
-                // Actualizar la cantidad disponible del equipo
-                if (DatosDevolucion.DocumentoSubarrendatario === EmpresaAnfitriona.value) {
+                // Actualizar inventario SOLO si el equipo es propio
+                const [prop] = await connection.query(
+                    `SELECT DocumentoSubarrendatario AS Propietario FROM equipo WHERE IdEquipo = ?`,
+                    [detalle.IdEquipo]
+                );
+                const esPropio = prop.length > 0 && prop[0].Propietario === EmpresaAnfitriona.value;
+                if (esPropio) {
                     const sqlUpdateStock = `
                         UPDATE equipo 
                         SET CantidadDisponible = CantidadDisponible + ? 
@@ -311,9 +316,7 @@ const CrearDevolucionQuery = async (DatosDevolucion) => {
                         detalle.IdEquipo
                     ]);
                 }
-
-                // ❌ ELIMINADO: No necesitas actualizar detalles_remisiones
-                // La información ya está en detalles_devoluciones
+                // Historial de movimiento queda en detalles_devoluciones
             }
         }
 

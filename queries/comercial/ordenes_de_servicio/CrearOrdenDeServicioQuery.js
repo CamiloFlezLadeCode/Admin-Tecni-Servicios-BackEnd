@@ -232,8 +232,7 @@ const CrearOrdenDeServicioQuery = async (DatosOrdenDeServicio) => {
 
         // Actualizar stock en bodega si hay repuestos utilizados
         if (DatosOrdenDeServicio.Detalles && DatosOrdenDeServicio.Detalles.length > 0) {
-            // await actualizarStockRepuestos(connection, DatosOrdenDeServicio.Detalles);
-            actualizarStockDeRepuesto(connection, DatosOrdenDeServicio.Detalles);
+            await actualizarStockRepuestos(connection, DatosOrdenDeServicio.Detalles);
         }
 
         // Se confirman todos los cambios
@@ -261,38 +260,15 @@ const actualizarStockRepuestos = async (connection, detalles) => {
     try {
         for (const detalle of detalles) {
             if (detalle.IdRepuesto && detalle.Cantidad) {
-                const actualizarStock = `
-                    UPDATE inventario_bodegas 
-                    SET CantidadDisponible = CantidadDisponible - ? 
-                    WHERE IdRepuesto = ? 
-                    AND IdTipoBodega = ? 
-                    AND CantidadDisponible >= ?;
-                `;
-
-                const [result] = await connection.query(actualizarStock, [
-                    detalle.Cantidad,
-                    detalle.IdRepuesto,
-                    ParametroBuscarBodegasRepuestos.value, // Asegúrate de definir esta constante
-                    detalle.Cantidad
-                ]);
-
+                const [result] = await connection.query(
+                    `UPDATE repuestos
+                     SET CantidadDisponible = CantidadDisponible - ?
+                     WHERE IdRepuesto = ? AND CantidadDisponible >= ?`,
+                    [detalle.Cantidad, detalle.IdRepuesto, detalle.Cantidad]
+                );
                 if (result.affectedRows === 0) {
                     throw new Error(`Stock insuficiente para el repuesto ID: ${detalle.IdRepuesto}`);
                 }
-
-                // Registrar movimiento de inventario
-                const registrarMovimiento = `
-                    INSERT INTO movimientos_inventario 
-                    (IdRepuesto, IdTipoBodega, TipoMovimiento, Cantidad, Descripcion, Usuario, FechaMovimiento)
-                    VALUES (?, ?, 'SALIDA', ?, 'Orden de servicio', ?, NOW());
-                `;
-
-                await connection.query(registrarMovimiento, [
-                    detalle.IdRepuesto,
-                    ParametroBuscarBodegasRepuestos.value,
-                    detalle.Cantidad,
-                    'Sistema' // O el usuario que crea la orden
-                ]);
             }
         }
     } catch (error) {
@@ -330,20 +306,13 @@ const verificarDisponibilidadRepuestos = async (detalles) => {
     try {
         for (const detalle of detalles) {
             if (detalle.IdRepuesto && detalle.Cantidad) {
-                const verificarStock = `
-                    SELECT CantidadDisponible 
-                    FROM inventario_bodegas 
-                    WHERE IdRepuesto = ? 
-                    AND IdTipoBodega = ?;
-                `;
-
-                const [stock] = await connection.query(verificarStock, [
-                    detalle.IdRepuesto,
-                    ParametroBuscarBodegasRepuestos.value
-                ]);
-
-                if (stock.length === 0 || stock[0].CantidadDisponible < detalle.Cantidad) {
-                    throw new Error(`Stock insuficiente para el repuesto ID: ${detalle.IdRepuesto}. Disponible: ${stock[0]?.CantidadDisponible || 0}, Solicitado: ${detalle.Cantidad}`);
+                const [stock] = await connection.query(
+                    `SELECT CantidadDisponible FROM repuestos WHERE IdRepuesto = ?`,
+                    [detalle.IdRepuesto]
+                );
+                const disponible = Number(stock[0]?.CantidadDisponible || 0);
+                if (disponible < Number(detalle.Cantidad)) {
+                    throw new Error(`Stock insuficiente para el repuesto ID: ${detalle.IdRepuesto}. Disponible: ${disponible}, Solicitado: ${detalle.Cantidad}`);
                 }
             }
         }

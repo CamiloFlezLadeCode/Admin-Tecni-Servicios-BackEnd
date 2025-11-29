@@ -25,13 +25,13 @@ const EliminarOrdenDeServicioQuery = async (IdOrdenDeServicio) => {
             [IdOrdenDeServicio]
         );
 
-        // 4. Actualizar los respuestos "cantidad"
+        // 4. Reponer stock de repuestos
         for (const detalle of detalles) {
             const [repuesto] = await connection.query(
                 `SELECT CantidadDisponible FROM repuestos WHERE IdRepuesto = ?`,
                 [detalle.IdRepuesto]
             );
-            const nuevaCantidadRepuesto = repuesto[0].CantidadDisponible + detalle.Cantidad;
+            const nuevaCantidadRepuesto = Number(repuesto[0]?.CantidadDisponible || 0) + Number(detalle.Cantidad || 0);
             await connection.query(
                 `UPDATE repuestos SET CantidadDisponible = ? WHERE IdRepuesto = ?`,
                 [nuevaCantidadRepuesto, detalle.IdRepuesto]
