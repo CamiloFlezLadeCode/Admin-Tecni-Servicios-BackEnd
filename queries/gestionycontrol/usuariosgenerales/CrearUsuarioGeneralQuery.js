@@ -134,8 +134,8 @@ const RegistrarUsuarioGeneralQuery = async (DatosUsuarioGeneral) => {
     // Inserta información general del usuario
     const sqlUsuario = `
       INSERT INTO usuario 
-        (DocumentoUsuario, TipoDocumento, Nombres, Apellidos, Correo, Direccion, Telefono, Celular, UsuarioCreacion, FechaCreacion, IdEstado, Contacto) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (DocumentoUsuario, TipoDocumento, Nombres, Apellidos, Correo, Direccion, Telefono, Celular1, Celular2, UsuarioCreacion, FechaCreacion, IdEstado, Contacto) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     await connection.query(sqlUsuario, [
       DatosUsuarioGeneral.Documento,
@@ -145,7 +145,8 @@ const RegistrarUsuarioGeneralQuery = async (DatosUsuarioGeneral) => {
       DatosUsuarioGeneral.Correo,
       DatosUsuarioGeneral.Direccion,
       DatosUsuarioGeneral.Telefono,
-      DatosUsuarioGeneral.Celular,
+      (DatosUsuarioGeneral.Celular1 || DatosUsuarioGeneral.Celular || null),
+      (DatosUsuarioGeneral.Celular2 || null),
       DatosUsuarioGeneral.UsuarioCreacion,
       FechaActualColombia(),
       DatosUsuarioGeneral.Estado,

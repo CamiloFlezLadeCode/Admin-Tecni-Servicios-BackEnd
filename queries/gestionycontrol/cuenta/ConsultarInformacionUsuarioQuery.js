@@ -8,7 +8,8 @@ const ConsultarInformacionUsuarioQuery = async (DocumentoUsuario) => {
             usu.Correo AS Correo,
             usu.Direccion AS Direccion,
             usu.Telefono AS Telefono,
-            usu.Celular AS Celular
+            usu.Celular1 AS Celular1,
+            usu.Celular2 AS Celular2
             #crede.NombreUsuario AS Usuario,
             #crede.ClaveUsuario AS Clave
         FROM

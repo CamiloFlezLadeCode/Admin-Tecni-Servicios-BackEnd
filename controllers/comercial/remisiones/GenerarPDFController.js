@@ -324,7 +324,7 @@ const GenerarPDFRemisionController = async (req, res) => {
             '{{DocumentoCliente}}': cabecera.DocumentoCliente,
             '{{DireccionProyecto}}': cabecera.DireccionProyecto,
             '{{Proyecto}}': cabecera.Proyecto,
-            '{{Celular}}': cabecera.Celular ?? '',
+            '{{Celular}}': [cabecera.Celular1, cabecera.Celular2].filter(Boolean).join(' / '),
             '{{Contacto}}': cabecera.Contacto ?? '',
             '{{{contenido}}}': HTML_MANUAL,
             '{{rows}}': pdfGenerator.generateTableRows(items, {

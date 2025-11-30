@@ -9,7 +9,8 @@ const ActualizarInfoUsuarioQuery = async (InfoUsuario) => {
             Apellidos = ?, 
             Correo = ?, 
             Direccion = ?, 
-            Celular = ? 
+            Celular1 = ?, 
+            Celular2 = ? 
         WHERE 
             DocumentoUsuario = ?;
     `;
@@ -18,7 +19,8 @@ const ActualizarInfoUsuarioQuery = async (InfoUsuario) => {
         InfoUsuario.ApellidosUsuario,
         InfoUsuario.CorreoUsuario,
         InfoUsuario.DireccionUsuario,
-        InfoUsuario.CelularUsuario,
+        (InfoUsuario.Celular1Usuario || InfoUsuario.CelularUsuario || null),
+        (InfoUsuario.Celular2Usuario || null),
         InfoUsuario.DocumentoUsuario
     ]);
 };

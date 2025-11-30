@@ -143,7 +143,7 @@ const GenerarPDFOrdenDeServicioController = async (req, res) => {
             '{{DocumentoCliente}}': cabecera.DocumentoCliente,
             '{{DireccionProyecto}}': cabecera.DireccionProyecto,
             '{{Proyecto}}': cabecera.Proyecto,
-            '{{Celular}}': cabecera.Celular ?? '',
+            '{{Celular}}': [cabecera.Celular1, cabecera.Celular2].filter(Boolean).join(' / '),
             '{{Contacto}}': cabecera.Contacto ?? '',
             // IINFO CONTENIDO/CUERPO PDF            
             '{{{contenido}}}': tablaHTML,
