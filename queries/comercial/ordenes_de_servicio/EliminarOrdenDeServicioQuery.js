@@ -36,6 +36,24 @@ const EliminarOrdenDeServicioQuery = async (IdOrdenDeServicio) => {
                 `UPDATE repuestos SET CantidadDisponible = ? WHERE IdRepuesto = ?`,
                 [nuevaCantidadRepuesto, detalle.IdRepuesto]
             );
+
+            const InsertarMovimientoRepuesto = `
+                INSERT INTO movimiento_repuesto (
+                    IdRepuesto, Fecha, IdTipoMovimiento, Direccion, Cantidad,
+                    DocumentoReferencia, IdDocumentoOrigen, UsuarioCreacion, FechaRegistro
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `;
+            await connection.query(InsertarMovimientoRepuesto, [
+                detalle.IdRepuesto,
+                new Date(),
+                6,
+                'ENTRADA',
+                Number(detalle.Cantidad || 0),
+                `OS-${IdOrdenDeServicio}`,
+                IdOrdenDeServicio,
+                'SYSTEM',
+                new Date()
+            ]);
         }
 
         await connection.commit();

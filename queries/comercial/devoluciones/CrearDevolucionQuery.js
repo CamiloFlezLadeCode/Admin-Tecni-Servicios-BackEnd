@@ -316,7 +316,24 @@ const CrearDevolucionQuery = async (DatosDevolucion) => {
                         detalle.IdEquipo
                     ]);
                 }
-                // Historial de movimiento queda en detalles_devoluciones
+                // Registrar movimiento de equipo (histórico)
+                const InsertarMovimiento = `
+                    INSERT INTO movimiento_equipo (
+                        IdEquipo, Fecha, IdTipoMovimiento, Direccion, Cantidad,
+                        DocumentoReferencia, IdDocumentoOrigen, UsuarioCreacion, FechaRegistro
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `;
+                await connection.query(InsertarMovimiento, [
+                    detalle.IdEquipo,
+                    DatosDevolucion.FechaDevolucion || FechaActualColombia(),
+                    2, // Devolución
+                    'ENTRADA',
+                    Number(detalle.CantidadADevolver),
+                    DatosDevolucion.NoDevolucion,
+                    IdDevolucion,
+                    DatosDevolucion.UsuarioCreacion,
+                    FechaActualColombia()
+                ]);
             }
         }
 

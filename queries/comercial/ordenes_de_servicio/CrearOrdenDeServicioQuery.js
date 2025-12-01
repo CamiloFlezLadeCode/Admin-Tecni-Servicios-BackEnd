@@ -235,6 +235,28 @@ const CrearOrdenDeServicioQuery = async (DatosOrdenDeServicio) => {
             await actualizarStockRepuestos(connection, DatosOrdenDeServicio.Detalles);
         }
 
+        const InsertarMovimientoRepuesto = `
+            INSERT INTO movimiento_repuesto (
+                IdRepuesto, Fecha, IdTipoMovimiento, Direccion, Cantidad,
+                DocumentoReferencia, IdDocumentoOrigen, UsuarioCreacion, FechaRegistro
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        for (const detalle of (DatosOrdenDeServicio.Detalles || [])) {
+            if (detalle.IdRepuesto && detalle.Cantidad) {
+                await connection.query(InsertarMovimientoRepuesto, [
+                    detalle.IdRepuesto,
+                    DatosOrdenDeServicio.FechaOrdenDeServicio || FechaActualColombia(),
+                    5,
+                    'SALIDA',
+                    Number(detalle.Cantidad),
+                    DatosOrdenDeServicio.NoOrdenDeServicio,
+                    IdOrdenDeServicio,
+                    DatosOrdenDeServicio.UsuarioCreacion,
+                    FechaActualColombia()
+                ]);
+            }
+        }
+
         // Se confirman todos los cambios
         await connection.commit();
 

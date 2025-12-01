@@ -4,9 +4,17 @@ const { GuardarEntradaRepuestosController } = require('../../../controllers/inve
 const { ListarRepuestosController } = require('../../../controllers/inventario/repuestos/ListarRepuestosController');
 const { ConsultarEntradasRepuestosController } = require('../../../controllers/inventario/repuestos/ConsultarEntradasRepuestosController');
 const { VisualizarEntradaRepuestosController } = require('../../../controllers/inventario/repuestos/VisualizarEntradaRepuestosController');
+const { VerStockRepuestosController } = require('../../../controllers/inventario/repuestos/VerStockRepuestosController');
+const { ConsultarSalidasRepuestosController } = require('../../../controllers/inventario/repuestos/ConsultarSalidasRepuestosController');
+const { GuardarSalidaRepuestosController } = require('../../../controllers/inventario/repuestos/GuardarSalidaRepuestosController');
+const { VisualizarSalidaRepuestosController } = require('../../../controllers/inventario/repuestos/VisualizarSalidaRepuestosController');
 
 router.post('/guardar-entrada-repuestos', GuardarEntradaRepuestosController);
 router.get('/listar-repuestos', ListarRepuestosController);
 router.get('/ver-entradas-de-repuestos', ConsultarEntradasRepuestosController);
 router.get('/visualizar-entrada-repuestos', VisualizarEntradaRepuestosController);
+router.get('/ver-stock-repuestos', VerStockRepuestosController);
+router.get('/ver-salidas-de-repuestos', ConsultarSalidasRepuestosController);
+router.post('/guardar-salida-repuestos', GuardarSalidaRepuestosController);
+router.get('/visualizar-salida-repuestos', VisualizarSalidaRepuestosController);
 module.exports = router;

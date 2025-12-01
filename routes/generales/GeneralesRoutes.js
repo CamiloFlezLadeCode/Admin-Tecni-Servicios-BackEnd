@@ -25,7 +25,9 @@ const { ListarTipoBodegaController } = require('../../controllers/generales/Tipo
 const { ListarTipoEquipoController } = require('../../controllers/generales/TipoEquipoController');
 const { ListarUnidadesController } = require('../../controllers/generales/UnidadesController');
 const { ListarBodegasPorSubarrendatarioController } = require('../../controllers/generales/BodegasPorSubarrendatarioController');
-const { SiguienteNumeracion_Para_EntradaRepuestosController } = require('../../controllers/generales/SiguienteNumeracionController');
+const { SiguienteNumeracion_Para_EntradaRepuestosController, SiguienteNumeracion_Para_SalidaRepuestosController } = require('../../controllers/generales/SiguienteNumeracionController');
+const { ListarTiposMovimientoEquipoController } = require('../../controllers/generales/TiposMovimientoEquipoController');
+const { ListarTiposMovimientoRepuestoController } = require('../../controllers/generales/TiposMovimientoRepuestoController');
 //...
 
 //Se crean las rutas/apis con su respectivo controlador
@@ -48,6 +50,9 @@ router.get('/listar-tipo-de-equipos', ListarTipoEquipoController);
 router.get('/listar-unidades-de-medida', ListarUnidadesController);
 router.get('/listar-bodegas-subarrendatario', ListarBodegasPorSubarrendatarioController);
 router.get('/siguiente-no-entrada-repuestos', SiguienteNumeracion_Para_EntradaRepuestosController);
+router.get('/siguiente-no-salida-repuestos', SiguienteNumeracion_Para_SalidaRepuestosController);
+router.get('/listar-tipos-movimiento-equipo', ListarTiposMovimientoEquipoController);
+router.get('/listar-tipos-movimiento-repuesto', ListarTiposMovimientoRepuestoController);
 //...
 
 //Se exportan las rutas/apis para ser levantadas en el servidor

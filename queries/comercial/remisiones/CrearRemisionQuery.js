@@ -274,6 +274,27 @@ const CrearRemisionQuery = async (DatosRemision) => {
             }
         }
 
+        // 6. Registrar movimiento de equipos (histórico)
+        const InsertarMovimiento = `
+            INSERT INTO movimiento_equipo (
+                IdEquipo, Fecha, IdTipoMovimiento, Direccion, Cantidad,
+                DocumentoReferencia, IdDocumentoOrigen, UsuarioCreacion, FechaRegistro
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        for (const det of DatosRemision.Detalles) {
+            await connection.query(InsertarMovimiento, [
+                det.IdEquipo,
+                DatosRemision.FechaRemision || FechaActualColombia(),
+                1, // Remisión
+                'SALIDA',
+                validarNumero(det.Cantidad, 'Cantidad'),
+                DatosRemision.NoRemision,
+                IdRemision,
+                DatosRemision.UsuarioCreacion,
+                FechaActualColombia()
+            ]);
+        }
+
         await connection.commit();
         return { success: true, IdRemision };
 

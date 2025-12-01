@@ -55,6 +55,29 @@ const GuardarEntradaRepuestosQuery = async (DataEntradaRepuestos) => {
                 detalle_entrada.IdEstado,
                 detalle_entrada.Observacion
             ]);
+
+            await connection.query(
+                `UPDATE repuestos SET CantidadDisponible = CantidadDisponible + ? WHERE IdRepuesto = ?`,
+                [Number(detalle_entrada.Cantidad), detalle_entrada.IdRepuesto]
+            );
+
+            const InsertarMovimiento = `
+                INSERT INTO movimiento_repuesto (
+                    IdRepuesto, Fecha, IdTipoMovimiento, Direccion, Cantidad,
+                    DocumentoReferencia, IdDocumentoOrigen, UsuarioCreacion, FechaRegistro
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `;
+            await connection.query(InsertarMovimiento, [
+                detalle_entrada.IdRepuesto,
+                DataEntradaRepuestos.FechaEntrada || FechaActualColombia(),
+                1,
+                'ENTRADA',
+                Number(detalle_entrada.Cantidad),
+                DataEntradaRepuestos.NoEntradaRepuestos,
+                IdEntradaRepuestos,
+                DataEntradaRepuestos.UsuarioCreacion,
+                FechaActualColombia()
+            ]);
         };
 
         await connection.commit();

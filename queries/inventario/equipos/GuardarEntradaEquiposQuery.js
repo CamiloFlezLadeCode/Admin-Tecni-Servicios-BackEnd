@@ -61,6 +61,25 @@ const GuardarEntradaEquiposQuery = async (DataEntradaEquipos) => {
                 detalle_entrada.IdEstado,
                 detalle_entrada.Observacion
             ]);
+
+            // Registrar movimiento de equipo (entrada a bodega)
+            const InsertarMovimiento = `
+                INSERT INTO movimiento_equipo (
+                    IdEquipo, Fecha, IdTipoMovimiento, Direccion, Cantidad,
+                    DocumentoReferencia, IdDocumentoOrigen, UsuarioCreacion, FechaRegistro
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `;
+            await connection.query(InsertarMovimiento, [
+                detalle_entrada.IdEquipo,
+                DataEntradaEquipos.FechaEntrada || FechaActualColombia(),
+                10,
+                'ENTRADA',
+                Number(detalle_entrada.Cantidad),
+                DataEntradaEquipos.NoEntradaEquipos,
+                IdEntradaEquipos,
+                DataEntradaEquipos.UsuarioCreacion,
+                FechaActualColombia()
+            ]);
         };
 
         await connection.commit();
