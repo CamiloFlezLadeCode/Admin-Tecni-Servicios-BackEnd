@@ -7,7 +7,7 @@ const GuardarSalidaRepuestosController = async (req, res) => {
         const Resultado = await GuardarSalidaRepuestosService(DataSalidaRepuestos);
         const io = obtenerSocketServer();
         if (io) {
-            io.emit('salida-repuesto-creada', '');
+            io.emit('salida-repuestos-creada', '');
         } else {
             console.warn("⚠️ Socket.IO no está inicializado");
         }

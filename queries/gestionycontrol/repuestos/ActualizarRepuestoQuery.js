@@ -6,14 +6,12 @@ const ActualizarRepuestoQuery = async (DatosRepuesto) => {
             repuestos 
         SET 
             Nombre = ?, 
-            Cantidad = ?, 
             IdEstado = ? 
         WHERE 
             IdRepuesto = ?;
     `;
     return query(sql, [
         DatosRepuesto.NuevoNombreRepuesto,
-        DatosRepuesto.NuevaCantidadRepuesto,
         DatosRepuesto.NuevoEstadoRepuesto,
         DatosRepuesto.IdRepuesto
     ]);

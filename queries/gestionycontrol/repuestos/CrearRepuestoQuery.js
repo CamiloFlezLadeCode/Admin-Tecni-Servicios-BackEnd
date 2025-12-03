@@ -12,19 +12,23 @@ const CrearRepuestoQuery = async (DatosRepuesto) => {
                     CantidadDisponible, 
                     UsuarioCreacion,
                     FechaCreacion,
-                    IdEstado
+                    IdEstado,
+                    IdUnidadDeMedida
                 ) 
         VALUES 
-            ( ?, ?, ?, ?, ?, ?, ? );
+            ( ?, ?, ?, ?, ?, ?, ?, ? );
     `;
     return query(sql, [
         DatosRepuesto.Bodega,
         DatosRepuesto.NombreRepuesto,
-        DatosRepuesto.Cantidad,
-        DatosRepuesto.Cantidad,
+        // DatosRepuesto.Cantidad,
+        // DatosRepuesto.Cantidad,
+        0,
+        0,
         DatosRepuesto.UsuarioCreacion,
         FechaActualColombia(),
-        DatosRepuesto.Estado
+        DatosRepuesto.Estado,
+        DatosRepuesto.IdUnidadMedida
     ]);
 };
 module.exports = {

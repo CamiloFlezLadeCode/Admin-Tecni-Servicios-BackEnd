@@ -25,9 +25,9 @@ const ConsultarSalidasRepuestosQuery = async () => {
         FROM
             salida_repuesto AS sr
         INNER JOIN
-            usuario AS usu_responsable ON sr.Responsable = usu_responsable.DocumentoUsuario COLLATE utf8mb4_0900_ai_ci
+            usuario AS usu_responsable ON sr.Responsable = usu_responsable.DocumentoUsuario
         INNER JOIN
-            usuario AS usu_creacion ON sr.UsuarioCreacion = usu_creacion.DocumentoUsuario COLLATE utf8mb4_0900_ai_ci
+            usuario AS usu_creacion ON sr.UsuarioCreacion = usu_creacion.DocumentoUsuario
         ORDER BY
             sr.NoSalidaRepuestos DESC
     `;
