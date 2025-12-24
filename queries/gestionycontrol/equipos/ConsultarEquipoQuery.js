@@ -4,15 +4,19 @@ const ConsultarEquipoQuery = async (IdEquipo) => {
     const sql = `
         SELECT 
             IdCategoria AS IdCategoria,
-            Nombre AS Nombre,
+            equipo.Nombre AS Nombre,
             Cantidad AS Cantidad,
             DocumentoSubarrendatario AS DocumentoSubarrendatario,
             PrecioVenta AS PrecioVenta,
             PrecioAlquiler AS PrecioAlquiler,
             PrecioReparacion AS PrecioReparacion,
-            IdEstado AS IdEstado
+            equipo.IdEstado AS IdEstado,
+            unidad.IdUnidad AS IdUnidadDeMedida,
+            unidad.Nombre AS UnidadDeMedida
         FROM
             equipo
+		INNER JOIN
+        	unidad ON equipo.IdUnidadDeMedida = unidad.IdUnidad
         WHERE
             IdEquipo = ?
     `;

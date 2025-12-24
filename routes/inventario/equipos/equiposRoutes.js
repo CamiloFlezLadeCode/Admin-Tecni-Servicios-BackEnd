@@ -5,10 +5,20 @@ const { ConsultarSiguienteNoEntradaEquipoController } = require('../../../contro
 const { GuardarEntradaEquiposController } = require('../../../controllers/inventario/equipos/GuardarEntradaEquiposController');
 const { ConsultarEntradasDeEquiposController } = require('../../../controllers/inventario/equipos/ConsultarEntradasDeEquiposController');
 const { VisualizarEntradaEquiposController } = require('../../../controllers/inventario/equipos/VisualizarEntradaEquiposController');
+const { ConsultarSiguienteNoSalidaEquipoController } = require('../../../controllers/inventario/equipos/ConsultarSiguienteNoSalidaEquipoController');
+const { ConsultarSalidasEquiposController } = require('../../../controllers/inventario/equipos/ConsultarSalidasEquiposController');
+const { GuardarSalidaEquiposController } = require('../../../controllers/inventario/equipos/GuardarSalidaEquiposController');
+const { VisualizarSalidaEquiposController } = require('../../../controllers/inventario/equipos/VisualizarSalidaEquiposController');
+const { VerStockEquiposController } = require('../../../controllers/inventario/equipos/VerStockEquiposController');
 
 router.get('/listar-equipos-propios', ListarEquiposPropiosController);
 router.get('/siguiente-no-entrada-equipos', ConsultarSiguienteNoEntradaEquipoController);
+router.get('/siguiente-no-salida-equipos', ConsultarSiguienteNoSalidaEquipoController);
 router.post('/guardar-entrada-equipos', GuardarEntradaEquiposController);
+router.post('/guardar-salida-equipos', GuardarSalidaEquiposController);
 router.get('/ver-entradas-de-equipos', ConsultarEntradasDeEquiposController);
+router.get('/ver-salidas-de-equipos', ConsultarSalidasEquiposController);
 router.get('/visualizar-entrada-equipos', VisualizarEntradaEquiposController);
+router.get('/visualizar-salida-equipos', VisualizarSalidaEquiposController);
+router.get('/ver-stock-equipos', VerStockEquiposController);
 module.exports = router;
