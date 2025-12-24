@@ -69,10 +69,10 @@ const GuardarSalidaEquiposQuery = async (DataSalidaEquipos) => {
 
             // Verificar y Actualizar Stock
             const [info] = await connection.query(
-                `SELECT Nombre, Cantidad FROM equipo WHERE IdEquipo = ?`,
+                `SELECT Nombre, Cantidad, CantidadDisponible FROM equipo WHERE IdEquipo = ?`,
                 [detalle_salida.IdEquipo]
             );
-            const disponible = Number(info[0]?.Cantidad || 0);
+            const disponible = Number(info[0]?.CantidadDisponible || 0);
             const requerido = Number(detalle_salida.Cantidad);
             const nombreEquipo = info[0]?.Nombre || '';
             
@@ -80,9 +80,15 @@ const GuardarSalidaEquiposQuery = async (DataSalidaEquipos) => {
                 throw new Error(`Stock insuficiente para el equipo ${nombreEquipo} (ID: ${detalle_salida.IdEquipo}). Disponible: ${disponible}, Requerido: ${requerido}`);
             }
             
+            // Actualizar Stock
+            // Siempre reduce CantidadDisponible.
+            // Si es Baja (4), reduce también Cantidad (Total).
             await connection.query(
-                `UPDATE equipo SET Cantidad = Cantidad - ? WHERE IdEquipo = ?`,
-                [requerido, detalle_salida.IdEquipo]
+                `UPDATE equipo SET 
+                    CantidadDisponible = CantidadDisponible - ?,
+                    Cantidad = CASE WHEN ? = 4 THEN Cantidad - ? ELSE Cantidad END
+                 WHERE IdEquipo = ?`,
+                [requerido, IdTipoMovimiento, requerido, detalle_salida.IdEquipo]
             );
 
             // Registrar movimiento de equipo

@@ -12,15 +12,12 @@ const { ActualizarEquipoQuery } = require('../../../queries/gestionycontrol/equi
 
 const ActualizarEquipoService = async (DatosEquipoAActualizar) => {
     try {
-        const resultado = await ActualizarEquipoQuery(DatosEquipoAActualizar);
+        await ActualizarEquipoQuery(DatosEquipoAActualizar);
         
         // Retornamos los datos actualizados para el socket
+        // Nota: Cantidad y CantidadDisponible no se actualizan en este endpoint
         return {
-            ...DatosEquipoAActualizar,
-            CantidadDisponible: resultado.affectedRows > 0 ? 
-                (DatosEquipoAActualizar.CantidadDisponible || 0) + 
-                (DatosEquipoAActualizar.Cantidad - (DatosEquipoAActualizar.CantidadAnterior || 0)) : 
-                null
+            ...DatosEquipoAActualizar
         };
     } catch (error) {
         console.error('Error en ActualizarEquipoService:', error);

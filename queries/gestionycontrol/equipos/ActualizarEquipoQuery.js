@@ -35,26 +35,7 @@
 const { query } = require('../../../config/db');
 
 const ActualizarEquipoQuery = async (DatosEquipoAActualizar) => {
-    // Primero obtenemos los valores actuales
-    const sqlSelect = `SELECT Cantidad, CantidadDisponible FROM equipo WHERE IdEquipo = ?`;
-    const [equipoActual] = await query(sqlSelect, [DatosEquipoAActualizar.IdEquipo]);
-
-    const cantidadActual = equipoActual.Cantidad;
-    const cantidadDisponibleActual = equipoActual.CantidadDisponible;
-    const cantidadNueva = DatosEquipoAActualizar.Cantidad;
-
-    // Calculamos la diferencia
-    const diferencia = cantidadNueva - cantidadActual;
-
-    // Calculamos la nueva CantidadDisponible
-    let nuevaCantidadDisponible = cantidadDisponibleActual + diferencia;
-
-    // Aseguramos que CantidadDisponible no sea negativa
-    if (nuevaCantidadDisponible < 0) {
-        nuevaCantidadDisponible = 0;
-    }
-
-    // Ahora actualizamos ambos campos
+    // La cantidad ya no se actualiza desde aquí, se maneja por inventario
     const sqlUpdate = `
         UPDATE 
             equipo 
@@ -65,8 +46,6 @@ const ActualizarEquipoQuery = async (DatosEquipoAActualizar) => {
             PrecioVenta = ?, 
             PrecioAlquiler = ?, 
             PrecioReparacion = ?, 
-            Cantidad = ?,
-            CantidadDisponible = ?,
             IdEstado = ?
         WHERE 
             IdEquipo = ?;
@@ -79,8 +58,6 @@ const ActualizarEquipoQuery = async (DatosEquipoAActualizar) => {
         DatosEquipoAActualizar.PrecioVenta,
         DatosEquipoAActualizar.PrecioAlquiler,
         DatosEquipoAActualizar.PrecioReparacion,
-        cantidadNueva,
-        nuevaCantidadDisponible,
         DatosEquipoAActualizar.EstadoEquipo,
         DatosEquipoAActualizar.IdEquipo
     ]);

@@ -49,6 +49,10 @@ const GuardarEntradaEquiposQuery = async (DataEntradaEquipos) => {
             VALUES 
                 ( ?, ?, ?, ?, ?, ? );
         `;
+        
+        // Obtener IdTipoMovimiento de la solicitud o usar valor por defecto (10 = Entrada General/Compra)
+        let IdTipoMovimiento = DataEntradaEquipos.IdTipoMovimiento || 10;
+
         for (const detalle_entrada of DataEntradaEquipos.Equipos) {
             if (!detalle_entrada.IdEquipo || !detalle_entrada.Cantidad) {
                 throw new Error('Detalle de remisión incompleto');
@@ -62,6 +66,22 @@ const GuardarEntradaEquiposQuery = async (DataEntradaEquipos) => {
                 detalle_entrada.Observacion
             ]);
 
+            // Actualizar Stock en Equipo
+            // Si es Devolución (2), solo aumenta CantidadDisponible.
+            // Si es Entrada General (10) u otro, aumenta Cantidad (Total) y CantidadDisponible.
+            await connection.query(
+                `UPDATE equipo SET 
+                    CantidadDisponible = CantidadDisponible + ?,
+                    Cantidad = CASE WHEN ? != 2 THEN Cantidad + ? ELSE Cantidad END
+                 WHERE IdEquipo = ?`,
+                [
+                    Number(detalle_entrada.Cantidad),
+                    IdTipoMovimiento,
+                    Number(detalle_entrada.Cantidad),
+                    detalle_entrada.IdEquipo
+                ]
+            );
+
             // Registrar movimiento de equipo (entrada a bodega)
             const InsertarMovimiento = `
                 INSERT INTO movimiento_equipo (
@@ -72,7 +92,7 @@ const GuardarEntradaEquiposQuery = async (DataEntradaEquipos) => {
             await connection.query(InsertarMovimiento, [
                 detalle_entrada.IdEquipo,
                 DataEntradaEquipos.FechaEntrada || FechaActualColombia(),
-                10,
+                IdTipoMovimiento,
                 'ENTRADA',
                 Number(detalle_entrada.Cantidad),
                 DataEntradaEquipos.NoEntradaEquipos,

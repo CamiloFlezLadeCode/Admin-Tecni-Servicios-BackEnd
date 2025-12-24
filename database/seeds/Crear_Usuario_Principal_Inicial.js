@@ -68,4 +68,6 @@ exports.seed = async function (knex) {
       FechaCreacion: FechaActualColombia()
     }
   ])
+
+  console.log('Se ha insertado el usuario principal del sistema');
 };

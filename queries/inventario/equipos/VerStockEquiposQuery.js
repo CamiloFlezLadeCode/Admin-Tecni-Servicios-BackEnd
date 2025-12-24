@@ -5,7 +5,7 @@ const VerStockEquiposQuery = async () => {
         SELECT
             e.IdEquipo AS IdEquipo,
             e.Nombre AS NombreEquipo,
-            e.Cantidad AS Cantidad,
+            e.CantidadDisponible AS Cantidad,
             est.Estado AS Estado,
             um.Nombre AS UnidadMedida
         FROM

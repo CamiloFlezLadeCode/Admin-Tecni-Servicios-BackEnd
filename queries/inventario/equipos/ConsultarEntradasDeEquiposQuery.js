@@ -10,7 +10,7 @@ const ConsultarEntradasDeEquiposQuery = async () => {
             #entra_equi.IdEntradaEquipo AS IdEntradaEquipo,
             entra_equi.NoEntradaEquipos AS NoEntradaEquipos,
             DATE_FORMAT(entra_equi.FechaEntrada, '%W %d/%m/%Y a las %l:%i:%s %p') AS FechaEntrada,
-            CONCAT(SUBSTRING_INDEX(COALESCE(usu_responsable.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu_responsable.Apellidos, ''), ' ', 1)) AS Responsable,
+            CONCAT(SUBSTRING_INDEX(COALESCE(usu_responsable.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu_responsable.Apellidos, ''), ' ', 1)) AS NombreResponsable,
             entra_equi.Observaciones AS Observaciones,
             CONCAT(SUBSTRING_INDEX(COALESCE(usu_creacion.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu_creacion.Apellidos, ''), ' ', 1)) AS CreadoPor,
             DATE_FORMAT(entra_equi.FechaCreacion, '%W %d/%m/%Y a las %l:%i:%s %p') AS FechaCreacion
