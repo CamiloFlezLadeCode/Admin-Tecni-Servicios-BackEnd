@@ -141,3 +141,6 @@ backups_bd/
 
 # Configuraciones del Visual Studio Code
 .vscode
+
+# Carpeta de uploads
+uploads/
