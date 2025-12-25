@@ -1,4 +1,5 @@
 const { pool } = require('../../../config/db');
+const { EmpresaAnfitriona } = require('../../../utils/constant/default');
 
 const EliminarDevolucionQuery = async (IdDevolucion) => {
     const connection = await pool.getConnection();
@@ -29,6 +30,19 @@ const EliminarDevolucionQuery = async (IdDevolucion) => {
 
         // 4. Actualizar la cantidad disponible de equipos (DECREMENTAR)
         for (const detalle of detalles) {
+            // Verificar si es equipo propio antes de descontar stock
+            const [prop] = await connection.query(
+                `SELECT DocumentoSubarrendatario AS Propietario FROM equipo WHERE IdEquipo = ?`,
+                [detalle.IdEquipo]
+            );
+
+            const propietario = prop.length > 0 ? prop[0].Propietario : null;
+            const esPropio = propietario === EmpresaAnfitriona.value;
+
+            if (!esPropio) {
+                continue;
+            }
+
             // Obtener cantidad actual
             const [[equipo]] = await connection.query(
                 `SELECT CantidadDisponible 
