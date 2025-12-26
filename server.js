@@ -9,6 +9,8 @@ require('dotenv').config();
 
 const app = express();
 
+app.set('trust proxy', true);
+
 // 👇 Esto debe ir ANTES de cualquier otra ruta
 // app.use(
 //     '/uploads',
@@ -44,6 +46,32 @@ RutasApis.forEach(route => app.use(route));
 app.use('/api/backups', express.static(path.join(__dirname, 'backups_bd')));
 // app.use('/uploads/avatar', express.static(path.join(__dirname, 'uploads/avatar')));
 // app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.get('/health', (req, res) => {
+    const forwardedFor = req.headers['x-forwarded-for'];
+    res.status(200).json({
+        ok: true,
+        status: 'ok',
+        now: new Date().toISOString(),
+        uptimeSeconds: Math.round(process.uptime()),
+        ip: req.ip || null,
+        ips: Array.isArray(req.ips) ? req.ips : [],
+        remoteAddress: req.socket?.remoteAddress || null,
+        forwardedFor: typeof forwardedFor === 'string' ? forwardedFor : null,
+        userAgent: req.headers['user-agent'] || null
+    });
+});
+
+app.get('/whoami', (req, res) => {
+    const forwardedFor = req.headers['x-forwarded-for'];
+    res.status(200).json({
+        ip: req.ip || null,
+        ips: Array.isArray(req.ips) ? req.ips : [],
+        remoteAddress: req.socket?.remoteAddress || null,
+        forwardedFor: typeof forwardedFor === 'string' ? forwardedFor : null,
+        userAgent: req.headers['user-agent'] || null
+    });
+});
 
 
 app.get('/', (req, res) => {

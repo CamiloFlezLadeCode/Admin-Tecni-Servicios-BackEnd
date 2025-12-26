@@ -165,6 +165,14 @@
           <div class="k">User-Agent</div>
           <div class="v" id="ua">-</div>
         </div>
+        <div class="row">
+          <div class="k">IP del cliente (según servidor)</div>
+          <div class="v" id="ip">-</div>
+        </div>
+        <div class="row">
+          <div class="k">X-Forwarded-For</div>
+          <div class="v" id="xff">-</div>
+        </div>
       </div>
 
       <p class="foot">
@@ -188,8 +196,25 @@
     setText('hora', now());
     setText('origen', window.location.origin || '-');
     setText('ua', navigator.userAgent || '-');
+    setText('ip', '-');
+    setText('xff', '-');
 
     setInterval(() => setText('hora', now()), 1000);
+
+    const loadClientIp = async () => {
+      try {
+        const res = await fetch('/health', { method: 'GET', cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        setText('ip', data?.ip || '-');
+        setText('xff', data?.forwardedFor || '-');
+      } catch (e) {
+        setText('ip', 'No disponible');
+        setText('xff', 'No disponible');
+      }
+    };
+
+    loadClientIp();
   </script>
 </body>
 
