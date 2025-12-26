@@ -1,35 +1,196 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backend TecniServicios | OK</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.12);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.68);
+      --ok: #26d07c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(38, 208, 124, 0.12), transparent 55%),
+        radial-gradient(900px 600px at 85% 20%, rgba(59, 130, 246, 0.14), transparent 55%),
+        radial-gradient(900px 700px at 50% 95%, rgba(251, 191, 36, 0.10), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 28px 16px;
+    }
+
+    .wrap {
+      width: min(920px, 100%);
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      letter-spacing: 0.2px;
+    }
+
+    .subtitle {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 740px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .row {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 14px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .k {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .v {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 13px;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--ok);
+      box-shadow: 0 0 0 5px rgba(38, 208, 124, 0.14);
+    }
+
+    .foot {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    a {
+      color: rgba(147, 197, 253, 0.95);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(147, 197, 253, 0.5);
+    }
+
+    a:hover {
+      border-bottom-style: solid;
+    }
+  </style>
 </head>
+
 <body>
-    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero ducimus odio totam quisquam corrupti numquam accusamus nemo obcaecati aut dicta enim voluptatem expedita laboriosam, voluptates error fugit maxime quo dolores?
+  <main class="wrap">
+    <section class="card" aria-label="Estado del backend">
+      <div class="badge" role="status" aria-live="polite">
+        <span class="dot" aria-hidden="true"></span>
+        <span id="statusText">Servidor en ejecución (GET /)</span>
+      </div>
 
+      <h1 style="margin-top: 14px;">Admin TecniServicios — Backend</h1>
+      <p class="subtitle">
+        Si estás viendo esta página en la ruta raíz, el servidor HTTP está respondiendo correctamente.
+      </p>
 
-    <form>
-        <h1>to: Mozilla</h1>
-      
-        <div id="from">
-          <label for="name">from:</label>
-          <input type="text" id="name" name="user_name" />
+      <div class="grid">
+        <div class="row">
+          <div class="k">Ruta</div>
+          <div class="v" id="ruta">/</div>
         </div>
-      
-        <div id="reply">
-          <label for="mail">reply:</label>
-          <input type="email" id="mail" name="user_email" />
+        <div class="row">
+          <div class="k">Hora (navegador)</div>
+          <div class="v" id="hora">-</div>
         </div>
-      
-        <div id="message">
-          <label for="msg">Your message:</label>
-          <textarea id="msg" name="user_message"></textarea>
+        <div class="row">
+          <div class="k">Origen</div>
+          <div class="v" id="origen">-</div>
         </div>
-      
-        <div class="button">
-          <button type="submit">Send your message</button>
+        <div class="row">
+          <div class="k">User-Agent</div>
+          <div class="v" id="ua">-</div>
         </div>
-      </form>
+      </div>
+
+      <p class="foot">
+        Sugerencia: usa un endpoint de salud JSON (p.ej. <code>/health</code>) si necesitas monitoreo automático.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const setText = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    };
+
+    const now = () => {
+      const d = new Date();
+      return d.toLocaleString();
+    };
+
+    setText('ruta', window.location.pathname || '/');
+    setText('hora', now());
+    setText('origen', window.location.origin || '-');
+    setText('ua', navigator.userAgent || '-');
+
+    setInterval(() => setText('hora', now()), 1000);
+  </script>
 </body>
+
 </html>
