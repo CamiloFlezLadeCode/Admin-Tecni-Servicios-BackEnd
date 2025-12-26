@@ -8,6 +8,9 @@ const { GenerarPDFRemisionController } = require('../../../controllers/comercial
 const { EliminarRemisionController } = require('../../../controllers/comercial/remisiones/EliminarRemisionController');
 const { VerDisponibilidadEquiposController } = require('../../../controllers/comercial/remisiones/VerDisponibilidadEquiposController');
 const { VerDisponibilidadEquiposGeneralesController } = require('../../../controllers/comercial/remisiones/VerDisponibilidadEquiposGeneralesController');
+const { VerCantidadRemisionesYDevolucionesUltimos6MesesController } = require('../../../controllers/comercial/remisiones/VerCantidadRemisionesYDevolucionesUltimos6MesesController');
+const { VerTotalesMovimientosMesActualController } = require('../../../controllers/comercial/remisiones/VerTotalesMovimientosMesActualController');
+const { VerActividadRecienteMovimientosController } = require('../../../controllers/comercial/remisiones/VerActividadRecienteMovimientosController');
 
 router.post('/crear-remision', CrearRemisionController);
 router.get('/ver-cantidad-disponible-equipo/:IdEquipo', VerCantidadDisponibleController);
@@ -17,4 +20,7 @@ router.get('/obtener-pdf-remision/:IdRemision', GenerarPDFRemisionController);
 router.delete('/eliminar-remision', EliminarRemisionController);
 router.get('/ver-disponibilidad-equipos', VerDisponibilidadEquiposController);
 router.get('/ver-disponibilidad-equipos-generales', VerDisponibilidadEquiposGeneralesController);
+router.get('/cantidad-remisiones-devoluciones-ultimos-6-meses', VerCantidadRemisionesYDevolucionesUltimos6MesesController);
+router.get('/totales-movimientos-mes-actual', VerTotalesMovimientosMesActualController);
+router.get('/actividad-reciente-movimientos', VerActividadRecienteMovimientosController);
 module.exports = router;
