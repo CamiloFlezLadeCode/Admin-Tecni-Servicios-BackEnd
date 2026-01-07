@@ -10,7 +10,7 @@ const VerActividadRecienteMovimientosQuery = async ({ Limite }) => {
             Proyecto,
             CreadoPor,
             Estado,
-            FechaCreacion
+            FechaCreacionFormateada AS FechaCreacion
         FROM (
             SELECT
                 'REMISION' AS TipoMovimiento,
@@ -20,7 +20,8 @@ const VerActividadRecienteMovimientosQuery = async ({ Limite }) => {
                 proyec.Nombre AS Proyecto,
                 CONCAT(SUBSTRING_INDEX(COALESCE(usucreacion.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usucreacion.Apellidos, ''), ' ', 1)) AS CreadoPor,
                 esta.Estado AS Estado,
-                remi.FechaCreacion AS FechaCreacion
+                remi.FechaCreacion AS FechaOrdenar,
+                DATE_FORMAT(remi.FechaCreacion, '%d/%m/%Y %l:%i %p') AS FechaCreacionFormateada
             FROM remisiones AS remi
             INNER JOIN usuario AS cliente ON remi.DocumentoCliente = cliente.DocumentoUsuario
             INNER JOIN proyectos AS proyec ON remi.IdProyecto = proyec.IdProyecto
@@ -37,7 +38,8 @@ const VerActividadRecienteMovimientosQuery = async ({ Limite }) => {
                 proyec.Nombre AS Proyecto,
                 CONCAT(SUBSTRING_INDEX(COALESCE(usucreacion.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usucreacion.Apellidos, ''), ' ', 1)) AS CreadoPor,
                 esta.Estado AS Estado,
-                devo.FechaCreacion AS FechaCreacion
+                devo.FechaCreacion AS FechaOrdenar,
+                DATE_FORMAT(devo.FechaCreacion, '%d/%m/%Y %l:%i %p') AS FechaCreacionFormateada
             FROM devoluciones AS devo
             INNER JOIN usuario AS cliente ON devo.DocumentoCliente = cliente.DocumentoUsuario
             INNER JOIN proyectos AS proyec ON devo.IdProyecto = proyec.IdProyecto
@@ -54,14 +56,15 @@ const VerActividadRecienteMovimientosQuery = async ({ Limite }) => {
                 proyec.Nombre AS Proyecto,
                 CONCAT(SUBSTRING_INDEX(COALESCE(usucreacion.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usucreacion.Apellidos, ''), ' ', 1)) AS CreadoPor,
                 esta.Estado AS Estado,
-                os.FechaCreacion AS FechaCreacion
+                os.FechaCreacion AS FechaOrdenar,
+                DATE_FORMAT(os.FechaCreacion, '%d/%m/%Y %l:%i %p') AS FechaCreacionFormateada
             FROM ordenes_de_servicio AS os
             INNER JOIN usuario AS cliente ON os.DocumentoCliente = cliente.DocumentoUsuario
             INNER JOIN proyectos AS proyec ON os.IdProyecto = proyec.IdProyecto
             INNER JOIN usuario AS usucreacion ON os.UsuarioCreacion = usucreacion.DocumentoUsuario
             INNER JOIN estado AS esta ON os.IdEstado = esta.IdEstado
         ) AS movimientos
-        ORDER BY FechaCreacion DESC
+        ORDER BY FechaOrdenar DESC
         LIMIT ?
     `;
 
