@@ -28,7 +28,9 @@ const GenerarPDFDevolucionQuery = async (IdDevolucion) => {
             esta.Estado AS EstadoEquipoEntregado,
             devo.PersonaQueEntrega AS PersonaQueEntrega,
             CONCAT(COALESCE(persorecibe.Nombres, ''), ' ', COALESCE(persorecibe.Apellidos, '')) AS PersonaQueRecibe,
-            CONCAT(DAYNAME(devo.FechaDevolucion), ' ', DATE_FORMAT(devo.FechaDevolucion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaDevolucion
+            CONCAT(DAYNAME(devo.FechaDevolucion), ' ', DATE_FORMAT(devo.FechaDevolucion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaDevolucion,
+            devo.IncluyeTransporte,
+            devo.ValorTransporte
         FROM
             devoluciones AS devo 
         INNER JOIN 

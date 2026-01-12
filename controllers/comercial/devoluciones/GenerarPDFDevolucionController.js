@@ -26,6 +26,15 @@ const GenerarPDFDevolucionController = async (req, res) => {
             EstadoEquipoEntregado: d.EstadoEquipoEntregado
         }));
 
+        if (cabecera.IncluyeTransporte) {
+            items.push({
+                CantidadEntregada: 1,
+                EquipoEntregado: `SERVICIO DE TRANSPORTE`,
+                // EquipoEntregado: `SERVICIO DE TRANSPORTE - Valor: $ ${new Intl.NumberFormat('es-CO').format(cabecera.ValorTransporte)}`,
+                EstadoEquipoEntregado: 'N/A'
+            });
+        }
+
         const HTMLMANUAL = `
             <!-- <p>${cabecera.Observaciones}</p> -->
 

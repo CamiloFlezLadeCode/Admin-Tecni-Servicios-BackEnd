@@ -21,8 +21,10 @@ const CrearDevolucionQuery = async (DatosDevolucion) => {
                 Observaciones,
                 PersonaQueRecibe,
                 PersonaQueEntrega,
-                FechaDevolucion
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                FechaDevolucion,
+                IncluyeTransporte,
+                ValorTransporte
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const paramsDevolucion = [
@@ -35,7 +37,9 @@ const CrearDevolucionQuery = async (DatosDevolucion) => {
             DatosDevolucion.Observaciones,
             DatosDevolucion.PersonaQueRecibe,
             DatosDevolucion.PersonaQueEntrega,
-            DatosDevolucion.FechaDevolucion
+            DatosDevolucion.FechaDevolucion,
+            DatosDevolucion.IncluyeTransporte || false,
+            DatosDevolucion.ValorTransporte || 0
         ];
 
         const result = await connection.query(sqlDevolucion, paramsDevolucion);
