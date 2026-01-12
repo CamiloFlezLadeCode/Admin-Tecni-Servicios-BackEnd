@@ -87,8 +87,8 @@ const InformeInternoEmpresaEquiposEnObraQuery = async ({ DocumentoCliente, IdPro
                 dr.DocumentoSubarrendatario,
                 sub.Nombres,
                 sub.Apellidos
-            HAVING
-                CantidadEnObra > 0
+            #HAVING
+                #CantidadEnObra > 0
         ) t
         GROUP BY
             t.DocumentoCliente,

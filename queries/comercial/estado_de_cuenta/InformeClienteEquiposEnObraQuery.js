@@ -71,8 +71,8 @@ const InformeClienteEquiposEnObraQuery = async ({ DocumentoCliente, IdProyecto }
                 dr.IdEquipo,
                 e.Nombre,
                 c.Categoria
-            HAVING
-                CantidadEnObra > 0
+            #HAVING
+                #CantidadEnObra > 0
         ) t
         GROUP BY
             t.DocumentoCliente,
