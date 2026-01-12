@@ -37,7 +37,9 @@ const InfoPDFQuery = async (IdRemision) => {
 			END AS PlacaVehiculo, 
             remi.NombrePersonaRecibe AS PersonaQueRecibe,
             remi.PlacaVehiculoRecibe AS PlacaVehiculoRecibe,
-            deta_remi.ObservacionesCliente AS ObservacionesClienteItem
+            deta_remi.ObservacionesCliente AS ObservacionesClienteItem,
+            remi.IncluyeTransporte,
+            remi.ValorTransporte
             
         FROM
             remisiones AS remi

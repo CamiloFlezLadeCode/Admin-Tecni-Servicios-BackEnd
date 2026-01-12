@@ -245,6 +245,15 @@ const GenerarPDFRemisionController = async (req, res) => {
             observaciones: d.ObservacionesClienteItem || ''
         }));
 
+        // Agregar transporte si aplica
+        if (cabecera.IncluyeTransporte) {
+            items.push({
+                nombre: 'SERVICIO DE TRANSPORTE',
+                cantidad: 1,
+                // observaciones: `Valor: $${Number(cabecera.ValorTransporte).toLocaleString('es-CO')}`
+            });
+        }
+
         const HTML_MANUAL = `
             <table class="SinBordesDobles TableInfoItems BordesNegros1px">
       <thead>
