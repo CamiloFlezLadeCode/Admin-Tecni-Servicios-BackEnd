@@ -173,6 +173,10 @@
           <div class="k">X-Forwarded-For</div>
           <div class="v" id="xff">-</div>
         </div>
+        <div class="row">
+          <div class="k">Sockets conectados</div>
+          <div class="v" id="sockets">-</div>
+        </div>
       </div>
 
       <!-- <p class="foot">
@@ -201,6 +205,7 @@
     setText('ua', navigator.userAgent || '-');
     setText('ip', '-');
     setText('xff', '-');
+    setText('sockets', '-');
 
     setInterval(() => setText('hora', now()), 1000);
 
@@ -211,9 +216,11 @@
         const data = await res.json();
         setText('ip', data?.ip || '-');
         setText('xff', data?.forwardedFor || '-');
+        setText('sockets', data?.socketClients ?? '-');
       } catch (e) {
         setText('ip', 'No disponible');
         setText('xff', 'No disponible');
+        setText('sockets', 'No disponible');
       }
     };
 

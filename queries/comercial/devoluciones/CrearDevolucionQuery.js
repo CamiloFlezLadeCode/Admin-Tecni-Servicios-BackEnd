@@ -1,4 +1,4 @@
-const { query, pool } = require('../../../config/db');
+const { pool } = require('../../../config/db');
 const { FechaActualColombia } = require('../../../utils/FechaActualColombia');
 const { EmpresaAnfitriona } = require('../../../utils/constant/default');
 
@@ -79,7 +79,7 @@ const CrearDevolucionQuery = async (DatosDevolucion) => {
                 if (DatosDevolucion.DocumentoSubarrendatario === EmpresaAnfitriona.value) {
                     const sqlUpdateStock = `
                         UPDATE equipo 
-                        SET CantidadDisponible = CantidadDisponible + ? 
+                        SET CantidadDisponible = CantidadDisponible + ?, IdEstado = 3
                         WHERE IdEquipo = ?
                     `;
                     await connection.query(sqlUpdateStock, [

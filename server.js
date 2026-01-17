@@ -4,7 +4,7 @@ const http = require('http');
 const { applyMiddlewares } = require('./server.config'); // middlewares
 const RutasApis = require('./routes'); // rutas API
 const { Server } = require('socket.io');
-const { setSocketServer } = require('./utils/WebSocket'); // util para manejar io global
+const { setSocketServer, obtenerSocketServer } = require('./utils/WebSocket'); // util para manejar io global
 require('dotenv').config();
 
 const app = express();
@@ -49,6 +49,15 @@ app.use('/api/backups', express.static(path.join(__dirname, 'backups_bd')));
 
 app.get('/health', (req, res) => {
     const forwardedFor = req.headers['x-forwarded-for'];
+    const io = obtenerSocketServer();
+    const socketClients =
+        typeof io?.engine?.clientsCount === 'number'
+            ? io.engine.clientsCount
+            : typeof io?.of === 'function'
+                ? io.of('/').sockets.size
+                : typeof io?.sockets?.sockets?.size === 'number'
+                    ? io.sockets.sockets.size
+                    : null;
     res.status(200).json({
         ok: true,
         status: 'ok',
@@ -58,7 +67,8 @@ app.get('/health', (req, res) => {
         ips: Array.isArray(req.ips) ? req.ips : [],
         remoteAddress: req.socket?.remoteAddress || null,
         forwardedFor: typeof forwardedFor === 'string' ? forwardedFor : null,
-        userAgent: req.headers['user-agent'] || null
+        userAgent: req.headers['user-agent'] || null,
+        socketClients
     });
 });
 
@@ -85,10 +95,52 @@ const server = http.createServer(app);
 const OrigenesSeguros = process.env.ORIGENES_SEGUROS_PARA_SOCKET_IO_SERVER;
 const OrignesSegurosIndividuales = OrigenesSeguros.split(',');
 // console.log(OrignesSegurosIndividuales);
+// const io = new Server(server, {
+//     cors: {
+//         origin: OrignesSegurosIndividuales,
+//         credentials: true,
+//     }
+// });
+
+/** Configuración de WebSocket para evitar en lo posible que haya desconexiones inesperadas */
 const io = new Server(server, {
     cors: {
         origin: OrignesSegurosIndividuales,
         credentials: true,
+    },
+    // 🔹 TRANSPORTES (importante que coincida con el frontend)
+    transports: ['websocket', 'polling'], // Mantener ambos por compatibilidad
+
+    // 🔹 RECONEXIÓN Y RECUPERACIÓN DE ESTADO (Socket.IO v4+)
+    connectionStateRecovery: {
+        // La recuperación de estado es CRUCIAL para no perder datos
+        maxDisconnectionDuration: 1 * 60 * 1000, // 1 minutos máximo
+        skipMiddlewares: false,
+    },
+
+    // 🔹 TIMEOUTS OPTIMIZADOS
+    // pingTimeout: 30000,           // 30 segundos - tiempo para considerar desconectado
+    // pingInterval: 15000,          // 15 segundos - frecuencia de ping
+    connectTimeout: 45000,        // 45 segundos - tiempo máximo para conectar
+
+    // 🔹 COMPRESIÓN Y OPTIMIZACIÓN
+    perMessageDeflate: {
+        threshold: 1024,          // Comprimir mensajes mayores a 1KB
+    },
+    httpCompression: true,
+    maxHttpBufferSize: 1e7,       // 10MB - aumentar para grandes payloads
+
+    // 🔹 UPGRADES Y COMPATIBILIDAD
+    allowUpgrades: true,          // Permitir upgrade de polling a websocket
+    allowEIO3: false,             // Solo Engine.IO 4+
+
+    // 🔹 ADAPTATIVIDAD (importante para redes móviles)
+    upgradeTimeout: 10000,        // 10 segundos para upgrade
+    cookie: {
+        name: 'io',
+        path: '/',
+        httpOnly: true,
+        sameSite: 'lax'           // Importante para CORS con credenciales
     }
 });
 

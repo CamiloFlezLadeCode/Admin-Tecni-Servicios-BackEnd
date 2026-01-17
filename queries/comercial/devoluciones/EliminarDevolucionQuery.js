@@ -8,63 +8,79 @@ const EliminarDevolucionQuery = async (IdDevolucion) => {
 
         // 1. Obtener los detalles de la devolución para actualizar los equipos
         const [detalles] = await connection.query(
-            `SELECT IdEquipo, Cantidad 
+            `SELECT IdEquipo, Cantidad, IdRemision
              FROM detalles_devoluciones 
              WHERE IdDevolucion = ?`,
             [IdDevolucion]
         );
 
-        // 2. Eliminar los detalles de la devolución
+        // 2. Actualizar la cantidad disponible de equipos (DECREMENTAR)
+        for (const detalle of detalles) {
+            const [prop] = await connection.query(
+                `SELECT
+                    DocumentoSubarrendatario AS Propietario
+                FROM
+                    detalles_remisiones
+                WHERE IdRemision = ? AND IdEquipo = ?
+                LIMIT 1`,
+                [detalle.IdRemision, detalle.IdEquipo]
+            );
+
+            const propietario = prop.length > 0 ? String(prop[0].Propietario ?? '').trim() : null;
+            const esPropio = propietario === String(EmpresaAnfitriona.value).trim();
+
+            if (!esPropio) {
+                continue;
+            }
+
+            const [[equipo]] = await connection.query(
+                `SELECT CantidadDisponible 
+                 FROM equipo 
+                 WHERE IdEquipo = ? 
+                 FOR UPDATE`,
+                [detalle.IdEquipo]
+            );
+
+            if (!equipo) {
+                throw new Error(`No se encontró el equipo ${detalle.IdEquipo}`);
+            }
+
+            const nuevaCantidad = Number(equipo.CantidadDisponible) - Number(detalle.Cantidad);
+
+            if (nuevaCantidad < 0) {
+                throw new Error(`La cantidad no puede ser negativa para el equipo ${detalle.IdEquipo}`);
+            }
+
+            if (nuevaCantidad == 0) {
+                await connection.query(
+                    `UPDATE equipo 
+                    SET CantidadDisponible = ?, IdEstado = 4 
+                    WHERE IdEquipo = ?`,
+                    [nuevaCantidad, detalle.IdEquipo]
+                );
+            } else {
+                await connection.query(
+                    `UPDATE equipo 
+                    SET CantidadDisponible = ?, IdEstado = 3 
+                    WHERE IdEquipo = ?`,
+                    [nuevaCantidad, detalle.IdEquipo]
+                )
+            }
+        }
+
+        // 3. Eliminar los detalles de la devolución
         await connection.query(
             `DELETE FROM detalles_devoluciones 
              WHERE IdDevolucion = ?`,
             [IdDevolucion]
         );
 
-        // 3. Eliminar la devolución principal
+        // 4. Eliminar la devolución principal
         await connection.query(
             `DELETE FROM devoluciones 
              WHERE IdDevolucion = ?`,
             [IdDevolucion]
         );
-
-        // 4. Actualizar la cantidad disponible de equipos (DECREMENTAR)
-        for (const detalle of detalles) {
-            // Verificar si es equipo propio antes de descontar stock
-            const [prop] = await connection.query(
-                `SELECT DocumentoSubarrendatario AS Propietario FROM equipo WHERE IdEquipo = ?`,
-                [detalle.IdEquipo]
-            );
-
-            const propietario = prop.length > 0 ? prop[0].Propietario : null;
-            const esPropio = propietario === EmpresaAnfitriona.value;
-
-            if (!esPropio) {
-                continue;
-            }
-
-            // Obtener cantidad actual
-            const [[equipo]] = await connection.query(
-                `SELECT CantidadDisponible 
-                 FROM equipo 
-                 WHERE IdEquipo = ? 
-                 FOR UPDATE`, // Bloqueo para evitar condiciones de carrera
-                [detalle.IdEquipo]
-            );
-
-            const nuevaCantidad = equipo.CantidadDisponible - detalle.Cantidad;
-
-            if (nuevaCantidad < 0) {
-                throw new Error(`La cantidad no puede ser negativa para el equipo ${detalle.IdEquipo}`);
-            }
-
-            await connection.query(
-                `UPDATE equipo 
-                 SET CantidadDisponible = ? 
-                 WHERE IdEquipo = ?`,
-                [nuevaCantidad, detalle.IdEquipo]
-            );
-        }
 
         await connection.commit();
         return {
