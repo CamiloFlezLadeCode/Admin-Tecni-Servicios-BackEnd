@@ -11,8 +11,12 @@ const { VerDisponibilidadEquiposGeneralesController } = require('../../../contro
 const { VerCantidadRemisionesYDevolucionesUltimos6MesesController } = require('../../../controllers/comercial/remisiones/VerCantidadRemisionesYDevolucionesUltimos6MesesController');
 const { VerTotalesMovimientosMesActualController } = require('../../../controllers/comercial/remisiones/VerTotalesMovimientosMesActualController');
 const { VerActividadRecienteMovimientosController } = require('../../../controllers/comercial/remisiones/VerActividadRecienteMovimientosController');
+const { VerRemisionPorIdController } = require('../../../controllers/comercial/remisiones/VerRemisionPorIdController');
+const { ActualizarRemisionController } = require('../../../controllers/comercial/remisiones/ActualizarRemisionController');
 
 router.post('/crear-remision', CrearRemisionController);
+router.put('/actualizar-remision', ActualizarRemisionController);
+router.get('/ver-remision-por-id', VerRemisionPorIdController);
 router.get('/ver-cantidad-disponible-equipo/:IdEquipo', VerCantidadDisponibleController);
 router.get('/siguiente-no-remision', ConsultarSiguienteNoRemisionController);
 router.get('/ver-remisiones', ConsultarRemisionesController);

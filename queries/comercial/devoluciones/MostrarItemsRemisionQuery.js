@@ -16,12 +16,14 @@ const MostrarItemsRemisionQuery = async (IdRemision) => {
                 FROM devoluciones d
                 JOIN detalles_devoluciones dd ON d.IdDevolucion = dd.IdDevolucion
                 WHERE dd.IdEquipo = e.IdEquipo
-                AND d.IdRemision = r.IdRemision
+                AND dd.IdRemision = r.IdRemision
                 AND d.IdEstado IN (1, 2) -- Estados aprobados/procesados
                 ), 0) AS CantidadPendiente,
             dr.PrecioUnidad,
             dr.PrecioTotal,
             dr.ObservacionesCliente,
+            dr.DocumentoSubarrendatario AS Subarrendatario,
+            CONCAT(usu_sub.Nombres, ' ', usu_sub.Apellidos) AS NombreSubarrendatario,
             e.IdEstado AS EstadoActualEquipo,
             es.Estado AS NombreEstadoEquipo
         FROM
@@ -38,6 +40,8 @@ const MostrarItemsRemisionQuery = async (IdRemision) => {
             proyectos AS p ON r.IdProyecto = p.IdProyecto
         INNER JOIN
             estado AS es ON e.IdEstado = es.IdEstado
+        LEFT JOIN
+            usuario AS usu_sub ON dr.DocumentoSubarrendatario = usu_sub.DocumentoUsuario
         WHERE
             r.IdRemision = ?  -- Usar el alias correctamente
             AND dr.Cantidad > IFNULL(
@@ -45,7 +49,7 @@ const MostrarItemsRemisionQuery = async (IdRemision) => {
                 FROM devoluciones d
                 JOIN detalles_devoluciones dd ON d.IdDevolucion = dd.IdDevolucion
                 WHERE dd.IdEquipo = e.IdEquipo
-                AND d.IdRemision = r.IdRemision  -- Aquí también especifica el alias
+                AND dd.IdRemision = r.IdRemision  -- Aquí también especifica el alias
                 AND d.IdEstado IN (1, 2)
                 ), 0
             )
@@ -66,12 +70,14 @@ const MostrarItemsRemisionQuery = async (IdRemision) => {
                 FROM devoluciones d
                 JOIN detalles_devoluciones dd ON d.IdDevolucion = dd.IdDevolucion
                 WHERE dd.IdEquipo = dr.IdEquipo
-                AND d.IdRemision = r.IdRemision
+                AND dd.IdRemision = r.IdRemision
                 /*AND d.IdEstado IN (1, 2)*/
         ), 0) AS CantidadPendiente,
             dr.PrecioUnidad,
             dr.PrecioTotal,
             dr.ObservacionesCliente,
+            dr.DocumentoSubarrendatario AS Subarrendatario,
+            CONCAT(usu_sub.Nombres, ' ', usu_sub.Apellidos) AS NombreSubarrendatario,
             e.IdEstado AS EstadoActualEquipo,
             es.Estado AS NombreEstadoEquipo
         FROM
@@ -88,6 +94,8 @@ const MostrarItemsRemisionQuery = async (IdRemision) => {
             proyectos AS p ON r.IdProyecto = p.IdProyecto
         INNER JOIN
             estado AS es ON e.IdEstado = es.IdEstado
+        LEFT JOIN
+            usuario AS usu_sub ON dr.DocumentoSubarrendatario = usu_sub.DocumentoUsuario
         WHERE
             r.IdRemision = ?
             AND dr.Cantidad > IFNULL(
@@ -95,7 +103,7 @@ const MostrarItemsRemisionQuery = async (IdRemision) => {
                 FROM devoluciones d
                 JOIN detalles_devoluciones dd ON d.IdDevolucion = dd.IdDevolucion
                 WHERE dd.IdEquipo = dr.IdEquipo
-                AND d.IdRemision = r.IdRemision
+                AND dd.IdRemision = r.IdRemision
                 AND d.IdEstado IN (1, 2))
             , 0)
     `;

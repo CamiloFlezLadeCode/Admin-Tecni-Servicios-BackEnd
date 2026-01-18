@@ -18,13 +18,14 @@ const MostrarEquiposPorDevolverQuery = async (Parametros) => {
                 FROM devoluciones d
                 JOIN detalles_devoluciones dd ON d.IdDevolucion = dd.IdDevolucion
                 WHERE dd.IdEquipo = dr.IdEquipo
-                #AND d.IdRemision = r.IdRemision
                 AND dd.IdRemision = r.IdRemision
                 /*AND d.IdEstado IN (1, 2)*/
         ), 0) AS CantidadPendiente,
             dr.PrecioUnidad,
             dr.PrecioTotal,
             dr.ObservacionesCliente,
+            dr.DocumentoSubarrendatario AS Subarrendatario,
+            CONCAT(usu_sub.Nombres, ' ', usu_sub.Apellidos) AS NombreSubarrendatario,
             e.IdEstado AS EstadoActualEquipo,
             es.Estado AS NombreEstadoEquipo
         FROM
@@ -41,6 +42,8 @@ const MostrarEquiposPorDevolverQuery = async (Parametros) => {
             proyectos AS p ON r.IdProyecto = p.IdProyecto
         INNER JOIN
             estado AS es ON e.IdEstado = es.IdEstado
+        LEFT JOIN
+            usuario AS usu_sub ON dr.DocumentoSubarrendatario = usu_sub.DocumentoUsuario
         WHERE
             #r.IdRemision = 22
             (r.IdProyecto = ? AND dr.DocumentoSubarrendatario = ?)
@@ -49,7 +52,6 @@ const MostrarEquiposPorDevolverQuery = async (Parametros) => {
                 FROM devoluciones d
                 JOIN detalles_devoluciones dd ON d.IdDevolucion = dd.IdDevolucion
                 WHERE dd.IdEquipo = dr.IdEquipo
-                #AND d.IdRemision = r.IdRemision
                 AND dd.IdRemision = r.IdRemision
                 AND d.IdEstado IN (1, 2))
             , 0))
