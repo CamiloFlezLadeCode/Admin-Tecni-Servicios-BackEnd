@@ -1,6 +1,10 @@
 const { query } = require('../../../config/db');
 
 const VerRemisionPorIdQuery = async (IdRemision) => {
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
     const sqlRemision = `
         SELECT	
             remi.IdRemision,
@@ -15,7 +19,8 @@ const VerRemisionPorIdQuery = async (IdRemision) => {
             CONCAT(cliente.Nombres, ' ', cliente.Apellidos) AS Cliente,
             proyec.Nombre AS Proyecto,
             CONCAT(usucreacion.Nombres, ' ', usucreacion.Apellidos) AS CreadoPor,
-            remi.FechaCreacion,
+            DATE_FORMAT(remi.FechaCreacion, '%W %d/%m/%Y a las %l:%i:%s %p') AS FechaCreacion,
+            #remi.FechaCreacion AS FechaCreacion,
             esta.Estado AS EstadoRemision
         FROM
             remisiones AS remi
