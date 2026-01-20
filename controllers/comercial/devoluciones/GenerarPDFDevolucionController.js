@@ -36,7 +36,7 @@ const GenerarPDFDevolucionController = async (req, res) => {
         }
 
         const HTMLMANUAL = `
-            <!-- <p>${cabecera.Observaciones}</p> -->
+            <!-- <p>${cabecera.Observaciones}asdfasdfasfasdf</p> -->
 
             <table class="SinBordesDobles TableInfoItems BordesNegros1px" style="width: 100%; margin-top: 20px;">
                 <thead>
@@ -53,7 +53,8 @@ const GenerarPDFDevolucionController = async (req, res) => {
                             <td class="BordesNegros1px SinBordesDobles" style="padding: 4px;">${item.EquipoEntregado}</td>
                             <td class="BordesNegros1px SinBordesDobles" style="padding: 4px;">${item.EstadoEquipoEntregado}</td>
                         </tr>
-                    `)}
+                    `).join('') //Se agrega un espacio en blanco con .join('') para separar los items y evitar caracteres raros en el html
+                    } 
                 </tbody>
             </table>
             <table class="SinBordesDobles TableInfoItems BordesNegros1px" style="width: 100%; margin-top: 0px; border-top: none;">
@@ -82,7 +83,7 @@ const GenerarPDFDevolucionController = async (req, res) => {
                     </td>
                 </tr>
             </table>
-        `
+        `;
 
         // Configurar reemplazos
         const replacements = {
