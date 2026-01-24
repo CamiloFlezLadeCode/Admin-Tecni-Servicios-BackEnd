@@ -22,6 +22,7 @@ module.exports = [
   require('./comercial/devoluciones/devolucionesRoutes'),
   require('./comercial/ordenes_de_servicio/ordenesDeServicioRoutes'),
   require('./comercial/estado_de_cuenta/estadoDeCuentaRoutes'),
+  require('./comercial/movimientos_generales/movimientosGeneralesRoutes'),
   // Rutas configuraciones
   require('./configuraciones/configuracionesRoutes'),
   // Rutas inventario
