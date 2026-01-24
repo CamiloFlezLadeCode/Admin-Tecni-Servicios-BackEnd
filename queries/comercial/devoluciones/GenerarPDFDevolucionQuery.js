@@ -25,7 +25,11 @@ const GenerarPDFDevolucionQuery = async (IdDevolucion) => {
             CONCAT(DAYNAME(devo.FechaCreacion), ' ', DATE_FORMAT(devo.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion,
             detadevo.Cantidad AS CantidadEntregada,
             equi.Nombre AS EquipoEntregado,
-            esta.Estado AS EstadoEquipoEntregado,
+            #esta.Estado AS EstadoEquipoEntregado,
+            CASE
+                WHEN esta.Estado IS NULL THEN 'Sin especificar'
+                ELSE esta.Estado
+            END AS EstadoEquipoEntregado,
             devo.PersonaQueEntrega AS PersonaQueEntrega,
             CONCAT(COALESCE(persorecibe.Nombres, ''), ' ', COALESCE(persorecibe.Apellidos, '')) AS PersonaQueRecibe,
             CONCAT(DAYNAME(devo.FechaDevolucion), ' ', DATE_FORMAT(devo.FechaDevolucion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaDevolucion,
@@ -41,7 +45,8 @@ const GenerarPDFDevolucionQuery = async (IdDevolucion) => {
             detalles_devoluciones AS detadevo ON devo.IdDevolucion = detadevo.IdDevolucion
         INNER JOIN
             equipo AS equi ON detadevo.IdEquipo = equi.IdEquipo
-        INNER JOIN
+        #INNER JOIN
+        LEFT JOIN
             estado AS esta ON detadevo.IdEstado = esta.IdEstado
         LEFT JOIN
             usuario AS persorecibe ON devo.PersonaQueRecibe = persorecibe.DocumentoUsuario
