@@ -2,14 +2,21 @@ const { VerMovimientosGeneralesService } = require('../../../services/comercial/
 
 const VerMovimientosGeneralesController = async (req, res) => {
     try {
-        const movimientos = await VerMovimientosGeneralesService();
+        const filtros = {
+            FechaInicio: req.query.FechaInicio,
+            FechaFin: req.query.FechaFin,
+            DocumentoCliente: req.query.DocumentoCliente,
+            IdProyecto: req.query.IdProyecto
+        };
+
+        const movimientos = await VerMovimientosGeneralesService(filtros);
         console.log(`Movimientos generales consultados correctamente. Total: ${movimientos.length}`);
         return res.status(200).json(movimientos);
     } catch (error) {
         console.error('Error en VerMovimientosGeneralesController => ', error);
-        return res.status(500).json({ 
+        return res.status(500).json({
             success: false,
-            error: `Error al consultar los movimientos generales => ${error.message}` 
+            error: `Error al consultar los movimientos generales => ${error.message}`
         });
     }
 };
