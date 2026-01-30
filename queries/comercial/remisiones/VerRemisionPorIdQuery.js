@@ -18,6 +18,18 @@ const VerRemisionPorIdQuery = async (IdRemision) => {
             remi.ValorTransporte,
             CONCAT(cliente.Nombres, ' ', cliente.Apellidos) AS Cliente,
             proyec.Nombre AS Proyecto,
+            proyec.IdProyecto AS IdProyecto,
+            -- Consultar todos los proyectos del cliente de la remisión como JSON
+            (
+                SELECT JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                    	'value', p.IdProyecto,
+                    	'label', p.Nombre	
+                    )
+                )
+                FROM proyectos AS p 
+                WHERE p.DocumentoCliente = cliente.DocumentoUsuario
+            ) AS ProyectosCliente,
             CONCAT(usucreacion.Nombres, ' ', usucreacion.Apellidos) AS CreadoPor,
             DATE_FORMAT(remi.FechaCreacion, '%W %d/%m/%Y a las %l:%i:%s %p') AS FechaCreacion,
             #remi.FechaCreacion AS FechaCreacion,

@@ -22,8 +22,9 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
             PrecioTotalGeneralSinIVA,
             PrecioTotalGeneralConIVA,
             Detalles,
-            UsuarioQueActualiza
+            UsuarioQueActualiza,
             // UsuarioActualizacion // Asumimos que viene el usuario que realiza el cambio
+            IdProyecto,
         } = DatosActualizacion;
 
         // 1. Obtener datos actuales de la remisión
@@ -51,7 +52,8 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
             IncluyeTransporte: (IncluyeTransporte ? 1 : 0) !== remisionActual.IncluyeTransporte,
             ValorTransporte: Number(ValorTransporte || 0).toFixed(2) !== Number(remisionActual.ValorTransporte || 0).toFixed(2),
             PrecioTotalGeneralSinIVA: Number(PrecioTotalGeneralSinIVA || 0).toFixed(2) !== Number(remisionActual.PrecioTotalGeneralSinIVA || 0).toFixed(2),
-            PrecioTotalGeneralConIVA: Number(PrecioTotalGeneralConIVA || 0).toFixed(2) !== Number(remisionActual.PrecioTotalGeneralConIVA || 0).toFixed(2)
+            PrecioTotalGeneralConIVA: Number(PrecioTotalGeneralConIVA || 0).toFixed(2) !== Number(remisionActual.PrecioTotalGeneralConIVA || 0).toFixed(2),
+            IdProyecto: Number(IdProyecto) !== Number(remisionActual.IdProyecto),
         };
 
         const huboCambiosCabecera = Object.values(cambiosCabecera).some(cambio => cambio);
@@ -218,7 +220,8 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
                     PrecioTotalGeneralSinIVA = ?, 
                     PrecioTotalGeneralConIVA = ?,
                     FechaUltimaActualizacion = ?,
-                    UsuarioQueActualiza = ?
+                    UsuarioQueActualiza = ?,
+                    IdProyecto = ?
                 WHERE 
                     IdRemision = ?
             `;
@@ -233,7 +236,9 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
                 PrecioTotalGeneralConIVA,
                 FechaActualColombia(),
                 UsuarioQueActualiza,
-                IdRemision
+                IdProyecto,
+                IdRemision,
+
             ]);
         }
 
