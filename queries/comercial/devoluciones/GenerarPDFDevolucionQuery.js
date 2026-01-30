@@ -27,7 +27,8 @@ const GenerarPDFDevolucionQuery = async (IdDevolucion) => {
             equi.Nombre AS EquipoEntregado,
             #esta.Estado AS EstadoEquipoEntregado,
             CASE
-                WHEN esta.Estado IS NULL THEN 'Sin especificar'
+                #WHEN esta.Estado IS NULL THEN 'Sin especificar'
+                WHEN esta.Estado IS NULL THEN ''
                 ELSE esta.Estado
             END AS EstadoEquipoEntregado,
             devo.PersonaQueEntrega AS PersonaQueEntrega,
