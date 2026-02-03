@@ -6,7 +6,11 @@ const VerStockEquiposQuery = async () => {
             e.IdEquipo AS IdEquipo,
             e.Nombre AS NombreEquipo,
             e.CantidadDisponible AS Cantidad,
-            est.Estado AS Estado,
+            #est.Estado AS Estado,
+            CASE
+            	WHEN e.CantidadDisponible <= 0 THEN 'No disponible'
+				ELSE 'Disponible'
+			END AS Estado,
             um.Nombre AS UnidadMedida
         FROM
             equipo AS e

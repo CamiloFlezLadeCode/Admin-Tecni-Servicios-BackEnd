@@ -6,7 +6,11 @@ const VerStockRepuestosQuery = async () => {
             rep.IdRepuesto AS IdRepuesto,
             rep.Nombre AS NombreRepuesto,
             rep.CantidadDisponible AS CantidadDisponible,
-            est.Estado AS Estado
+            #est.Estado AS Estado
+            CASE 
+            	WHEN rep.CantidadDisponible <= 0 THEN 'No disponible'
+                ELSE 'Disponible'
+			END AS Estado   
         FROM
             repuestos AS rep
         LEFT JOIN
