@@ -25,6 +25,7 @@ const GenerarPDFDevolucionQuery = async (IdDevolucion) => {
             CONCAT(DAYNAME(devo.FechaCreacion), ' ', DATE_FORMAT(devo.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion,
             detadevo.Cantidad AS CantidadEntregada,
             equi.Nombre AS EquipoEntregado,
+            detadevo.IdEquipo AS IdEquipo,
             #esta.Estado AS EstadoEquipoEntregado,
             CASE
                 #WHEN esta.Estado IS NULL THEN 'Sin especificar'
