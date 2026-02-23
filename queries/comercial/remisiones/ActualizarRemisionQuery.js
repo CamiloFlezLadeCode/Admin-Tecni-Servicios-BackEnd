@@ -10,6 +10,7 @@ const { FechaActualColombia } = require('../../../utils/FechaActualColombia');
 const ActualizarRemisionQuery = async (DatosActualizacion) => {
     const connection = await pool.getConnection();
     try {
+        console.log("DatosActualizacion", DatosActualizacion)
         await connection.beginTransaction();
 
         const {
@@ -61,6 +62,7 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
         // 3. Obtener detalles actuales para comparación y stock
         const [detallesAnteriores] = await connection.query(
             `SELECT 
+                IdDetalleRemision,
                 DocumentoSubarrendatario, 
                 IdCategoria,
                 IdEquipo, 
@@ -77,6 +79,7 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
         const detallesNuevos = Detalles
             .filter(det => Number(det.IdEquipo) !== 0)
             .map(det => ({
+                IdDetalleRemision: det.IdDetalleRemision, // Conservar el ID original
                 DocumentoSubarrendatario: det.DocumentoSubarrendatario ? String(det.DocumentoSubarrendatario).trim() : null,
                 IdCategoria: Number(det.IdCategoria),
                 IdEquipo: Number(det.IdEquipo),
@@ -245,27 +248,47 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
         if (huboCambiosDetalles) {
             await connection.query('DELETE FROM detalles_remisiones WHERE IdRemision = ?', [IdRemision]);
 
+            const mapaIds = new Map(); // Mapa para antiguos -> nuevos Ids
+
             if (detallesNuevos.length > 0) {
                 const sqlInsertDetalle = `
                     INSERT INTO detalles_remisiones (
                         IdRemision, DocumentoSubarrendatario, IdCategoria,
                         IdEquipo, Cantidad, PrecioUnidad,
                         PrecioTotal, ObservacionesCliente
-                    ) VALUES ?
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 `;
 
-                const values = detallesNuevos.map(det => [
-                    IdRemision,
-                    det.DocumentoSubarrendatario,
-                    det.IdCategoria,
-                    det.IdEquipo,
-                    det.Cantidad,
-                    det.PrecioUnidad,
-                    det.PrecioTotal,
-                    det.ObservacionesCliente
-                ]);
+                for (const det of detallesNuevos) {
+                    const [result] = await connection.query(sqlInsertDetalle, [
+                        IdRemision,
+                        det.DocumentoSubarrendatario,
+                        det.IdCategoria,
+                        det.IdEquipo,
+                        det.Cantidad,
+                        det.PrecioUnidad,
+                        det.PrecioTotal,
+                        det.ObservacionesCliente
+                    ]);
+                    const nuevoIdDetalle = result.insertId;
 
-                await connection.query(sqlInsertDetalle, [values]);
+                    // Si el detalle tenía un ID antiguo, lo mapeamos al nuevo
+                    if (det.IdDetalleRemision) {
+                        mapaIds.set(det.IdDetalleRemision, nuevoIdDetalle);
+                    }
+                }
+
+                // Actualizar detalles_devoluciones con los nuevos Ids
+                if (mapaIds.size > 0) {
+                    const sqlUpdateDevolucion = `
+                        UPDATE detalles_devoluciones
+                        SET IdDetalleRemision = ?
+                        WHERE IdDetalleRemision = ?
+                    `;
+                    for (const [idAntiguo, idNuevo] of mapaIds.entries()) {
+                        await connection.query(sqlUpdateDevolucion, [idNuevo, idAntiguo]);
+                    }
+                }
             }
         }
 
