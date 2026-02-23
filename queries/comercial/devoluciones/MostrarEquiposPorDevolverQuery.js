@@ -3,7 +3,7 @@ const { query } = require('../../../config/db');
 const MostrarEquiposPorDevolverQuery = async (Parametros) => {
     const sql = `
         SELECT
-            CONCAT('NoRemi: ', r.NoRemision, ' - ', 'Fecha: ', DATE_FORMAT(r.FechaRemision, '%d/%m/%Y %l:%i %p')) AS Descripcion,
+            CONCAT('NoRemi: ', r.NoRemision, ' - ', 'Fecha: ', DATE_FORMAT(r.FechaRemision, '%d/%m/%Y %l:%i %p'), ' - Subarren: ', CONCAT(usu_sub.Nombres, ' ', usu_sub.Apellidos)) AS Descripcion,
             dr.IdDetalleRemision,
             r.IdRemision,
             r.NoRemision,
@@ -19,6 +19,7 @@ const MostrarEquiposPorDevolverQuery = async (Parametros) => {
                 JOIN detalles_devoluciones dd ON d.IdDevolucion = dd.IdDevolucion
                 WHERE dd.IdEquipo = dr.IdEquipo
                 AND dd.IdRemision = r.IdRemision
+                AND dd.IdDetalleRemision = dr.IdDetalleRemision
                 /*AND d.IdEstado IN (1, 2)*/
         ), 0) AS CantidadPendiente,
             dr.PrecioUnidad,
@@ -46,7 +47,8 @@ const MostrarEquiposPorDevolverQuery = async (Parametros) => {
             usuario AS usu_sub ON dr.DocumentoSubarrendatario = usu_sub.DocumentoUsuario
         WHERE
             #r.IdRemision = 22
-            (r.IdProyecto = ? AND dr.DocumentoSubarrendatario = ?)
+            #(r.IdProyecto = Valor AND dr.DocumentoSubarrendatario = Valor)
+            (r.IdProyecto = ?) 
             AND (dr.Cantidad > IFNULL(
                 (SELECT SUM(dd.Cantidad)
                 FROM devoluciones d
@@ -60,7 +62,7 @@ const MostrarEquiposPorDevolverQuery = async (Parametros) => {
     `;
     return query(sql, [
         Parametros.IdProyecto,
-        Parametros.DocumentoSubarrendatario,
+        // Parametros.DocumentoSubarrendatario,
     ]);
 };
 module.exports = {

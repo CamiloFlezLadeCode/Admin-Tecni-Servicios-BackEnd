@@ -21,6 +21,7 @@ const InfoPDFQuery = async (IdRemision) => {
             #DATOS DETALLES DE LA REMISIÓN
             deta_remi.Cantidad AS Cantidad,
             equi.Nombre AS NombreEquipo,
+            equi.IdEquipo AS IdEquipo,
             remi.ObservacionesEmpresa AS ObservacionesEmpresa,
             #DATOS REMISIÓN
             remi.NoRemision AS NoRemision,
@@ -28,7 +29,7 @@ const InfoPDFQuery = async (IdRemision) => {
             CONCAT(DAYNAME(remi.FechaRemision), ' ', DATE_FORMAT(remi.FechaRemision, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaRemision, 
             CONCAT(COALESCE(bodeguero.Nombres, ''), ' ', COALESCE(bodeguero.Apellidos, '')) AS Bodeguero,
             CONCAT(COALESCE(despachador.Nombres, ''), ' ', COALESCE(despachador.Apellidos, '')) AS Despachador,
-            CONCAT(COALESCE(transportador.Nombres, ''), ' ', COALESCE(transportador.Apellidos, '')) AS 				Transportador,
+            CONCAT(COALESCE(transportador.Nombres, ''), ' ', COALESCE(transportador.Apellidos, '')) AS Transportador,
             #vehi.Placa AS PlacaVehiculo,
             CASE	
             	WHEN vehi.Placa IS NULL THEN ''

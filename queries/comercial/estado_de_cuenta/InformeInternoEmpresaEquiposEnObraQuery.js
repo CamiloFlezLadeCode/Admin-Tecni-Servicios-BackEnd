@@ -56,6 +56,7 @@ const InformeInternoEmpresaEquiposEnObraQuery = async ({ DocumentoCliente, IdPro
                 SELECT
                     dd.IdEquipo,
                     dd.IdRemision,
+                    dd.IdDetalleRemision,
                     SUM(dd.Cantidad) AS CantidadDevuelta
                 FROM detalles_devoluciones dd
                 INNER JOIN devoluciones d ON dd.IdDevolucion = d.IdDevolucion
@@ -65,8 +66,8 @@ const InformeInternoEmpresaEquiposEnObraQuery = async ({ DocumentoCliente, IdPro
                     WHERE Estado NOT LIKE '%Anulado%'
                       AND Estado NOT LIKE '%Cancelado%'
                 )
-                GROUP BY dd.IdEquipo, dd.IdRemision
-            ) devueltos ON devueltos.IdRemision = r.IdRemision AND devueltos.IdEquipo = dr.IdEquipo
+                GROUP BY dd.IdEquipo, dd.IdRemision, dd.IdDetalleRemision
+            ) devueltos ON devueltos.IdRemision = r.IdRemision AND devueltos.IdEquipo = dr.IdEquipo AND devueltos.IdDetalleRemision = dr.IdDetalleRemision
             WHERE
                 r.DocumentoCliente = ?
                 ${filtroProyecto}
