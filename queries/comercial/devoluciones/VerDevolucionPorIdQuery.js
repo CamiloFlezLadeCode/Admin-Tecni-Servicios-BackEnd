@@ -76,7 +76,8 @@ const VerDevolucionPorIdQuery = async (IdDevolucion) => {
             remi.IdRemision AS IdRemision,
             remi.NoRemision AS NoRemision,
             dr.ObservacionesCliente AS Descripcion,
-            dr.DocumentoSubarrendatario AS Subarrendatario
+            dr.DocumentoSubarrendatario AS Subarrendatario,
+            CONCAT(COALESCE(subarrendatario.Nombres, ''), ' ', COALESCE(subarrendatario.Apellidos, '')) AS NombreSubarrendatario
         FROM
             detalles_devoluciones AS dd
         INNER JOIN
@@ -85,6 +86,8 @@ const VerDevolucionPorIdQuery = async (IdDevolucion) => {
             detalles_remisiones AS dr ON dd.IdDetalleRemision = dr.IdDetalleRemision
         INNER JOIN
             equipo AS equi ON dd.IdEquipo = equi.IdEquipo
+        INNER JOIN
+            usuario AS subarrendatario ON dr.DocumentoSubarrendatario = subarrendatario.DocumentoUsuario
         WHERE
             dd.IdDevolucion = ?
     `;
