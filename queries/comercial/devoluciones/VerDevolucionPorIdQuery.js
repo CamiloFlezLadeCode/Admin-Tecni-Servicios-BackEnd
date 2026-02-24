@@ -1,6 +1,10 @@
 const { query } = require('../../../config/db');
 
 const VerDevolucionPorIdQuery = async (IdDevolucion) => {
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
     const sqlDevolucion = `
         SELECT
             devo.IdDevolucion AS IdDevolucion,
@@ -12,7 +16,7 @@ const VerDevolucionPorIdQuery = async (IdDevolucion) => {
             devo.Observaciones AS Observaciones,
             devo.PersonaQueRecibe AS PersonaQueRecibe,
             devo.PersonaQueEntrega AS PersonaQueEntrega,
-            DATE_FORMAT(devo.FechaDevolucion, '%Y-%m-%d %H:%i:%s') AS FechaDevolucion,
+            DATE_FORMAT(devo.FechaDevolucion, '%W %d/%m/%Y a las %l:%i:%s %p') AS FechaDevolucion,
             devo.IncluyeTransporte AS IncluyeTransporte,
             devo.ValorTransporte AS ValorTransporte,
             devo.IdEstado AS IdEstado,
