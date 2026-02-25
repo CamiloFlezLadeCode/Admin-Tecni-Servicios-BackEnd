@@ -10,6 +10,7 @@ const { EliminarDevolucionController } = require('../../../controllers/comercial
 const { MostrarSubarrendatariosConRemisionAsignadaController } = require('../../../controllers/comercial/devoluciones/MostrarSubarrendatariosConRemisionAsignadaController');
 const { MostrarEquiposPorDevolverController } = require('../../../controllers/comercial/devoluciones/MostrarEquiposPorDevolverController');
 const { VerDevolucionPorIdController } = require('../../../controllers/comercial/devoluciones/VerDevolucionPorIdController');
+const { ActualizarDevolucionController } = require('../../../controllers/comercial/devoluciones/ActualizarDevolucionController');
 
 
 router.get('/ver-remisiones-cliente', MostrarRemisionesDelClienteController);
@@ -22,4 +23,5 @@ router.get('/obtener-pdf-devolucion', GenerarPDFDevolucionController);
 router.delete('/eliminar-devolucion', EliminarDevolucionController);
 router.get('/ver-subarrendatarios-con-remisiones-asignadas-para-cliente-proyecto', MostrarSubarrendatariosConRemisionAsignadaController);
 router.get('/equipos-pendientes-por-devolver', MostrarEquiposPorDevolverController);
+router.put('/actualizar-devolucion', ActualizarDevolucionController);
 module.exports = router;
