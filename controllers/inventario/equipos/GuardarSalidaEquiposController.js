@@ -3,7 +3,7 @@ const { GuardarSalidaEquiposService } = require('../../../services/inventario/eq
 const GuardarSalidaEquiposController = async (req, res) => {
     try {
         const DataSalidaEquipos = req.body;
-        console.log(DataSalidaEquipos)
+// console.log(DataSalidaEquipos)
         if (!DataSalidaEquipos || !DataSalidaEquipos.Equipos || DataSalidaEquipos.Equipos.length === 0) {
             return res.status(400).json({ error: 'Datos de salida inválidos o vacíos' });
         }

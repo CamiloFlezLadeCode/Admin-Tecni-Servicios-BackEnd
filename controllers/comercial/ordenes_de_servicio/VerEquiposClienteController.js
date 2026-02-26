@@ -7,7 +7,7 @@ const VerEquiposClienteController = async (req, res) => {
             return res.status(400).json({ data: null, message: 'No se especificaron los parametros de consulta' });
         }
         const EquiposDelCliente = await VerEquiposClienteService(ParametrosConsultaEquiposCliente) || [];
-        console.log(`EQUIPOS DEL CLIENTE OBTENIDOS CORRECTAMENTE. TOTAL: ${EquiposDelCliente.length}`);
+// console.log(`EQUIPOS DEL CLIENTE OBTENIDOS CORRECTAMENTE. TOTAL: ${EquiposDelCliente.length}`);
         const EquiposDelClienteMapeados = EquiposDelCliente.map(equipo => ({
             value: equipo.IdEquipo,
             label: equipo.NombreEquipo

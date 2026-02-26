@@ -5,7 +5,7 @@ const CrearOrdenDeServicioController = async (req, res) => {
     try {
         const DatosOrdenDeServicio = req.body;
         const OrdenDeServicio = await CrearOrdenDeServicioService(DatosOrdenDeServicio);
-        console.log(`Orden de servicio creada correctamente. Orden: ${OrdenDeServicio}`);
+// console.log(`Orden de servicio creada correctamente. Orden: ${OrdenDeServicio}`);
         // Se emite evento Socket al cliente
         const io = obtenerSocketServer();
         if (io) {

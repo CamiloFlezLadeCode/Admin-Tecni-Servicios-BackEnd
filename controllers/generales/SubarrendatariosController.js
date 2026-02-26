@@ -3,7 +3,7 @@ const { ConsultarSubarrendatariosService } = require('../../services/generales/S
 const ConsultarSubarrendatariosController = async (req, res) => {
     try {
         const Subarrendatarios = await ConsultarSubarrendatariosService();
-        console.log(`Subarrendatarios obtenidos correctamente. Total: ${Subarrendatarios.length}`);
+// console.log(`Subarrendatarios obtenidos correctamente. Total: ${Subarrendatarios.length}`);
         const SubarrendatariosMapeados = Subarrendatarios.map(subarrendatario => ({
             Id: subarrendatario.IdSubarrendatario,
             value: subarrendatario.DocumentoSubarrendatario,

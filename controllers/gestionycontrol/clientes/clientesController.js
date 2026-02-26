@@ -3,7 +3,7 @@ const { verClientesService, insertarClienteService, obtenerClientePorDocumentoSe
 const verClientes = async (req, res) => {
     try {
         const clientes = await verClientesService();
-        console.log(`Clientes obtenidos correctamente. Total: ${clientes.length}`);
+// console.log(`Clientes obtenidos correctamente. Total: ${clientes.length}`);
         res.json(clientes);
     } catch (error) {
         console.error('Error en verClientes:', error);
@@ -78,13 +78,13 @@ const obtenerClientePorDocumento = async (req, res) => {
 
         // Verificación de la existencia del cliente
         if (cliente && cliente.length > 0) {
-            console.log('Usuario encontradro');
+// console.log('Usuario encontradro');
             return res.status(200).json({
                 encontrado: true,
                 cliente: cliente[0] // Asumiendo que `cliente` es un arreglo y tomamos el primer resultado
             });
         } else {
-            console.log('Usuario no encontradro');
+// console.log('Usuario no encontradro');
             return res.status(200).json({
                 encontrado: false,
                 mensaje: "Cliente no encontrado"

@@ -5,7 +5,7 @@ const CrearRepuestoController = async (req, res) => {
     try {
         const DatosRepuesto = req.body;
         await CrearRepuestoService(DatosRepuesto);
-        console.log('Repuesto creado correctamente');
+// console.log('Repuesto creado correctamente');
         //Se emite el evento Socket al cliente
         const io = obtenerSocketServer();
         if (io) {

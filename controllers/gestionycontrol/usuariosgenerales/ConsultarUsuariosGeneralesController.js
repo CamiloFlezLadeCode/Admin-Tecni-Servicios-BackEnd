@@ -3,7 +3,7 @@ const { ConsultarUsuariosGeneralesService } = require('../../../services/gestion
 const ConsultarUsuariosGeneralesController = async (req, res) => {
     try {
         const UsuariosGenerales = await ConsultarUsuariosGeneralesService();
-        console.log(`Usuarios generales obtenidos correctamente. Total: ${UsuariosGenerales.length}`);
+// console.log(`Usuarios generales obtenidos correctamente. Total: ${UsuariosGenerales.length}`);
         return res.status(200).json(UsuariosGenerales);
     } catch (error) {
         console.error('Error en ConsultarUsuariosGeneralesController => ', error);

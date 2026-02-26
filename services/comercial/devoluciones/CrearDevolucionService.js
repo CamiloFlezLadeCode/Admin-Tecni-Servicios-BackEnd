@@ -32,8 +32,8 @@ const CrearDevolucionService = async (DatosDevolucion) => {
         connection = await pool.getConnection();
         await connection.beginTransaction();
 
-        console.log("Datos de devolución:", DatosDevolucion);
-        console.log("Detalles recibidos:", DatosDevolucion.Detalles);
+// console.log("Datos de devolución:", DatosDevolucion);
+// console.log("Detalles recibidos:", DatosDevolucion.Detalles);
 
         // 1. Insertar devolución principal
         const paramsDevolucion = [
@@ -71,7 +71,7 @@ const CrearDevolucionService = async (DatosDevolucion) => {
                 const esPropio = detalle.DocumentoSubarrendatario === EmpresaAnfitriona.value;
 
                 if (esPropio) {
-                    console.log(`Equipo ${detalle.IdEquipo} es propio, actualizando stock...`);
+// console.log(`Equipo ${detalle.IdEquipo} es propio, actualizando stock...`);
                     await DevolucionQuery.updateStockEquipo(
                         detalle.IdEquipo,
                         detalle.CantidadADevolver,

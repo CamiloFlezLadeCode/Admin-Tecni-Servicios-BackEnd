@@ -4,7 +4,7 @@ const ConsultarRepuestoPorIdController = async (req, res) => {
     try {
         const { IdRepuesto } = req.params;
         const Repuesto = await ConsultarRepuestoPorIdService(IdRepuesto);
-        console.log(Repuesto);
+// console.log(Repuesto);
         return res.status(200).json(Repuesto);
     } catch (error) {
         console.error('Error en ConsultarRepuestoPorIdController => ', error);

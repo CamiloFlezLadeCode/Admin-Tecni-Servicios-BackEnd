@@ -3,7 +3,7 @@ const { VerTodasLasDevolucionesService } = require('../../../services/comercial/
 const VerTodasLasDevolucionesController = async (req, res) => {
     try {
         const Devoluciones = await VerTodasLasDevolucionesService();
-        console.log(`Todas las devoluciones se obtuvieron correctemante. Total: ${Devoluciones.length}`);
+// console.log(`Todas las devoluciones se obtuvieron correctemante. Total: ${Devoluciones.length}`);
         return res.status(200).json(Devoluciones);
     } catch (error) {
         console.error('Error en VerTodasLasDevolucionesController => ', error.message);

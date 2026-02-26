@@ -69,5 +69,5 @@ exports.seed = async function (knex) {
     }
   ])
 
-  console.log('Se ha insertado el usuario principal del sistema');
+// console.log('Se ha insertado el usuario principal del sistema');
 };

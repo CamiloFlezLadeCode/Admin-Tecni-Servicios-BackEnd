@@ -3,9 +3,9 @@ const { ListarBodegasPorSubarrendatarioService } = require('../../services/gener
 const ListarBodegasPorSubarrendatarioController = async (req, res) => {
     try {
         const { IdTipoBodega } = req.query;
-        console.log(IdTipoBodega);
+// console.log(IdTipoBodega);
         const Bodegas = await ListarBodegasPorSubarrendatarioService(IdTipoBodega);
-        console.log(`BODEGAS OBTENIDAS CORRECTAMENTE. TOTAL: ${Bodegas.length}`);
+// console.log(`BODEGAS OBTENIDAS CORRECTAMENTE. TOTAL: ${Bodegas.length}`);
         const BodegasMapeadas = Bodegas.map(Bodega => ({
             value: Bodega.IdBodega,
             label: Bodega.NombreBodega

@@ -4,7 +4,7 @@ const ActualizarCredencialesProfesionalPorAdministradorController = async (req, 
     try {
         const DatosCredenciales = req.body;
         await ActualizarCredencialesProfesionalPorAdministradorService(DatosCredenciales);
-        console.log('Credenciales del profesional actualizadas correctamente');
+// console.log('Credenciales del profesional actualizadas correctamente');
         return res.status(204).send();
     } catch (error) {
         console.error('Error en ActualizarCredencialesProfesionalPorAdministradorController => ', error);

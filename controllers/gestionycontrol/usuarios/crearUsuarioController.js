@@ -8,7 +8,7 @@ const crearUsuarioController = async (req, res) => {
         }
 
         const resultado = await crearUsuarioService(usuarioData);
-        console.log("Usuario creado correctamente");
+// console.log("Usuario creado correctamente");
         return res.status(200).json({ message: 'Usuario insertado correctamente', data: resultado });
     } catch (error) {
         console.error('Error en crearUsuarioController => ', error);

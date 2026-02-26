@@ -3,7 +3,7 @@ const { ConsultarEntradasDeEquiposService } = require('../../../services/inventa
 const ConsultarEntradasDeEquiposController = async (req, res) => {
     try {
         const EntradasDeEquipos = await ConsultarEntradasDeEquiposService();
-        console.log(`Entradas de equipos obtenidas correctamente. Total:${EntradasDeEquipos.length}`);
+// console.log(`Entradas de equipos obtenidas correctamente. Total:${EntradasDeEquipos.length}`);
         return res.status(200).json(EntradasDeEquipos);
     } catch (error) {
         console.error('Error en ConsultarEntradasDeEquiposController => ', error.message);

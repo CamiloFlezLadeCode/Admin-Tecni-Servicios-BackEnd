@@ -3,13 +3,13 @@ const { ConsultarBodegaPorIdService } = require('../../../services/gestionycontr
 const ConsultarBodegaPorIdController = async (req, res) => {
     try {
         const { IdBodega } = req.query;
-        console.log(IdBodega)
+// console.log(IdBodega)
         const InfoBodega = await ConsultarBodegaPorIdService(IdBodega);
         if (InfoBodega.length > 0) {
-            console.log(`BODEGA CONSULTADA CORRECTAMENTE`);
+// console.log(`BODEGA CONSULTADA CORRECTAMENTE`);
             return res.status(200).json(InfoBodega);
         } else {
-            console.log(`NO SE ENCONTRÓ NINGUNA BODEGA CON ID: ${IdBodega}`);
+// console.log(`NO SE ENCONTRÓ NINGUNA BODEGA CON ID: ${IdBodega}`);
             return res.status(400).json({ message: `No se encontró ninguna bodega con id: ${IdBodega}` });
         }
     } catch (error) {

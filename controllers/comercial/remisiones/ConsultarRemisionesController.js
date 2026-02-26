@@ -3,7 +3,7 @@ const { ConsultarRemisionesService } = require('../../../services/comercial/remi
 const ConsultarRemisionesController = async (req, res) => {
     try {
         const Remisiones = await ConsultarRemisionesService();
-        console.log(`Remisiones consultadas correctamente. Total: ${Remisiones.length}`);
+// console.log(`Remisiones consultadas correctamente. Total: ${Remisiones.length}`);
         return res.status(200).json(
             Remisiones
         );

@@ -4,7 +4,7 @@ const ListarEquiposController = async (req, res) => {
     try {
         const IdReferencia = req.query;
         const Equipos = await ListarEquiposService(IdReferencia);
-        console.log(`Equipos optenidos correctamente. Total: ${Equipos.length}`);
+// console.log(`Equipos optenidos correctamente. Total: ${Equipos.length}`);
         const EquiposMapeados = Equipos.map(Equipo => ({
             value: Equipo.IdEquipo,
             label: Equipo.Nombre,

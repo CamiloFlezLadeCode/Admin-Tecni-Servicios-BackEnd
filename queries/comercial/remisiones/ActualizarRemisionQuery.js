@@ -10,7 +10,7 @@ const { FechaActualColombia } = require('../../../utils/FechaActualColombia');
 const ActualizarRemisionQuery = async (DatosActualizacion) => {
     const connection = await pool.getConnection();
     try {
-        console.log("DatosActualizacion", DatosActualizacion)
+// console.log("DatosActualizacion", DatosActualizacion)
         await connection.beginTransaction();
 
         const {
@@ -59,8 +59,8 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
             // FechaRemision: String(fechaRemisionNueva || '').slice(0, 10) !== String(remisionActual.FechaRemision || '').slice(0, 10),
             FechaRemision: fechaRemisionNueva.getTime() !== new Date(remisionActual.FechaRemision).getTime(),
         };
-        console.log("FechaRemisionNueva", fechaRemisionNueva)
-        console.log("remisionActual.FechaRemision", remisionActual.FechaRemision)
+// console.log("FechaRemisionNueva", fechaRemisionNueva)
+// console.log("remisionActual.FechaRemision", remisionActual.FechaRemision)
 
         const huboCambiosCabecera = Object.values(cambiosCabecera).some(cambio => cambio);
 

@@ -12,7 +12,7 @@ const InformeInternoEmpresaEquiposEnObraController = async (req, res) => {
         }
 
         const data = await InformeInternoEmpresaEquiposEnObraService(req.query);
-        console.log(`Informe interno (equipos en obra) obtenido correctamente. Total proyectos: ${data.length}`);
+// console.log(`Informe interno (equipos en obra) obtenido correctamente. Total proyectos: ${data.length}`);
         return res.status(200).json(data);
     } catch (error) {
         console.error('Error en InformeInternoEmpresaEquiposEnObraController => ', error.message);

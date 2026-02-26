@@ -5,7 +5,7 @@ const ActualizarProyectoController = async (req, res) => {
     try {
         const DatosProyecto = req.body;
         await ActualizarProyectoService(DatosProyecto);
-        console.log('Proyecto actualizado correctamente');
+// console.log('Proyecto actualizado correctamente');
         // Emitir el evento con Socket.IO
         const io = obtenerSocketServer();
         if (io) {

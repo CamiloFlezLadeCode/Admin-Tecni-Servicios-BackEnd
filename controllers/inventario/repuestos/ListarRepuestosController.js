@@ -3,7 +3,7 @@ const { ListarRepuestosService } = require('../../../services/inventario/repuest
 const ListarRepuestosController = async (req, res) => {
     try {
         const Repuestos = await ListarRepuestosService();
-        console.log(`Repuestos obtenidos correctamente. Total:${Repuestos.length}`);
+// console.log(`Repuestos obtenidos correctamente. Total:${Repuestos.length}`);
         return res.status(200).json(Repuestos);
     } catch (error) {
         console.error('Error en ListarRepuestosController => ', error.message);

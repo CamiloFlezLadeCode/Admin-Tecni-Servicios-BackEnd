@@ -33,7 +33,7 @@ const ActualizarEquipoController = async (req, res) => {
         
         const equipoActualizado = await ActualizarEquipoService(DatosEquipoAActualizar);
 
-        console.log(`Equipo actualizado correctamente.`);
+// console.log(`Equipo actualizado correctamente.`);
 
         // Emitir evento Socket.IO con los datos actualizados
         const io = obtenerSocketServer();

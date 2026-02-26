@@ -3,7 +3,7 @@ const { TipoBodegaService } = require('../../services/generales/TipoBodegaServic
 const ListarTipoBodegaController = async (req, res) => {
     try {
         const Bodegas = await TipoBodegaService();
-        console.log(`TIPOS DE BODEGAS CONSULTADOS CORRECTAMENTE. TOTAL: ${Bodegas.length}`);
+// console.log(`TIPOS DE BODEGAS CONSULTADOS CORRECTAMENTE. TOTAL: ${Bodegas.length}`);
         const BodegasMapeadas = Bodegas.map(bodega => ({
             value: bodega.IdTipoBodega,
             label: bodega.TipoBodega

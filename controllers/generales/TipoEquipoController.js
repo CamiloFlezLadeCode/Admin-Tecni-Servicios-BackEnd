@@ -3,7 +3,7 @@ const { ListarTipoEquipoService } = require('../../services/generales/TipoEquipo
 const ListarTipoEquipoController = async (req, res) => {
     try {
         const TiposDeEquipo = await ListarTipoEquipoService();
-        console.log(`TIPOS DE EQUIPOS OBTENIDOS CORRECTAMENTE. TOTAL:${TiposDeEquipo.length}`);
+// console.log(`TIPOS DE EQUIPOS OBTENIDOS CORRECTAMENTE. TOTAL:${TiposDeEquipo.length}`);
         const TiposDeEquipoMapeados = TiposDeEquipo.map(Tipo => ({
             label: Tipo.TipoEquipo,
             value: Tipo.IdTipoEquipo

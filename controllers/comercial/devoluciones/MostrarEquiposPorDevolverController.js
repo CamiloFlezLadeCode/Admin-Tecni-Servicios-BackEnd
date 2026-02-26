@@ -4,8 +4,8 @@ const MostrarEquiposPorDevolverController = async (req, res) => {
     try {
         const Parametros = req.query;
         const EquiposPorDevolver = await MostrarEquiposPorDevolverService(Parametros);
-        console.log(Parametros)
-        console.log(`Equipos por devolver obtenidos correctamente. Total: ${EquiposPorDevolver.length}`);
+// console.log(Parametros)
+// console.log(`Equipos por devolver obtenidos correctamente. Total: ${EquiposPorDevolver.length}`);
         return res.status(200).json(
             EquiposPorDevolver
         );

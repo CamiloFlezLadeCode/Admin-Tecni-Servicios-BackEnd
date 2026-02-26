@@ -3,7 +3,7 @@ const { ListarUnidadesService } = require('../../services/generales/UnidadesServ
 const ListarUnidadesController = async (req, res) => {
     try {
         const Unidades = await ListarUnidadesService();
-        console.log(`UNIDADES OBTENIDAS CORRECTAMENTE. TOTAL:${Unidades.length}`);
+// console.log(`UNIDADES OBTENIDAS CORRECTAMENTE. TOTAL:${Unidades.length}`);
         const UnidadesMapeadas = Unidades.map(Unidad => ({
             value: Unidad.IdUnidad,
             label: Unidad.Nombre

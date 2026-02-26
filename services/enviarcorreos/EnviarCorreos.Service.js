@@ -26,7 +26,7 @@ async function enviarRemision({ destinatario, asunto, html, rutaPDF }) {
   };
 
   await transporter.sendMail(mailOptions);
-  console.log('📧 Remisión enviada a:', destinatario);
+// console.log('📧 Remisión enviada a:', destinatario);
 }
 
 module.exports = { enviarRemision };

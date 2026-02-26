@@ -4,7 +4,7 @@ const VisualizarEntradaRepuestosController = async (req, res) => {
     try {
         const { NoEntradaRepuestos } = req.query;
         const EntradaRepuestos = await VisualizarEntradaRepuestosService(NoEntradaRepuestos);
-        console.log(`Entrada de repuestos obtenida correctamente`);
+// console.log(`Entrada de repuestos obtenida correctamente`);
         return res.status(200).json(EntradaRepuestos[0]);
     } catch (error) {
         console.error('Error en VisualizarEntradaRepuestosController => ', error.message);

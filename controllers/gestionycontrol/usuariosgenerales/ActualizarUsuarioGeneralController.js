@@ -55,7 +55,7 @@ const ActualizarUsuarioGeneralController = async (req, res) => {
         const DatosAActualizarUsuarioGeneral = req.body;
 
         await ActualizarUsuarioGeneralService(DatosAActualizarUsuarioGeneral);
-        console.log("✅ Usuario general actualizado correctamente");
+// console.log("✅ Usuario general actualizado correctamente");
 
         // Emitir evento con Socket.IO
         const io = obtenerSocketServer();

@@ -3,7 +3,7 @@ const { ListarEquiposPropiosService } = require('../../../services/inventario/eq
 const ListarEquiposPropiosController = async (req, res) => {
     try {
         const EquiposPropios = await ListarEquiposPropiosService();
-        console.log(`Equipos obtenidos correctamente. Total:${EquiposPropios.length}`);
+// console.log(`Equipos obtenidos correctamente. Total:${EquiposPropios.length}`);
         const EquiposPropiosMapeados = EquiposPropios.map(equipo => ({
             value: equipo.IdEquipo,
             label: equipo.NombreEquipo

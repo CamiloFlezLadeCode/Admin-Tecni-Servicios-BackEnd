@@ -4,7 +4,7 @@ const ListarEstadosController = async (req, res) => {
     try {
         const data = await ListarEstadosService();
         if(data) {
-            console.log(`Estados obtenidos correctamente. Total: ${data.length}`);
+// console.log(`Estados obtenidos correctamente. Total: ${data.length}`);
             const Estados = data.map(Estado => ({
                 value: Estado.IdEstado,
                 label: Estado.Estado

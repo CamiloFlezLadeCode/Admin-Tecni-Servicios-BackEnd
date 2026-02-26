@@ -3,7 +3,7 @@ const { ListarNivelesService } = require('../../services/generales/NivelesServic
 const ListarNivelesController = async (req, res) => {
     try {
         const data = await ListarNivelesService();
-        console.log(`Niveles obtenidos correctamente. Total: ${data.length}`);
+// console.log(`Niveles obtenidos correctamente. Total: ${data.length}`);
         const Niveles = data.map(nivel => ({
             value: nivel.IdNivel,
             label: nivel.Nivel

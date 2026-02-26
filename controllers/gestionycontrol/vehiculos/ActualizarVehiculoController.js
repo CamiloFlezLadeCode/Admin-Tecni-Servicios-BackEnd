@@ -7,7 +7,7 @@ const ActualizarVehiculoController = async (req, res) => {
         // const DatosVehiculoAActualizar = req.body;
         DatosVehiculoAActualizar = req.body;
         await ActulizarVehiculoService(DatosVehiculoAActualizar);
-        console.log(`✅ Vehículo con id: ${DatosVehiculoAActualizar.IdVehiculo}  actualizado correctamente`);
+// console.log(`✅ Vehículo con id: ${DatosVehiculoAActualizar.IdVehiculo}  actualizado correctamente`);
         //Se emite el evento con Socket.IO
         const io = obtenerSocketServer();
         if (io) {

@@ -13,7 +13,7 @@ const ActualizarRepuestoController = async (req, res) => {
             console.warn("⚠️ Socket.IO no está inicializado");
         }
         // ...
-        console.log(`Repuesto actualizado correctamente`);
+// console.log(`Repuesto actualizado correctamente`);
         return res.status(204).send();
     } catch (error) {
         console.error('Error en ActualizarRepuestoController => ', error);

@@ -50,7 +50,7 @@ const EliminarRemisionQuery = async (IdRemision) => {
             const nuevaCantidadDisponible = prop[0].CantidadDisponible + detalle.Cantidad;
             // Cantidad total del equipo
             const cantidadTotal = prop[0].CantidadTotal;
-            console.log(`DocumentoPropietario: ${propietario}, Cantidad Total: ${cantidadTotal}, Cantidad Disponible: ${nuevaCantidadDisponible}`);
+// console.log(`DocumentoPropietario: ${propietario}, Cantidad Total: ${cantidadTotal}, Cantidad Disponible: ${nuevaCantidadDisponible}`);
 
             if (nuevaCantidadDisponible > cantidadTotal) {
                 throw new Error('No se puede eliminar la remisión. La cantidad disponible excede la cantidad total.');

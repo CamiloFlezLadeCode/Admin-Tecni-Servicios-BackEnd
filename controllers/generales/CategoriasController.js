@@ -3,7 +3,7 @@ const { ListarCategoriasService } = require('../../services/generales/Categorias
 const ListarCategoriasController = async (req, res) => {
     try {
         const data = await ListarCategoriasService();
-        console.log(`Categorias obtenidas correctamente. Total: ${data.length}`);
+// console.log(`Categorias obtenidas correctamente. Total: ${data.length}`);
         const Categorias = data.map(Categoria => ({
             value: Categoria.IdCategoria,
             label: Categoria.Categoria

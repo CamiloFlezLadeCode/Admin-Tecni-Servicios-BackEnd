@@ -8,7 +8,7 @@ const CrearProyectoController = async (req, res) => {
             return res.status(400).json({ error: 'UsuarioCreacion es requerido' });
         }
         const resultado = await CrearProyectoService(proyectoData);
-        console.log("Proyecto creado correctamente");
+// console.log("Proyecto creado correctamente");
         // Emitir el evento al cliente con Socket.IO
         const io = obtenerSocketServer();
         if (io) {

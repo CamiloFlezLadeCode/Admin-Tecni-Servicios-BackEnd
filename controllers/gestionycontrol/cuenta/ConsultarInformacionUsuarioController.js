@@ -4,7 +4,7 @@ const ConsultarInformacionUsuarioController = async (req, res) => {
     try {
         const { DocumentoUsuario } = req.params;
         const InformacionUsuario = await ConsultarInformacionUsuarioService(DocumentoUsuario);
-        console.log(`Información del usuario consultada correctamente.`);
+// console.log(`Información del usuario consultada correctamente.`);
         return res.status(200).json(InformacionUsuario);
     } catch (error) {
         console.error('Error en ConsultarInformacionUsuarioController => ', error);

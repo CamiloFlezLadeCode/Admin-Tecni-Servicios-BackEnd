@@ -10,7 +10,7 @@ const VerMovimientosGeneralesController = async (req, res) => {
         };
 
         const movimientos = await VerMovimientosGeneralesService(filtros);
-        console.log(`Movimientos generales consultados correctamente. Total: ${movimientos.length}`);
+// console.log(`Movimientos generales consultados correctamente. Total: ${movimientos.length}`);
         return res.status(200).json(movimientos);
     } catch (error) {
         console.error('Error en VerMovimientosGeneralesController => ', error);

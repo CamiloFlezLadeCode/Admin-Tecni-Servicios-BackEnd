@@ -140,7 +140,7 @@ const obtenerCredenciales = async (req, res) => {
             path: '/',
         });
         res.status(200).json({ message: 'Login exitoso', rol, nombre, documento, correo, token, accesohabilitado });
-        console.log(`Token generado correctamente. Token: ${token}`);
+// console.log(`Token generado correctamente. Token: ${token}`);
     } catch (error) {
         console.error('Error en login => ', error);
         res.status(500).json({ error: 'Error interno del servidor' });

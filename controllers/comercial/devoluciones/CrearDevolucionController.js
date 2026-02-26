@@ -11,7 +11,7 @@ const CrearDevolucionController = async (req, res) => {
 
         const resultado = await CrearDevolucionService(datosDevolucion);
 
-        console.log(`Devolución creada exitosamente con ID: ${resultado.IdDevolucion}`);
+// console.log(`Devolución creada exitosamente con ID: ${resultado.IdDevolucion}`);
         // Se emite evento Socket al cliente
         const io = obtenerSocketServer();
         if (io) {

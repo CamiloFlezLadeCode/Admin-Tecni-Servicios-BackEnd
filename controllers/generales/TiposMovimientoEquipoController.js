@@ -3,7 +3,7 @@ const { ListarTiposMovimientoEquipoService } = require('../../services/generales
 const ListarTiposMovimientoEquipoController = async (req, res) => {
     try {
         const tipos = await ListarTiposMovimientoEquipoService();
-        console.log(`Tipos de movimiento de equipo obtenidos. Total: ${tipos.length}`);
+// console.log(`Tipos de movimiento de equipo obtenidos. Total: ${tipos.length}`);
         return res.status(200).json(tipos);
     } catch (error) {
         console.error('Error en ListarTiposMovimientoEquipoController => ', error.message);

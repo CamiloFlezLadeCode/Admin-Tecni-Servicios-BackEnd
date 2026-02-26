@@ -34,7 +34,7 @@ const CrearUsuarioGeneralController = async (req, res) => {
         // Ejecuta el servicio
         const resultado = await RegistrarUsuarioGeneralService(DatosUsuarioGeneral);
 
-        console.log("✅ Usuario general creado correctamente");
+// console.log("✅ Usuario general creado correctamente");
         //Se emite el evento Socket al cliente
         const io = obtenerSocketServer();
         if (io) {

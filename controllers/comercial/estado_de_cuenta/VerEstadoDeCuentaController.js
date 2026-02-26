@@ -11,7 +11,7 @@ const VerEstadoDeCuentaController = async (req, res) => {
             });
         }
         const EstadoDeCuentaCliente = await VerEstadoDeCuentaService(DocumentoCliente);
-        console.log(`El estado del cliente se obtuvo correctamente. Total: ${EstadoDeCuentaCliente.length}`);
+// console.log(`El estado del cliente se obtuvo correctamente. Total: ${EstadoDeCuentaCliente.length}`);
         return res.status(200).json(EstadoDeCuentaCliente);
     } catch (error) {
         console.error('Error en VerEstadoDeCuentaController => ', error.message);

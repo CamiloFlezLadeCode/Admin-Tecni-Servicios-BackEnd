@@ -3,7 +3,7 @@ const { ConsultarVehiculosService } = require('../../../services/gestionycontrol
 const ConsultarVehiculosController = async (req, res) => {
     try {
         const data = await ConsultarVehiculosService();
-        console.log(`Vehículos obtenidos correctamente: Total: ${data.length}`);
+// console.log(`Vehículos obtenidos correctamente: Total: ${data.length}`);
         return res.status(200).json(data);
     } catch (error) {
         console.error('Error en ConsultarVehiculosController => ', error);

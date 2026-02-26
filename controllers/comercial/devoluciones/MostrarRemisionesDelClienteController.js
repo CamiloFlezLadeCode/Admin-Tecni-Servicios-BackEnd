@@ -4,7 +4,7 @@ const MostrarRemisionesDelClienteController = async (req, res) => {
     try {
         const Datos = req.query;
         const Remisiones = await MostrarRemisionesDelClienteService(Datos);
-        console.log(`Remisiones del cliente obtenidas correctamente - Total: ${Remisiones.length}`)
+// console.log(`Remisiones del cliente obtenidas correctamente - Total: ${Remisiones.length}`)
         const RemisionesMapeadas = Remisiones.map(remision => ({
             label: `No: ${remision.NoRemision} Fecha: ${remision.FechaCreacion}`,
             value: remision.IdRemision

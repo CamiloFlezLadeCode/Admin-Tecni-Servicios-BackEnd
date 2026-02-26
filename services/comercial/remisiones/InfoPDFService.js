@@ -43,7 +43,7 @@ const InfoPDFService = async (IdRemision) => {
     // Convertimos el Map a array
     const infoRemisionAgrupada = Array.from(mapaEquipos.values());
 
-    console.log('infoRemisionAgrupada => ', infoRemisionAgrupada);
+// console.log('infoRemisionAgrupada => ', infoRemisionAgrupada);
     return infoRemisionAgrupada;
 };
 module.exports = {

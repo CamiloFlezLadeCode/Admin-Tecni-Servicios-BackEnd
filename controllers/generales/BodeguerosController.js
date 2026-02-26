@@ -3,7 +3,7 @@ const { ListarBodeguerosService } = require('../../services/generales/Bodegueros
 const ListarBodeguerosController = async (req, res) => {
     try {
         const Bodegueros = await ListarBodeguerosService();
-        console.log(`Bodegueros obtenidos correctamente. Total: ${Bodegueros.length}`);
+// console.log(`Bodegueros obtenidos correctamente. Total: ${Bodegueros.length}`);
         const BodeguerosMapeados = Bodegueros.map(bodeguero => ({
             Id: bodeguero.IdBodeguero,
             value: bodeguero.DocumentoBodeguero,

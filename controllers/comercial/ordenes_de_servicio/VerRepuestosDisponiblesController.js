@@ -4,7 +4,7 @@ const VerRepuestosDisponiblesController = async (req, res) => {
     try {
         const ParametrosDeBusqueda = req.query;
         const Repuestos = await VerRepuestosDisponiblesService(ParametrosDeBusqueda);
-        console.log(`REPUESTOS OBTENIDOS CORRECTAMENTE. TOTTAL${Repuestos.length}`);
+// console.log(`REPUESTOS OBTENIDOS CORRECTAMENTE. TOTTAL${Repuestos.length}`);
         const RepuestosMapeados = Repuestos.map(repuesto => ({
             value: repuesto.IdRepuesto,
             label: repuesto.NombreRepuesto

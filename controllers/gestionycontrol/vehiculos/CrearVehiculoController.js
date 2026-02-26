@@ -5,7 +5,7 @@ const CrearVehiculoController = async (req, res) => {
     try {
         const DatosVehiculo = req.body;
         await CrearVehiculoService(DatosVehiculo);
-        console.log("Vehículo creado correctamente.");
+// console.log("Vehículo creado correctamente.");
         //Se emite el evento con Socket.IO
         const io = obtenerSocketServer();
         if (io) {

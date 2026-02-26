@@ -5,7 +5,7 @@ const EliminarVehiculoController = async (req, res) => {
     try {
         const { IdVehiculo } = req.params;
         const respuesta = await EliminarVehiculoService(Number(IdVehiculo));
-        console.log(`Vehículo eliminado correctamente => ${JSON.stringify(respuesta)}`);
+// console.log(`Vehículo eliminado correctamente => ${JSON.stringify(respuesta)}`);
         // Se envía evento de Socket al cliente
         const io = obtenerSocketServer();
         if (io) {

@@ -12,7 +12,7 @@ const CrearRemisionController = async (req, res) => {
 
         //Se ejecuta/consume el servicio
         const Resultado = await CrearRemisionService(DatosRemision);
-        console.log("✅ Remisión creada correctamente");
+// console.log("✅ Remisión creada correctamente");
         //...
 
         // Se emite evento socket al cliente

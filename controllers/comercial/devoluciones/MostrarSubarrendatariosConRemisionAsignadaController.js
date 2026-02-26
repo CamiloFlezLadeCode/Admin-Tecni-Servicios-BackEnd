@@ -4,7 +4,7 @@ const MostrarSubarrendatariosConRemisionAsignadaController = async (req, res) =>
     try {
         const DatosConsulta = req.query;
         const Subarrendatarios = await MostrarSubarrendatariosConRemisionAsignadaService(DatosConsulta);
-        console.log(`SUBARRENDATARIOS CON REMISIONES ASIGNADAS, CONSULTADOS CORRECTAMENTE. TOTAL: ${Subarrendatarios.length}`);
+// console.log(`SUBARRENDATARIOS CON REMISIONES ASIGNADAS, CONSULTADOS CORRECTAMENTE. TOTAL: ${Subarrendatarios.length}`);
         const SubarrendatariosMapeados = Subarrendatarios.map(subarrendatario => ({
             value: subarrendatario.DocumentoSubarrendatario,
             label: subarrendatario.Subarrendatario

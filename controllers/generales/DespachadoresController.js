@@ -3,7 +3,7 @@ const { ListarDespachadoresService } = require('../../services/generales/Despach
 const ListarDespachadoresController = async (req, res) => {
     try {
         const Despachadores = await ListarDespachadoresService();
-        console.log(`Despachadores obtenidos correctamente. Total: ${Despachadores.length}`);
+// console.log(`Despachadores obtenidos correctamente. Total: ${Despachadores.length}`);
         const DespachadoresMapeados = Despachadores.map(despachador => ({
             id: despachador.IdDespachador,
             value: despachador.DocumentoDespachador,

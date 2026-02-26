@@ -4,7 +4,7 @@ const VerDisponibilidadEquiposGeneralesController = async (req, res) => {
     try {
         const ParametrosConsulta = req.query;
         const DisponibilidadEquipos = await VerDisponibilidadEquiposGeneralesService(ParametrosConsulta);
-        console.log(`Disponibilidad de equipos obtenida correctamente. Total: ${DisponibilidadEquipos.length}`);
+// console.log(`Disponibilidad de equipos obtenida correctamente. Total: ${DisponibilidadEquipos.length}`);
         const DisponibilidadEquiposMapeada = DisponibilidadEquipos.map(Equipo => ({
             value: Equipo.IdEquipo,
             label: Equipo.Nombre,

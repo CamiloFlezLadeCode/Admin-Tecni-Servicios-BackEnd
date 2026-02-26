@@ -4,7 +4,7 @@ const CrearCredencialesProfesionalController = async (req, res) => {
     try {
         const DatosCredenciales = req.body;
         await CrearCredencialesProfesionalService(DatosCredenciales);
-        console.log('Credenciales del profesional creadas correctamente');
+// console.log('Credenciales del profesional creadas correctamente');
         return res.status(200).json();
     } catch (error) {
         console.error('Error en CrearCredencialesProfesionalController => ', error);

@@ -3,7 +3,7 @@ const { ConsultarProfesionalesPertenecientesService } = require('../../services/
 const ConsultarProfesionalesPertenecientesController = async (req, res) => {
     try {
         const ProfesionalesPertenecientes = await ConsultarProfesionalesPertenecientesService();
-        console.log(`Profesionales pertenecientes obteneidos correctamente. Total: ${ProfesionalesPertenecientes.length}`);
+// console.log(`Profesionales pertenecientes obteneidos correctamente. Total: ${ProfesionalesPertenecientes.length}`);
         const ProfesionalesPertenecientesMapeados = ProfesionalesPertenecientes.map(profesional => ({
             value: profesional.DocumentoProfesional,
             label: profesional.NombreProfesional

@@ -5,7 +5,7 @@ const ActualizarBodegaController = async (req, res) => {
     try {
         const NuevosDatosBodega = req.body;
         await ActualizarBodegaService(NuevosDatosBodega);
-        console.log(`BODEGA ACTUALIZADA CORRECTAMENTE`);
+// console.log(`BODEGA ACTUALIZADA CORRECTAMENTE`);
         // Se emite el evento socket al cliente
         const io = obtenerSocketServer();
         if (io) {

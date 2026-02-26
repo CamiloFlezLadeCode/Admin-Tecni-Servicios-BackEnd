@@ -12,7 +12,7 @@ const GuardarEntradaRepuestosController = async (req, res) => {
         } else {
             console.warn("⚠️ Socket.IO no está inicializado");
         }
-        console.log(`Entrada de repuestos guardada correctamente...`);
+// console.log(`Entrada de repuestos guardada correctamente...`);
         return res.status(200).json();
     } catch (error) {
         console.error('Error en GuardarEntradaRepuestosController => ', error.message);

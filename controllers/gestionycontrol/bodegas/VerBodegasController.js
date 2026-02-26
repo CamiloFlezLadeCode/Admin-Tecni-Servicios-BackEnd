@@ -3,7 +3,7 @@ const { VerBodegasService } = require('../../../services/gestionycontrol/bodegas
 const VerBodegasController = async (req, res) => {
     try {
         const Bodegas = await VerBodegasService();
-        console.log(`BODEGAS OBTENIDAS CORRECTAMENTE. TOTAL: ${Bodegas.length}`);
+// console.log(`BODEGAS OBTENIDAS CORRECTAMENTE. TOTAL: ${Bodegas.length}`);
         return res.status(200).json(Bodegas);
     } catch (error) {
         console.error('Error en VerBodegasController => ', error.message);

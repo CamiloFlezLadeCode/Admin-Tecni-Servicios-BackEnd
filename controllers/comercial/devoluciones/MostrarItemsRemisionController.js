@@ -5,7 +5,7 @@ const MostrarItemsRemisionController = async (req, res) => {
         const { IdRemision } = req.query;
         // const { IdRemision } = req.params;
         const ItemsRemision = await MostrarItemsRemisionService(IdRemision);
-        console.log(`Items de remisón obtenidos correctamente: Total: ${ItemsRemision.length}`);
+// console.log(`Items de remisón obtenidos correctamente: Total: ${ItemsRemision.length}`);
         return res.status(200).json(
             ItemsRemision
         );

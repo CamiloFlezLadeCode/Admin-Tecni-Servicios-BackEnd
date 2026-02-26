@@ -6,7 +6,7 @@ const ConsultarProyectoPorIdController = async (req, res) => {
         const { IdProyecto } = req.query; // Con parámetro en la petición
         const Proyecto = await ConsultarProyectoPorIdService(IdProyecto);
         if (Proyecto.length > 0) {
-            console.log('Información del proyecto obtenida correctamente.');
+// console.log('Información del proyecto obtenida correctamente.');
         }
         return res.status(200).json(Proyecto);
     } catch (error) {
