@@ -26,6 +26,7 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
             UsuarioQueActualiza,
             // UsuarioActualizacion // Asumimos que viene el usuario que realiza el cambio
             IdProyecto,
+            FechaRemision,
         } = DatosActualizacion;
 
         // 1. Obtener datos actuales de la remisión
@@ -44,8 +45,8 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
         }
 
         const remisionActual = remisionExistente[0];
+        const fechaRemisionNueva = new Date(FechaRemision);
 
-        // 2. Comparar cambios en cabecera (Normalizando tipos de datos)
         const cambiosCabecera = {
             // IdEstado: Number(IdEstado) !== Number(remisionActual.IdEstado),
             ObservacionesEmpresa: (ObservacionesEmpresa || '').trim() !== (remisionActual.ObservacionesEmpresa || '').trim(),
@@ -55,7 +56,11 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
             PrecioTotalGeneralSinIVA: Number(PrecioTotalGeneralSinIVA || 0).toFixed(2) !== Number(remisionActual.PrecioTotalGeneralSinIVA || 0).toFixed(2),
             PrecioTotalGeneralConIVA: Number(PrecioTotalGeneralConIVA || 0).toFixed(2) !== Number(remisionActual.PrecioTotalGeneralConIVA || 0).toFixed(2),
             IdProyecto: Number(IdProyecto) !== Number(remisionActual.IdProyecto),
+            // FechaRemision: String(fechaRemisionNueva || '').slice(0, 10) !== String(remisionActual.FechaRemision || '').slice(0, 10),
+            FechaRemision: fechaRemisionNueva.getTime() !== new Date(remisionActual.FechaRemision).getTime(),
         };
+        console.log("FechaRemisionNueva", fechaRemisionNueva)
+        console.log("remisionActual.FechaRemision", remisionActual.FechaRemision)
 
         const huboCambiosCabecera = Object.values(cambiosCabecera).some(cambio => cambio);
 
@@ -224,7 +229,8 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
                     PrecioTotalGeneralConIVA = ?,
                     FechaUltimaActualizacion = ?,
                     UsuarioQueActualiza = ?,
-                    IdProyecto = ?
+                    IdProyecto = ?,
+                    FechaRemision = ?
                 WHERE 
                     IdRemision = ?
             `;
@@ -240,8 +246,8 @@ const ActualizarRemisionQuery = async (DatosActualizacion) => {
                 FechaActualColombia(),
                 UsuarioQueActualiza,
                 IdProyecto,
-                IdRemision,
-
+                fechaRemisionNueva,
+                IdRemision
             ]);
         }
 
