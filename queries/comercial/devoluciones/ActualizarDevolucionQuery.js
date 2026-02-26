@@ -47,6 +47,7 @@ const ActualizarDevolucionQuery = {
                 PersonaQueEntrega = ?,
                 IncluyeTransporte = ?,
                 ValorTransporte = ?,
+                FechaDevolucion = ?,
                 IdEstado = ?
             WHERE IdDevolucion = ?
         `;

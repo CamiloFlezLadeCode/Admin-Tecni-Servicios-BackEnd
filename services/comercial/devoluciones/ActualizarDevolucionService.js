@@ -15,7 +15,8 @@ const ActualizarDevolucionService = async (Data) => {
             IncluyeTransporte,
             ValorTransporte,
             Detalles,
-            UsuarioQueActualiza
+            UsuarioQueActualiza,
+            FechaDevolucion,
         } = Data || {};
 
         if (!IdDevolucion) {
@@ -42,6 +43,8 @@ const ActualizarDevolucionService = async (Data) => {
 
         const cantidadDetallesActuales = Array.isArray(detallesActuales) ? detallesActuales.length : 0;
         const cantidadDetallesNuevos = Array.isArray(Detalles) ? Detalles.length : 0;
+
+        const fechaDevolucionNueva = new Date(FechaDevolucion);
 
         if (cantidadDetallesActuales > 0 && cantidadDetallesNuevos === 0) {
             const detallesConPropietario = await ActualizarDevolucionQuery.getDetallesDevolucionConPropietario(connection, IdDevolucion);
@@ -110,6 +113,7 @@ const ActualizarDevolucionService = async (Data) => {
             PersonaQueEntrega: PersonaQueEntrega ? String(PersonaQueEntrega).trim() : null,
             IncluyeTransporte: IncluyeTransporte ? 1 : 0,
             ValorTransporte: Number(ValorTransporte || 0),
+            FechaDevolucion: fechaDevolucionNueva,
             IdEstado: 17
         };
 
@@ -119,6 +123,7 @@ const ActualizarDevolucionService = async (Data) => {
             PersonaQueEntrega: devolucionActual.PersonaQueEntrega ? String(devolucionActual.PersonaQueEntrega).trim() : null,
             IncluyeTransporte: devolucionActual.IncluyeTransporte ? 1 : 0,
             ValorTransporte: Number(devolucionActual.ValorTransporte || 0),
+            FechaDevolucion: devolucionActual.FechaDevolucion ? new Date(devolucionActual.FechaDevolucion) : null,
             IdEstado: devolucionActual.IdEstado
         };
 
@@ -127,7 +132,12 @@ const ActualizarDevolucionService = async (Data) => {
             PersonaQueRecibe: nuevoHeader.PersonaQueRecibe !== headerActual.PersonaQueRecibe,
             PersonaQueEntrega: nuevoHeader.PersonaQueEntrega !== headerActual.PersonaQueEntrega,
             IncluyeTransporte: nuevoHeader.IncluyeTransporte !== headerActual.IncluyeTransporte,
-            ValorTransporte: nuevoHeader.ValorTransporte !== headerActual.ValorTransporte
+            ValorTransporte: nuevoHeader.ValorTransporte !== headerActual.ValorTransporte,
+            FechaDevolucion: (
+                (nuevoHeader.FechaDevolucion && headerActual.FechaDevolucion)
+                    ? nuevoHeader.FechaDevolucion.getTime() !== headerActual.FechaDevolucion.getTime()
+                    : (!!nuevoHeader.FechaDevolucion !== !!headerActual.FechaDevolucion)
+            )
         };
 
         const huboCambiosCabecera = Object.values(cambiosCabecera).some(Boolean);
@@ -263,6 +273,7 @@ const ActualizarDevolucionService = async (Data) => {
                 nuevoHeader.PersonaQueEntrega,
                 nuevoHeader.IncluyeTransporte,
                 nuevoHeader.ValorTransporte,
+                nuevoHeader.FechaDevolucion,
                 nuevoHeader.IdEstado,
                 IdDevolucion
             ]);
@@ -279,7 +290,7 @@ const ActualizarDevolucionService = async (Data) => {
         }
 
         await connection.commit();
-
+        await emitirWebSocketDevolucion().devolucionActualizada(IdDevolucion);
         return {
             code: 200,
             success: true,
