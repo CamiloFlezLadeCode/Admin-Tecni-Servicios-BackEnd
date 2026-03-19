@@ -144,3 +144,6 @@ backups_bd/
 
 # Carpeta de uploads
 uploads/
+
+# Se ignora archivo .node-version el cual contine la versión configurada para usar con fnm (fast node manager)
+.node-version
