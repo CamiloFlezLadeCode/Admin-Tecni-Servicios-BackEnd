@@ -147,3 +147,6 @@ uploads/
 
 # Se ignora archivo .node-version el cual contine la versión configurada para usar con fnm (fast node manager)
 .node-version
+
+# Se ignora archivo .nvmrc el cual contiene la versión configurada para usar con nvm (node version manager)
+.nvmrc
