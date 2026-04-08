@@ -28,6 +28,7 @@ const { ListarBodegasPorSubarrendatarioController } = require('../../controllers
 const { SiguienteNumeracion_Para_EntradaRepuestosController, SiguienteNumeracion_Para_SalidaRepuestosController } = require('../../controllers/generales/SiguienteNumeracionController');
 const { ListarTiposMovimientoEquipoController } = require('../../controllers/generales/TiposMovimientoEquipoController');
 const { ListarTiposMovimientoRepuestoController } = require('../../controllers/generales/TiposMovimientoRepuestoController');
+const { ListarMunicipiosController } = require('../../controllers/generales/MunicipiosController');
 //...
 
 //Se crean las rutas/apis con su respectivo controlador
@@ -53,6 +54,7 @@ router.get('/siguiente-no-entrada-repuestos', SiguienteNumeracion_Para_EntradaRe
 router.get('/siguiente-no-salida-repuestos', SiguienteNumeracion_Para_SalidaRepuestosController);
 router.get('/listar-tipos-movimiento-equipo', ListarTiposMovimientoEquipoController);
 router.get('/listar-tipos-movimiento-repuesto', ListarTiposMovimientoRepuestoController);
+router.get('/listar-municipios', ListarMunicipiosController);
 //...
 
 //Se exportan las rutas/apis para ser levantadas en el servidor

@@ -32,7 +32,8 @@ const VerRemisionPorIdQuery = async (IdRemision) => {
             ) AS ProyectosCliente,
             CONCAT(usucreacion.Nombres, ' ', usucreacion.Apellidos) AS CreadoPor,
             #DATE_FORMAT(remi.FechaCreacion, '%W %d/%m/%Y a las %l:%i:%s %p') AS FechaCreacion,
-            remi.FechaRemision AS FechaRemision,
+            #remi.FechaRemision AS FechaRemision,
+            DATE_FORMAT(remi.FechaRemision, '%d/%m/%Y %r') AS FechaRemision,
             #remi.FechaCreacion AS FechaCreacion,
             esta.Estado AS EstadoRemision
         FROM
