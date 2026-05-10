@@ -1,12 +1,13 @@
-const { query } = require('../../../config/db');
+const { query } = require("../../../config/db");
 
 const MostrarEquiposPorDevolverQuery = async (Parametros) => {
-    const sql = `
+  const sql = `
         SELECT
             CONCAT('NoRemi: ', r.NoRemision, ' - ', 'Fecha: ', DATE_FORMAT(r.FechaRemision, '%d/%m/%Y %l:%i %p'), ' - Subarren: ', CONCAT(usu_sub.Nombres, ' ', usu_sub.Apellidos)) AS Descripcion,
             dr.IdDetalleRemision,
             r.IdRemision,
             r.NoRemision,
+            r.DocumentoCliente,
             u.Nombres AS NombreCliente,
             p.Nombre AS NombreProyecto,
             e.IdEquipo,
@@ -49,6 +50,7 @@ const MostrarEquiposPorDevolverQuery = async (Parametros) => {
             #r.IdRemision = 22
             #(r.IdProyecto = Valor AND dr.DocumentoSubarrendatario = Valor)
             (r.IdProyecto = ?) 
+            AND (? IS NULL OR ? = '' OR r.DocumentoCliente = ?)
             AND (dr.Cantidad > IFNULL(
                 (SELECT SUM(dd.Cantidad)
                 FROM devoluciones d
@@ -60,11 +62,13 @@ const MostrarEquiposPorDevolverQuery = async (Parametros) => {
         ORDER BY
             r.FechaRemision DESC
     `;
-    return query(sql, [
-        Parametros.IdProyecto,
-        // Parametros.DocumentoSubarrendatario,
-    ]);
+  return query(sql, [
+    Parametros.IdProyecto,
+    Parametros.DocumentoCliente || null,
+    Parametros.DocumentoCliente || null,
+    Parametros.DocumentoCliente || null,
+  ]);
 };
 module.exports = {
-    MostrarEquiposPorDevolverQuery
+  MostrarEquiposPorDevolverQuery,
 };

@@ -1,11 +1,11 @@
-const { query } = require('../../../config/db');
+const { query } = require("../../../config/db");
 
 const VerDevolucionPorIdQuery = async (IdDevolucion) => {
-    await query(`
+  await query(`
         -- Ejecutar esto por separado antes del SELECT
         SET lc_time_names = 'es_ES';
     `);
-    const sqlDevolucion = `
+  const sqlDevolucion = `
         SELECT
             devo.IdDevolucion AS IdDevolucion,
             devo.NoDevolucion AS NoDevolucion,
@@ -40,9 +40,10 @@ const VerDevolucionPorIdQuery = async (IdDevolucion) => {
             devo.IdDevolucion = ?
     `;
 
-    const sqlDetalles = `
+  const sqlDetalles = `
         SELECT
             dd.IdDetalleDevolucion AS IdDetalleDevolucion,
+            dd.IdDetalleRemision AS IdDetalleRemision,
             dd.IdEquipo AS IdEquipo,
             equi.Nombre AS NombreEquipo,
             dr.Cantidad AS CantidadArrendada,
@@ -94,21 +95,20 @@ const VerDevolucionPorIdQuery = async (IdDevolucion) => {
             dd.IdDevolucion = ?
     `;
 
-    const devolucion = await query(sqlDevolucion, [IdDevolucion]);
+  const devolucion = await query(sqlDevolucion, [IdDevolucion]);
 
-    if (devolucion.length === 0) {
-        return null;
-    }
+  if (devolucion.length === 0) {
+    return null;
+  }
 
-    const detalles = await query(sqlDetalles, [IdDevolucion]);
+  const detalles = await query(sqlDetalles, [IdDevolucion]);
 
-    return {
-        ...devolucion[0],
-        Detalles: detalles
-    };
+  return {
+    ...devolucion[0],
+    Detalles: detalles,
+  };
 };
 
 module.exports = {
-    VerDevolucionPorIdQuery
+  VerDevolucionPorIdQuery,
 };
-
