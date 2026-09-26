@@ -1,4 +1,5 @@
 const { query } = require('../../../config/db');
+const { EmpresaAnfitriona } = require('../../../utils/constant/default');
 
 /**
  * Consulta dónde se encuentra actualmente un equipo.
@@ -26,6 +27,15 @@ const { query } = require('../../../config/db');
  * `Agregar_IdDetalleRemision_A_Detalles_Devoluciones_Existentes.js` que los
  * rellena. Si alguna devolución quedara sin ese dato, no se descontaría aquí
  * (ni en estado de cuenta).
+ *
+ * ── Propio vs. subarriendo ─────────────────────────────────────────────────
+ * Cada línea de remisión dice de quién son sus unidades en
+ * `detalles_remisiones.DocumentoSubarrendatario`: vacío, '0', 'ABC' o el NIT de
+ * la empresa anfitriona = PROPIAS; cualquier otro documento = tomadas en
+ * SUBARRIENDO a ese tercero. Al remisionar sólo se descuenta del inventario lo
+ * propio (`CrearRemisionQuery`), por eso Total y Disponible de la ficha son
+ * cifras propias y "en obra" se desglosa en ambos orígenes: sin el desglose,
+ * "en obra" podía superar al total y no cuadraba.
  *
  * ── Zona horaria ──────────────────────────────────────────────────────────
  * El tiempo transcurrido se calcula contra la hora de Colombia
@@ -92,12 +102,31 @@ const SQL_UBICACIONES = `
         dr.Cantidad                                                            AS CantidadPrestada,
         CAST(COALESCE(devueltos.CantidadDevuelta, 0) AS SIGNED)                AS CantidadDevuelta,
         CAST(dr.Cantidad - COALESCE(devueltos.CantidadDevuelta, 0) AS SIGNED)  AS CantidadEnObra,
-        devueltos.UltimaFechaDevolucion               AS FechaUltimaDevolucion
+        devueltos.UltimaFechaDevolucion               AS FechaUltimaDevolucion,
+
+        -- Origen de las unidades de esta línea (ver cabecera)
+        CASE
+            WHEN COALESCE(dr.DocumentoSubarrendatario, '0') IN ('0', 'ABC', ?) THEN 1
+            ELSE 0
+        END                                           AS EsPropio,
+        CASE
+            WHEN COALESCE(dr.DocumentoSubarrendatario, '0') IN ('0', 'ABC', ?) THEN NULL
+            ELSE dr.DocumentoSubarrendatario
+        END                                           AS DocumentoSubarrendatario,
+        CASE
+            WHEN COALESCE(dr.DocumentoSubarrendatario, '0') IN ('0', 'ABC', ?) THEN NULL
+            ELSE COALESCE(
+                NULLIF(TRIM(CONCAT(COALESCE(sub.Nombres, ''), ' ', COALESCE(sub.Apellidos, ''))), ''),
+                dr.DocumentoSubarrendatario
+            )
+        END                                           AS Subarrendatario,
+        COALESCE(sub.Celular1, sub.Telefono)          AS ContactoSubarrendatario
 
     FROM remisiones AS r
     INNER JOIN detalles_remisiones AS dr ON r.IdRemision = dr.IdRemision
     INNER JOIN usuario   AS cli ON r.DocumentoCliente = cli.DocumentoUsuario
     INNER JOIN proyectos AS p   ON r.IdProyecto       = p.IdProyecto
+    LEFT  JOIN usuario   AS sub ON dr.DocumentoSubarrendatario = sub.DocumentoUsuario
 
     LEFT JOIN (
         SELECT
@@ -134,16 +163,47 @@ const ConsultarUbicacionEquipoQuery = async (IdEquipo) => {
     const [ficha] = await query(SQL_FICHA_EQUIPO, [IdEquipo]);
     if (!ficha) return null;
 
-    const Ubicaciones = await query(SQL_UBICACIONES, [IdEquipo]);
+    const Anfitriona = EmpresaAnfitriona.value;
+    const filas = await query(SQL_UBICACIONES, [Anfitriona, Anfitriona, Anfitriona, IdEquipo]);
+    const Ubicaciones = filas.map((u) => ({ ...u, EsPropio: Number(u.EsPropio) === 1 }));
 
     // El total en obra se recalcula sumando las ubicaciones en vez de leer
     // `CantidadDisponible`: ese campo sólo se descuenta para los equipos de la
     // empresa anfitriona (ver `CrearRemisionQuery`), así que para un equipo de
     // subarrendatario no reflejaría la realidad.
-    const CantidadEnObra = Ubicaciones.reduce((suma, u) => suma + Number(u.CantidadEnObra || 0), 0);
+    let CantidadEnObraPropia = 0;
+    let CantidadEnObraSubarrendada = 0;
+    const porSubarrendatario = new Map();
+
+    for (const u of Ubicaciones) {
+        const cantidad = Number(u.CantidadEnObra || 0);
+        if (u.EsPropio) {
+            CantidadEnObraPropia += cantidad;
+            continue;
+        }
+        CantidadEnObraSubarrendada += cantidad;
+        const previo = porSubarrendatario.get(u.DocumentoSubarrendatario);
+        if (previo) {
+            previo.CantidadEnObra += cantidad;
+        } else {
+            porSubarrendatario.set(u.DocumentoSubarrendatario, {
+                Documento: u.DocumentoSubarrendatario,
+                Nombre: u.Subarrendatario,
+                Contacto: u.ContactoSubarrendatario,
+                CantidadEnObra: cantidad,
+            });
+        }
+    }
 
     return {
-        Equipo: { ...ficha, CantidadEnObra },
+        Equipo: {
+            ...ficha,
+            CantidadEnObra: CantidadEnObraPropia + CantidadEnObraSubarrendada,
+            CantidadEnObraPropia,
+            CantidadEnObraSubarrendada,
+            // De mayor a menor cantidad en obra
+            Subarrendatarios: [...porSubarrendatario.values()].sort((a, b) => b.CantidadEnObra - a.CantidadEnObra),
+        },
         Ubicaciones
     };
 };
