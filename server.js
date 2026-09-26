@@ -5,6 +5,7 @@ const { applyMiddlewares } = require('./server.config'); // middlewares
 const RutasApis = require('./routes'); // rutas API
 const { Server } = require('socket.io');
 const { setSocketServer, obtenerSocketServer } = require('./utils/WebSocket'); // util para manejar io global
+const verificarToken = require('./middlewares/authMiddleware');
 require('dotenv').config();
 
 const app = express();
@@ -38,6 +39,19 @@ app.use(
 
 // Aplica middlewares globales (seguridad, CORS, cookies, etc.)
 applyMiddlewares(app);
+
+// Autenticación global: todo requiere token JWT (Authorization: Bearer) excepto login y health.
+// Los preflight OPTIONS ya fueron respondidos por CORS, se dejan pasar por seguridad.
+const RUTAS_PUBLICAS = [
+    { method: 'POST', path: '/login' },
+    { method: 'GET', path: '/health' },
+];
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') return next();
+    const esPublica = RUTAS_PUBLICAS.some(r => r.method === req.method && r.path === req.path);
+    if (esPublica) return next();
+    return verificarToken(req, res, next);
+});
 
 // Rutas APIs
 RutasApis.forEach(route => app.use(route));
