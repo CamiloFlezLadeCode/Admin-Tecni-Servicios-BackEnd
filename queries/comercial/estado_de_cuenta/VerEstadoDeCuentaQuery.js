@@ -60,7 +60,7 @@ const VerEstadoDeCuentaQuery = async (DocumentoCliente) => {
         
         -- Información de Devolución (si existe)
         devueltos.NoDevolucion AS UltimaDevolucion,
-        devueltos.UltimaFechaDevolucion AS FechaUltimaDevolucion,
+        DATE_FORMAT(devueltos.UltimaFechaDevolucion, '%d/%m/%Y a las %l:%i %p') AS FechaUltimaDevolucion,
         
         -- Estado General de la Remisión
         es.Estado AS EstadoRemision
