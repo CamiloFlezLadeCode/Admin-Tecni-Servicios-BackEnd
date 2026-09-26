@@ -42,6 +42,10 @@ const applyMiddlewares = (app) => {
         },
         credentials: true,
         optionsSuccessStatus: 200,
+        // Cuánto puede el navegador reutilizar la respuesta del preflight (OPTIONS).
+        // Cada petición lleva `Authorization`, así que sin esto el navegador repetía
+        // un OPTIONS antes de CADA petición. Chrome lo limita a 2 horas.
+        maxAge: 7200,
     };
     app.use(cors(corsOptions));
 

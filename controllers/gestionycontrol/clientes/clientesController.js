@@ -1,7 +1,13 @@
-const { verClientesService, insertarClienteService, obtenerClientePorDocumentoService, crearClienteCompletoService } = require('../../../services/gestionycontrol/clientes/clientesService');
+const { leerPaginacion } = require('../../../utils/paginacion');
+const { verClientesService, verClientesPaginadoService, insertarClienteService, obtenerClientePorDocumentoService, crearClienteCompletoService } = require('../../../services/gestionycontrol/clientes/clientesService');
 
 const verClientes = async (req, res) => {
     try {
+        // Con `pagina` responde paginado; sin ella, el listado completo de siempre.
+        const paginacion = leerPaginacion(req.query);
+        if (paginacion) {
+            return res.status(200).json(await verClientesPaginadoService(paginacion));
+        }
         const clientes = await verClientesService();
 // console.log(`Clientes obtenidos correctamente. Total: ${clientes.length}`);
         res.json(clientes);

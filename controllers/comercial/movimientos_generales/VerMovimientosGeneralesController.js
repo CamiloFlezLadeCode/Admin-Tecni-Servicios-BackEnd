@@ -1,4 +1,5 @@
-const { VerMovimientosGeneralesService } = require('../../../services/comercial/movimientos_generales/VerMovimientosGeneralesService');
+const { leerPaginacion } = require('../../../utils/paginacion');
+const { VerMovimientosGeneralesService, VerMovimientosGeneralesPaginadoService } = require('../../../services/comercial/movimientos_generales/VerMovimientosGeneralesService');
 
 const VerMovimientosGeneralesController = async (req, res) => {
     try {
@@ -8,6 +9,12 @@ const VerMovimientosGeneralesController = async (req, res) => {
             DocumentoCliente: req.query.DocumentoCliente,
             IdProyecto: req.query.IdProyecto
         };
+
+        // Con `pagina` responde paginado (con el resumen de todo el conjunto); sin ella, lo de siempre.
+        const paginacion = leerPaginacion(req.query);
+        if (paginacion) {
+            return res.status(200).json(await VerMovimientosGeneralesPaginadoService(filtros, paginacion));
+        }
 
         const movimientos = await VerMovimientosGeneralesService(filtros);
 // console.log(`Movimientos generales consultados correctamente. Total: ${movimientos.length}`);

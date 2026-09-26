@@ -1,11 +1,8 @@
 const { query } = require('../../../config/db');
+const { consultaPaginada } = require('../../../utils/paginacion');
 
-const ConsultarRepuestosQuery = async () => {
-    await query(`
-        -- Ejecutar esto por separado antes del SELECT
-        SET lc_time_names = 'es_ES';
-    `);
-    const sql = `
+// Consulta del listado, separada de su orden para poder reutilizarla en la versión paginada.
+const SQL_LISTADO = `
         SELECT	
             repu.IdRepuesto AS IdRepuesto,
             repu.Nombre AS NombreRepuesto,
@@ -22,11 +19,31 @@ const ConsultarRepuestosQuery = async () => {
             usuario AS usu ON repu.UsuarioCreacion = usu.DocumentoUsuario
         LEFT JOIN	
             estado AS esta ON repu.IdEstado = esta.IdEstado
-        ORDER BY
-            repu.Nombre ASC
-    `;
-    return query(sql);
+`;
+
+const ORDEN_LISTADO = `repu.Nombre ASC`;
+
+const ConsultarRepuestosQuery = async () => {
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
+    return query(`${SQL_LISTADO}\n        ORDER BY ${ORDEN_LISTADO}`);
 };
+/**
+ * Versión paginada del listado (ver `utils/paginacion.js`): mismas filas y columnas,
+ * con búsqueda en las columnas que muestra la tabla y desempate por clave primaria.
+ */
+const ConsultarRepuestosPaginadoQuery = async (paginacion) => {
+    return consultaPaginada({
+        sqlBase: SQL_LISTADO,
+        orden: `${ORDEN_LISTADO}, repu.IdRepuesto ASC`,
+        columnasBusqueda: ['IdRepuesto', 'NombreRepuesto', 'CantidadDisponibleRepuesto', 'UsuarioCreacion', 'FechaCreacion'],
+        paginacion,
+    });
+};
+
 module.exports = {
-    ConsultarRepuestosQuery
+    ConsultarRepuestosQuery,
+    ConsultarRepuestosPaginadoQuery
 };

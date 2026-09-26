@@ -1,8 +1,8 @@
-const { ConsultarSalidasEquiposQuery } = require('../../../queries/inventario/equipos/ConsultarSalidasEquiposQuery');
+const { mapearDatos } = require('../../../utils/paginacion');
+const { ConsultarSalidasEquiposQuery, ConsultarSalidasEquiposPaginadoQuery } = require('../../../queries/inventario/equipos/ConsultarSalidasEquiposQuery');
 
-const ConsultarSalidasEquiposService = async () => {
-    const rows = await ConsultarSalidasEquiposQuery();
-    return rows.map(r => ({
+/** Forma de cada fila que espera el frontend (se usa en ambos modos). */
+const mapearFila = (r) => ({
         NoSalidaEquipos: r.NoSalidaEquipos,
         FechaSalida: r.FechaSalida,
         Responsable: r.Responsable,
@@ -12,8 +12,17 @@ const ConsultarSalidasEquiposService = async () => {
         CreadoPor: r.CreadoPor,
         FechaCreacion: r.FechaCreacion,
         TipoMovimiento: r.TipoMovimiento
-    }));
+    });
+
+const ConsultarSalidasEquiposService = async () => {
+    const rows = await ConsultarSalidasEquiposQuery();
+    return rows.map(mapearFila);
+};
+
+const ConsultarSalidasEquiposPaginadoService = async (paginacion) => {
+    return mapearDatos(await ConsultarSalidasEquiposPaginadoQuery(paginacion), mapearFila);
 };
 module.exports = {
-    ConsultarSalidasEquiposService
+    ConsultarSalidasEquiposService,
+    ConsultarSalidasEquiposPaginadoService
 };

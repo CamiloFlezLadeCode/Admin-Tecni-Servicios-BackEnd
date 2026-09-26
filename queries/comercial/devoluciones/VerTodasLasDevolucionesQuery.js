@@ -1,11 +1,8 @@
 const { query } = require('../../../config/db');
+const { consultaPaginada } = require('../../../utils/paginacion');
 
-const VerTodasLasDevolucionesQuery = async () => {
-    await query(`
-        -- Ejecutar esto por separado antes del SELECT
-        SET lc_time_names = 'es_ES';
-    `);
-    const sql = `
+// Consulta del listado, separada de su orden para poder reutilizarla en la versión paginada.
+const SQL_LISTADO = `
         SELECT DISTINCT
             devo.IdDevolucion AS IdDevolucion,
             devo.NoDevolucion AS NoDevolucion,
@@ -39,13 +36,36 @@ const VerTodasLasDevolucionesQuery = async () => {
             usucreacion.Apellidos,
             devo.FechaCreacion,
             esta.Estado
-        ORDER BY
-            CAST(devo.NoDevolucion AS UNSIGNED) DESC,
-    		FechaCreacion DESC;  -- Orden secundario por fecha
-    `;
-    return query(sql);
+`;
+
+const ORDEN_LISTADO = `CAST(devo.NoDevolucion AS UNSIGNED) DESC, FechaCreacion DESC`;
+
+const VerTodasLasDevolucionesQuery = async () => {
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
+    return query(`${SQL_LISTADO}\n        ORDER BY ${ORDEN_LISTADO}`);
+};
+
+/**
+ * Versión paginada del listado (ver `utils/paginacion.js`): mismas filas y columnas,
+ * con búsqueda en las columnas que muestra la tabla y desempate por clave primaria.
+ */
+const VerTodasLasDevolucionesPaginadoQuery = async (paginacion) => {
+    return consultaPaginada({
+        sqlBase: SQL_LISTADO,
+        orden: `${ORDEN_LISTADO}, devo.IdDevolucion DESC`,
+        columnasBusqueda: [
+            'NoDevolucion', 'NoRemision', 'Cliente', 'Proyecto', 'CreadoPor',
+            // `devo.FechaCreacion` está en el GROUP BY: en HAVING el nombre sería la fecha cruda
+            { expresion: "DATE_FORMAT(devo.FechaCreacion, '%W %d/%m/%Y a las %l:%i:%s %p')" },
+        ],
+        paginacion,
+    });
 };
 
 module.exports = {
-    VerTodasLasDevolucionesQuery
+    VerTodasLasDevolucionesQuery,
+    VerTodasLasDevolucionesPaginadoQuery
 };

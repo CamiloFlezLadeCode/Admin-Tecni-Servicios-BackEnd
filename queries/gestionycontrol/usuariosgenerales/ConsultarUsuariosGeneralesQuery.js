@@ -1,11 +1,8 @@
 const { query } = require('../../../config/db');
+const { consultaPaginada } = require('../../../utils/paginacion');
 
-const ConsultarUsuariosGeneralesQuery = async () => {
-    await query(`
-        -- Ejecutar esto por separado antes del SELECT
-        SET lc_time_names = 'es_ES';
-    `);
-    const sql = `
+// Consulta del listado, separada de su orden para poder reutilizarla en la versión paginada.
+const SQL_LISTADO = `
         SELECT
         usu.IdUsuario,
         #su.Nombres AS Nombre,
@@ -42,11 +39,31 @@ const ConsultarUsuariosGeneralesQuery = async () => {
         estado AS esta ON usu.IdEstado = esta.IdEstado
         GROUP BY
         usu.IdUsuario, usu.Nombres
-        ORDER BY	
-        usu.Nombres ASC;
-    `;
-    return query(sql);
+`;
+
+const ORDEN_LISTADO = `usu.Nombres ASC`;
+
+const ConsultarUsuariosGeneralesQuery = async () => {
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
+    return query(`${SQL_LISTADO}\n        ORDER BY ${ORDEN_LISTADO}`);
 };
+/**
+ * Versión paginada del listado (ver `utils/paginacion.js`): mismas filas y columnas,
+ * con búsqueda en las columnas que muestra la tabla y desempate por clave primaria.
+ */
+const ConsultarUsuariosGeneralesPaginadoQuery = async (paginacion) => {
+    return consultaPaginada({
+        sqlBase: SQL_LISTADO,
+        orden: `${ORDEN_LISTADO}, usu.IdUsuario ASC`,
+        columnasBusqueda: ['Nombre', 'TipoDocumento', 'Documento', 'Correo', 'Direccion', 'Celular1', 'Celular2', 'RolesLabel', 'Nivel', 'UsuarioCreacion', 'FechaCreacion'],
+        paginacion,
+    });
+};
+
 module.exports = {
-    ConsultarUsuariosGeneralesQuery
+    ConsultarUsuariosGeneralesQuery,
+    ConsultarUsuariosGeneralesPaginadoQuery
 };

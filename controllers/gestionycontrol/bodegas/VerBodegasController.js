@@ -1,7 +1,13 @@
-const { VerBodegasService } = require('../../../services/gestionycontrol/bodegas/VerBodegasService');
+const { leerPaginacion } = require('../../../utils/paginacion');
+const { VerBodegasService, VerBodegasPaginadoService } = require('../../../services/gestionycontrol/bodegas/VerBodegasService');
 
 const VerBodegasController = async (req, res) => {
     try {
+        // Con `pagina` responde paginado; sin ella, el listado completo de siempre.
+        const paginacion = leerPaginacion(req.query);
+        if (paginacion) {
+            return res.status(200).json(await VerBodegasPaginadoService(paginacion));
+        }
         const Bodegas = await VerBodegasService();
 // console.log(`BODEGAS OBTENIDAS CORRECTAMENTE. TOTAL: ${Bodegas.length}`);
         return res.status(200).json(Bodegas);

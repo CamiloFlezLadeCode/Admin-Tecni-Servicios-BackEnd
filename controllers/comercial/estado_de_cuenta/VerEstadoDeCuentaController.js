@@ -1,4 +1,5 @@
-const { VerEstadoDeCuentaService } = require('../../../services/comercial/estado_de_cuenta/VerEstadoDeCuentaService');
+const { leerPaginacion } = require('../../../utils/paginacion');
+const { VerEstadoDeCuentaService, VerEstadoDeCuentaPaginadoService } = require('../../../services/comercial/estado_de_cuenta/VerEstadoDeCuentaService');
 
 const VerEstadoDeCuentaController = async (req, res) => {
     try {
@@ -9,6 +10,12 @@ const VerEstadoDeCuentaController = async (req, res) => {
                 success: false,
                 message: 'El documento del cliente es requerido'
             });
+        }
+        // Con `pagina` responde paginado (con opciones de filtro y resumen); sin ella, lo de siempre.
+        const paginacion = leerPaginacion(req.query);
+        if (paginacion) {
+            const filtros = { Proyecto: req.query.Proyecto, Equipo: req.query.Equipo };
+            return res.status(200).json(await VerEstadoDeCuentaPaginadoService(DocumentoCliente, paginacion, filtros));
         }
         const EstadoDeCuentaCliente = await VerEstadoDeCuentaService(DocumentoCliente);
 // console.log(`El estado del cliente se obtuvo correctamente. Total: ${EstadoDeCuentaCliente.length}`);

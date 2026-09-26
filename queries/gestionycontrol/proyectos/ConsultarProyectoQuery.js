@@ -1,11 +1,8 @@
 const { query } = require('../../../config/db');
+const { consultaPaginada } = require('../../../utils/paginacion');
 
-const ConsultarProyectosQuery = async () => {
-    await query(`
-        -- Ejecutar esto por separado antes del SELECT
-        SET lc_time_names = 'es_ES';
-    `);
-    const sql = `
+// Consulta del listado, separada de su orden para poder reutilizarla en la versión paginada.
+const SQL_LISTADO = `
         SELECT	
             proye.IdProyecto AS IdProyecto,
             proye.Nombre AS NombreProyecto,
@@ -25,11 +22,31 @@ const ConsultarProyectosQuery = async () => {
             usuario AS usu2 ON proye.UsuarioCreacion = usu2.DocumentoUsuario
         INNER JOIN
             estado AS esta ON proye.IdEstado = esta.IdEstado
-        ORDER BY	
-            proye.Nombre ASC
-    `;
-    return await query(sql);
+`;
+
+const ORDEN_LISTADO = `proye.Nombre ASC`;
+
+const ConsultarProyectosQuery = async () => {
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
+    return await query(`${SQL_LISTADO}\n        ORDER BY ${ORDEN_LISTADO}`);
 };
+/**
+ * Versión paginada del listado (ver `utils/paginacion.js`): mismas filas y columnas,
+ * con búsqueda en las columnas que muestra la tabla y desempate por clave primaria.
+ */
+const ConsultarProyectosPaginadoQuery = async (paginacion) => {
+    return consultaPaginada({
+        sqlBase: SQL_LISTADO,
+        orden: `${ORDEN_LISTADO}, proye.IdProyecto ASC`,
+        columnasBusqueda: ['NombreProyecto', 'Cliente', 'DireccionProyecto', 'UsuarioCreacion', 'FechaCreacion'],
+        paginacion,
+    });
+};
+
 module.exports = {
-    ConsultarProyectosQuery
+    ConsultarProyectosQuery,
+    ConsultarProyectosPaginadoQuery
 };

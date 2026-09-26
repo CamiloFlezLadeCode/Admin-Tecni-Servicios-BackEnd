@@ -1,4 +1,27 @@
 const { query } = require('../../../config/db');
+const { consultaPaginada } = require('../../../utils/paginacion');
+
+// Consulta del listado, separada de su orden para poder reutilizarla en la versión paginada.
+const SQL_LISTADO = `
+        SELECT
+            bode.IdBodega AS IdBodega,
+            bode.NombreBodega AS NombreBodega,
+            bode.Descripcion AS DescripcionBodega,
+            CONCAT(SUBSTRING_INDEX(COALESCE(usu.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu.Apellidos, ''), ' ', 1) ) AS UsuarioCreacion,
+            CONCAT(DAYNAME(bode.FechaCreacion), ' ', DATE_FORMAT(bode.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion,
+            esta.Estado AS EstadoBodega,
+            tipo.TipoBodega AS TipoBodega  
+        FROM
+            bodegas AS bode
+        INNER JOIN 
+            usuario AS usu ON bode.UsuarioCreacion = usu.DocumentoUsuario
+        INNER JOIN	
+            tipo_bodega AS tipo ON bode.IdTipoBodega = tipo.IdTipoBodega
+        INNER JOIN
+            estado AS esta ON bode.IdEstado = esta.IdEstado
+`;
+
+const ORDEN_LISTADO = `bode.FechaCreacion DESC`;
 
 const VerBodegasQuery = async () => {
     await query(`
@@ -27,29 +50,22 @@ const VerBodegasQuery = async () => {
         ORDER BY
             bode.FechaCreacion DESC
     `;
-
-    const sql = `
-        SELECT
-            bode.IdBodega AS IdBodega,
-            bode.NombreBodega AS NombreBodega,
-            bode.Descripcion AS DescripcionBodega,
-            CONCAT(SUBSTRING_INDEX(COALESCE(usu.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu.Apellidos, ''), ' ', 1) ) AS UsuarioCreacion,
-            CONCAT(DAYNAME(bode.FechaCreacion), ' ', DATE_FORMAT(bode.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion,
-            esta.Estado AS EstadoBodega,
-            tipo.TipoBodega AS TipoBodega  
-        FROM
-            bodegas AS bode
-        INNER JOIN 
-            usuario AS usu ON bode.UsuarioCreacion = usu.DocumentoUsuario
-        INNER JOIN	
-            tipo_bodega AS tipo ON bode.IdTipoBodega = tipo.IdTipoBodega
-        INNER JOIN
-            estado AS esta ON bode.IdEstado = esta.IdEstado
-        ORDER BY
-            bode.FechaCreacion DESC
-    `;
-    return query(sql);
+    return query(`${SQL_LISTADO}\n        ORDER BY ${ORDEN_LISTADO}`);
 };
+/**
+ * Versión paginada del listado (ver `utils/paginacion.js`): mismas filas y columnas,
+ * con búsqueda en las columnas que muestra la tabla y desempate por clave primaria.
+ */
+const VerBodegasPaginadoQuery = async (paginacion) => {
+    return consultaPaginada({
+        sqlBase: SQL_LISTADO,
+        orden: `${ORDEN_LISTADO}, bode.IdBodega DESC`,
+        columnasBusqueda: ['IdBodega', 'NombreBodega', 'DescripcionBodega', 'UsuarioCreacion', 'FechaCreacion'],
+        paginacion,
+    });
+};
+
 module.exports = {
-    VerBodegasQuery
+    VerBodegasQuery,
+    VerBodegasPaginadoQuery
 };

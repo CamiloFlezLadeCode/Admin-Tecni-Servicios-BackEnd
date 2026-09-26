@@ -1,7 +1,13 @@
-const { ConsultarRemisionesService } = require('../../../services/comercial/remisiones/ConsultarRemisionesService');
+const { leerPaginacion } = require('../../../utils/paginacion');
+const { ConsultarRemisionesService, ConsultarRemisionesPaginadoService } = require('../../../services/comercial/remisiones/ConsultarRemisionesService');
 
 const ConsultarRemisionesController = async (req, res) => {
     try {
+        // Con `pagina` responde paginado; sin ella, el listado completo de siempre.
+        const paginacion = leerPaginacion(req.query);
+        if (paginacion) {
+            return res.status(200).json(await ConsultarRemisionesPaginadoService(paginacion));
+        }
         const Remisiones = await ConsultarRemisionesService();
 // console.log(`Remisiones consultadas correctamente. Total: ${Remisiones.length}`);
         return res.status(200).json(

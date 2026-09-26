@@ -1,10 +1,8 @@
 const { query } = require('../../../config/db');
+const { consultaPaginada } = require('../../../utils/paginacion');
 
-const ConsultarSalidasEquiposQuery = async () => {
-    await query(`
-        SET lc_time_names = 'es_ES';
-    `);
-    const sql = `
+// Consulta del listado, separada de su orden para poder reutilizarla en la versión paginada.
+const SQL_LISTADO = `
         SELECT
             se.NoSalidaEquipo AS NoSalidaEquipos,
             DATE_FORMAT(se.FechaSalida, '%W %d/%m/%Y a las %l:%i:%s %p') AS FechaSalida,
@@ -28,11 +26,30 @@ const ConsultarSalidasEquiposQuery = async () => {
             usuario AS usu_responsable ON se.Responsable = usu_responsable.DocumentoUsuario COLLATE utf8mb4_0900_ai_ci
         INNER JOIN
             usuario AS usu_creacion ON se.UsuarioCreacion = usu_creacion.DocumentoUsuario COLLATE utf8mb4_0900_ai_ci
-        ORDER BY
-            se.NoSalidaEquipo DESC
-    `;
-    return query(sql);
+`;
+
+const ORDEN_LISTADO = `se.NoSalidaEquipo DESC`;
+
+const ConsultarSalidasEquiposQuery = async () => {
+    await query(`
+        SET lc_time_names = 'es_ES';
+    `);
+    return query(`${SQL_LISTADO}\n        ORDER BY ${ORDEN_LISTADO}`);
 };
+/**
+ * Versión paginada del listado (ver `utils/paginacion.js`): mismas filas y columnas,
+ * con búsqueda en las columnas que muestra la tabla y desempate por clave primaria.
+ */
+const ConsultarSalidasEquiposPaginadoQuery = async (paginacion) => {
+    return consultaPaginada({
+        sqlBase: SQL_LISTADO,
+        orden: `${ORDEN_LISTADO}, se.IdSalidaEquipo DESC`,
+        columnasBusqueda: ['NoSalidaEquipos', 'FechaSalida', 'NombreResponsable', 'TipoMovimiento', 'CreadoPor', 'FechaCreacion'],
+        paginacion,
+    });
+};
+
 module.exports = {
-    ConsultarSalidasEquiposQuery
+    ConsultarSalidasEquiposQuery,
+    ConsultarSalidasEquiposPaginadoQuery
 };

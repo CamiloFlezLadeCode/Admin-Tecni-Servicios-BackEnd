@@ -1,4 +1,49 @@
 const { query } = require('../../../config/db');
+const { consultaPaginada } = require('../../../utils/paginacion');
+
+// Consulta del listado, separada de su orden para poder reutilizarla en la versión paginada.
+const SQL_LISTADO = `
+        SELECT	
+            equi.IdEquipo AS IdEquipo,
+            bode.NombreBodega AS BodegaUbicacion,
+            tipo_equi.TipoEquipo AS TipoDeEquipo,
+            equi.Nombre AS NombreEquipo,
+            cate.Categoria AS CategoriaEquipo,
+            equi.PrecioVenta AS PrecioVenta,
+            equi.PrecioAlquiler AS PrecioAlquiler,
+            equi.PrecioReparacion AS PrecioReparacion,
+            CONCAT(SUBSTRING_INDEX(COALESCE(usu.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu.Apellidos, ''), ' ', 1) ) AS UsuarioCreacion,
+            CONCAT(DAYNAME(equi.FechaCreacion), ' ', DATE_FORMAT(equi.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion,
+            esta.Estado,
+            equi.Cantidad AS Cantidad,
+            equi.CantidadDisponible AS CantidadDisponible,
+            uni.Nombre AS UnidadDeMedida,
+            #CONCAT(SUBSTRING_INDEX(COALESCE(usu_arrendatario.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu_arrendatario.Apellidos, ''), ' ', 1) ) AS Subarrendatario
+            CASE	
+            	WHEN 
+                	(COALESCE(equi.DocumentoSubarrendatario, '0') = '0' OR COALESCE(equi.DocumentoSubarrendatario, 'ABC') = 'ABC') THEN 'TECNISERVICIOS J.F S.A.S'
+                ELSE
+                	CONCAT(SUBSTRING_INDEX(COALESCE(usu_arrendatario.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu_arrendatario.Apellidos, ''), ' ', 1) )
+			END AS Subarrendatario
+        FROM	
+            equipo AS equi
+        INNER JOIN
+            categorias AS cate ON equi.IdCategoria = cate.IdCategoria
+        LEFT JOIN	
+            usuario AS usu ON equi.UsuarioCreacion = usu.DocumentoUsuario
+        LEFT JOIN	
+        	usuario AS usu_arrendatario ON equi.DocumentoSubarrendatario = usu_arrendatario.DocumentoUsuario
+        INNER JOIN	
+            estado AS esta ON equi.IdEstado = esta.IdEstado
+		INNER JOIN
+        	tipo_equipo AS tipo_equi ON equi.IdTipoEquipo = tipo_equi.IdTipoEquipo
+		INNER JOIN	
+        	unidad AS uni ON equi.IdUnidadDeMedida = uni.IdUnidad
+		INNER JOIN
+        	bodegas AS bode ON equi.IdBodega = bode.IdBodega
+`;
+
+const ORDEN_LISTADO = `equi.Nombre ASC`;
 
 const ConsultarEquiposQuery = async () => {
     await query(`
@@ -38,50 +83,22 @@ const ConsultarEquiposQuery = async () => {
     //     ORDER BY
     //         equi.Nombre ASC
     // `;
-    const sql = `
-        SELECT	
-            equi.IdEquipo AS IdEquipo,
-            bode.NombreBodega AS BodegaUbicacion,
-            tipo_equi.TipoEquipo AS TipoDeEquipo,
-            equi.Nombre AS NombreEquipo,
-            cate.Categoria AS CategoriaEquipo,
-            equi.PrecioVenta AS PrecioVenta,
-            equi.PrecioAlquiler AS PrecioAlquiler,
-            equi.PrecioReparacion AS PrecioReparacion,
-            CONCAT(SUBSTRING_INDEX(COALESCE(usu.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu.Apellidos, ''), ' ', 1) ) AS UsuarioCreacion,
-            CONCAT(DAYNAME(equi.FechaCreacion), ' ', DATE_FORMAT(equi.FechaCreacion, '%d/%m/%Y a las %l:%i:%s %p')) AS FechaCreacion,
-            esta.Estado,
-            equi.Cantidad AS Cantidad,
-            equi.CantidadDisponible AS CantidadDisponible,
-            uni.Nombre AS UnidadDeMedida,
-            #CONCAT(SUBSTRING_INDEX(COALESCE(usu_arrendatario.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu_arrendatario.Apellidos, ''), ' ', 1) ) AS Subarrendatario
-            CASE	
-            	WHEN 
-                	(COALESCE(equi.DocumentoSubarrendatario, '0') = '0' OR COALESCE(equi.DocumentoSubarrendatario, 'ABC') = 'ABC') THEN 'TECNISERVICIOS J.F S.A.S'
-                ELSE
-                	CONCAT(SUBSTRING_INDEX(COALESCE(usu_arrendatario.Nombres, ''), ' ', 1), ' ', SUBSTRING_INDEX(COALESCE(usu_arrendatario.Apellidos, ''), ' ', 1) )
-			END AS Subarrendatario
-        FROM	
-            equipo AS equi
-        INNER JOIN
-            categorias AS cate ON equi.IdCategoria = cate.IdCategoria
-        LEFT JOIN	
-            usuario AS usu ON equi.UsuarioCreacion = usu.DocumentoUsuario
-        LEFT JOIN	
-        	usuario AS usu_arrendatario ON equi.DocumentoSubarrendatario = usu_arrendatario.DocumentoUsuario
-        INNER JOIN	
-            estado AS esta ON equi.IdEstado = esta.IdEstado
-		INNER JOIN
-        	tipo_equipo AS tipo_equi ON equi.IdTipoEquipo = tipo_equi.IdTipoEquipo
-		INNER JOIN	
-        	unidad AS uni ON equi.IdUnidadDeMedida = uni.IdUnidad
-		INNER JOIN
-        	bodegas AS bode ON equi.IdBodega = bode.IdBodega
-        ORDER BY
-            equi.Nombre ASC    
-    `;
-    return query(sql);
+    return query(`${SQL_LISTADO}\n        ORDER BY ${ORDEN_LISTADO}`);
 }
+/**
+ * Versión paginada del listado (ver `utils/paginacion.js`): mismas filas y columnas,
+ * con búsqueda en las columnas que muestra la tabla y desempate por clave primaria.
+ */
+const ConsultarEquiposPaginadoQuery = async (paginacion) => {
+    return consultaPaginada({
+        sqlBase: SQL_LISTADO,
+        orden: `${ORDEN_LISTADO}, equi.IdEquipo ASC`,
+        columnasBusqueda: ['NombreEquipo', 'CategoriaEquipo', 'BodegaUbicacion', 'Cantidad', 'CantidadDisponible', 'PrecioVenta', 'PrecioAlquiler', 'PrecioReparacion', 'UsuarioCreacion', 'FechaCreacion'],
+        paginacion,
+    });
+};
+
 module.exports = {
-    ConsultarEquiposQuery
+    ConsultarEquiposQuery,
+    ConsultarEquiposPaginadoQuery
 };

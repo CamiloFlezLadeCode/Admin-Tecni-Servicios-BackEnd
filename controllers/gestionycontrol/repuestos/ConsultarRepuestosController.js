@@ -1,7 +1,13 @@
-const { ConsultarRepuestosService } = require('../../../services/gestionycontrol/repuestos/ConsultarRepuestosService');
+const { leerPaginacion } = require('../../../utils/paginacion');
+const { ConsultarRepuestosService, ConsultarRepuestosPaginadoService } = require('../../../services/gestionycontrol/repuestos/ConsultarRepuestosService');
 
 const ConsultarRepuestosController = async (req, res) => {
     try {
+        // Con `pagina` responde paginado; sin ella, el listado completo de siempre.
+        const paginacion = leerPaginacion(req.query);
+        if (paginacion) {
+            return res.status(200).json(await ConsultarRepuestosPaginadoService(paginacion));
+        }
         const Repuestos = await ConsultarRepuestosService();
 // console.log(`Repuestos obtenidos correctamente. Total: ${Repuestos.length}`);
         return res.status(200).json(Repuestos);

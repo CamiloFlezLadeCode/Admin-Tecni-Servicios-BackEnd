@@ -1,11 +1,8 @@
 const { query } = require('../../../config/db');
+const { consultaPaginada } = require('../../../utils/paginacion');
 
-const ConsultarMecanicosQuery = async () => {
-    await query(`
-        -- Ejecutar esto por separado antes del SELECT
-        SET lc_time_names = 'es_ES';
-    `);
-    const sql = `
+// Consulta del listado, separada de su orden para poder reutilizarla en la versión paginada.
+const SQL_LISTADO = `
         -- Consulta principal
         SELECT 
             usu.IdUsuario AS IdUsuario,
@@ -33,13 +30,34 @@ const ConsultarMecanicosQuery = async () => {
             roles rol ON usurol.IdRol = rol.IdRol
         WHERE	
             rol.Rol = 'Mecánico'
-        ORDER BY
-            usu.Nombres ASC, usu.Apellidos ASC;
-    `;
+`;
+
+const ORDEN_LISTADO = `usu.Nombres ASC, usu.Apellidos ASC`;
+
+const ConsultarMecanicosQuery = async () => {
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
+
     // const explain = await query(`EXPLAIN ${sql}`);
     // console.log(explain);
-    return query(sql);
+    return query(`${SQL_LISTADO}\n        ORDER BY ${ORDEN_LISTADO}`);
 };
+/**
+ * Versión paginada del listado (ver `utils/paginacion.js`): mismas filas y columnas,
+ * con búsqueda en las columnas que muestra la tabla y desempate por clave primaria.
+ */
+const ConsultarMecanicosPaginadoQuery = async (paginacion) => {
+    return consultaPaginada({
+        sqlBase: SQL_LISTADO,
+        orden: `${ORDEN_LISTADO}, usu.IdUsuario ASC`,
+        columnasBusqueda: ['Nombre', 'Documento'],
+        paginacion,
+    });
+};
+
 module.exports = {
-    ConsultarMecanicosQuery
+    ConsultarMecanicosQuery,
+    ConsultarMecanicosPaginadoQuery
 };

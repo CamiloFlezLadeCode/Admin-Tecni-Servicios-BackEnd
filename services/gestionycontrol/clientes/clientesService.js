@@ -1,8 +1,12 @@
-const { obtenerClientes, insertarClienteQuery, obtenerClientePorDocumento, crearClienteCompleto } = require('../../../queries/gestionycontrol/clientes/clientesQueries');
+const { obtenerClientes, obtenerClientesPaginado, insertarClienteQuery, obtenerClientePorDocumento, crearClienteCompleto } = require('../../../queries/gestionycontrol/clientes/clientesQueries');
 
 const verClientesService = async() => {
     return await obtenerClientes();
 }
+
+const verClientesPaginadoService = async (paginacion) => {
+    return obtenerClientesPaginado(paginacion);
+};
 
 // const insertarClienteService = async(clienteData) => {
 //     return await insertarCliente(clienteData);
@@ -29,6 +33,7 @@ const crearClienteCompletoService = async (clienteData) => {
 
 module.exports = {
     verClientesService,
+    verClientesPaginadoService,
     insertarClienteService,
     obtenerClientePorDocumentoService,
     crearClienteCompletoService

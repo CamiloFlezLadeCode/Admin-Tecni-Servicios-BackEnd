@@ -1,11 +1,8 @@
 const { query } = require('../../../config/db');
+const { consultaPaginada } = require('../../../utils/paginacion');
 
-const VerTodasLasOrdenesDeServicioQuery = async () => {
-    await query(`
-        -- Ejecutar esto por separado antes del SELECT
-        SET lc_time_names = 'es_ES';
-    `);
-    const sql = `
+// Consulta del listado, separada de su orden para poder reutilizarla en la versión paginada.
+const SQL_LISTADO = `
         SELECT
             orden.IdOrdenDeServicio AS IdOrdenDeServicio,
             orden.NoOrdenDeServicio AS NoOrdenDeServicio,
@@ -27,11 +24,31 @@ const VerTodasLasOrdenesDeServicioQuery = async () => {
             usuario AS usucreacion ON orden.UsuarioCreacion = usucreacion.DocumentoUsuario
         INNER JOIN
             estado AS esta ON orden.IdEstado = esta.IdEstado
-        ORDER BY
-            orden.FechaCreacion DESC    
-    `;
-    return query(sql);
+`;
+
+const ORDEN_LISTADO = `orden.FechaCreacion DESC`;
+
+const VerTodasLasOrdenesDeServicioQuery = async () => {
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
+    return query(`${SQL_LISTADO}\n        ORDER BY ${ORDEN_LISTADO}`);
 };
+/**
+ * Versión paginada del listado (ver `utils/paginacion.js`): mismas filas y columnas,
+ * con búsqueda en las columnas que muestra la tabla y desempate por clave primaria.
+ */
+const VerTodasLasOrdenesDeServicioPaginadoQuery = async (paginacion) => {
+    return consultaPaginada({
+        sqlBase: SQL_LISTADO,
+        orden: `${ORDEN_LISTADO}, orden.IdOrdenDeServicio DESC`,
+        columnasBusqueda: ['NoOrdenDeServicio', 'Cliente', 'Proyecto', 'Mecanico', 'FechaCreacion', 'CreadoPor'],
+        paginacion,
+    });
+};
+
 module.exports = {
-    VerTodasLasOrdenesDeServicioQuery
+    VerTodasLasOrdenesDeServicioQuery,
+    VerTodasLasOrdenesDeServicioPaginadoQuery
 };

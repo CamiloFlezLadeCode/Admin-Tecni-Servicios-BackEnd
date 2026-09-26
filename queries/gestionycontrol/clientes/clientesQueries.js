@@ -1,12 +1,9 @@
 const { query } = require('../../../config/db');
+const { consultaPaginada } = require('../../../utils/paginacion');
 
 
-const obtenerClientes = async () => {
-    await query(`
-        -- Ejecutar esto por separado antes del SELECT
-        SET lc_time_names = 'es_ES';
-    `);
-    const sql = `
+// Consulta del listado de clientes, separada de su orden para reutilizarla en la versión paginada.
+const SQL_LISTADO_CLIENTES = `
         -- Consulta principal
         SELECT 
             CONCAT(COALESCE(usu.Nombres, ''), ' ', COALESCE(usu.Apellidos, '')) AS Nombre,
@@ -44,13 +41,33 @@ const obtenerClientes = async () => {
             roles rol ON usurol.IdRol = rol.IdRol
         WHERE	
             rol.Rol = 'Cliente'
-        ORDER BY
-            usu.Nombres ASC, usu.Apellidos ASC;
-    `;
-    return await query(sql);
+`;
+
+const ORDEN_LISTADO_CLIENTES = `usu.Nombres ASC, usu.Apellidos ASC`;
+
+const obtenerClientes = async () => {
+    await query(`
+        -- Ejecutar esto por separado antes del SELECT
+        SET lc_time_names = 'es_ES';
+    `);
+    return await query(`${SQL_LISTADO_CLIENTES}
+        ORDER BY ${ORDEN_LISTADO_CLIENTES}`);
 };
 
 //Query Insertar Usuario
+/**
+ * Versión paginada del listado de clientes (ver `utils/paginacion.js`).
+ * Busca por nombre y documento, igual que la tabla de clientes.
+ */
+const obtenerClientesPaginado = async (paginacion) => {
+    return consultaPaginada({
+        sqlBase: SQL_LISTADO_CLIENTES,
+        orden: `${ORDEN_LISTADO_CLIENTES}, usu.IdUsuario ASC`,
+        columnasBusqueda: ['Nombre', 'Documento'],
+        paginacion,
+    });
+};
+
 const insertarUsuario = async (clienteData) => {
     const sql = `
         INSERT INTO usuarios 
@@ -115,6 +132,7 @@ const crearClienteCompleto = async (datos) => {
 
 module.exports = {
     obtenerClientes,
+    obtenerClientesPaginado,
     insertarClienteQuery,
     obtenerClientePorDocumento,
     crearClienteCompleto
