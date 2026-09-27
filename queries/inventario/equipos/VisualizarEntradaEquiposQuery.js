@@ -4,7 +4,11 @@ const VisualizarEntradaEquiposQuery = async (NoEntradaEquipos) => {
     const sql = `
         SELECT 
             ee.NoEntradaEquipos,
-            ee.FechaEntrada,
+            -- Como texto, igual que VerRemisionPorIdQuery / VerDevolucionPorIdQuery: si viajara
+            -- como DATETIME, mysql2 lo convertiría a Date con la zona horaria del proceso de Node
+            -- y el modal mostraría otra hora que el listado. El front lo lee con
+            -- dayjs(fecha, 'DD/MM/YYYY hh:mm:ss A').
+            DATE_FORMAT(ee.FechaEntrada, '%d/%m/%Y %r') AS FechaEntrada,
             ee.Responsable,
             CONCAT(p.Nombres, ' ', p.Apellidos) AS NombreResponsable,
             ee.Observaciones,

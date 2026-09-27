@@ -8,7 +8,8 @@ const VisualizarSalidaEquiposQuery = async (NoSalidaEquipos) => {
     const sql = `
         SELECT
             se.NoSalidaEquipo AS NoSalidaEquipos,
-            se.FechaSalida,
+            -- Como texto (ver VisualizarEntradaEquiposQuery): no depende de la zona horaria de Node.
+            DATE_FORMAT(se.FechaSalida, '%d/%m/%Y %r') AS FechaSalida,
             se.Responsable AS DocumentoResponsable,
             se.Responsable,
             CONCAT(p.Nombres, ' ', p.Apellidos) AS NombreResponsable,
