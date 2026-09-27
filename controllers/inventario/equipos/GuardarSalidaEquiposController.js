@@ -1,4 +1,5 @@
 const { GuardarSalidaEquiposService } = require('../../../services/inventario/equipos/GuardarSalidaEquiposService');
+const { obtenerSocketServer } = require('../../../utils/WebSocket');
 
 const GuardarSalidaEquiposController = async (req, res) => {
     try {
@@ -8,6 +9,12 @@ const GuardarSalidaEquiposController = async (req, res) => {
             return res.status(400).json({ error: 'Datos de salida inválidos o vacíos' });
         }
         const Resultado = await GuardarSalidaEquiposService(DataSalidaEquipos);
+        const io = obtenerSocketServer();
+        if (io) {
+            io.emit('salida-equipos-creada', '');
+        } else {
+            console.warn("⚠️ Socket.IO no está inicializado");
+        }
         return res.status(200).json(Resultado);
     } catch (error) {
         console.error('Error en GuardarSalidaEquiposController => ', error.message);

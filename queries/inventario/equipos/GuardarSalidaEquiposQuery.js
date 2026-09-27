@@ -54,6 +54,16 @@ const GuardarSalidaEquiposQuery = async (DataSalidaEquipos) => {
             IdTipoMovimiento = tipoMov.length > 0 ? tipoMov[0].IdTipoMovimiento : 20; // Default a 20 si no se encuentra
         }
 
+        // Una baja saca el equipo del inventario definitivamente, así que también
+        // descuenta la cantidad total. Se identifica por el nombre del catálogo y no
+        // por un id fijo: el catálogo no está en las migraciones y sus ids pueden
+        // variar entre entornos (antes se comparaba con 4, que es "Recepcion de Traslado").
+        const [tipoSalida] = await connection.query(
+            `SELECT Nombre FROM cat_tipos_movimiento_equipo WHERE IdTipoMovimiento = ?`,
+            [IdTipoMovimiento]
+        );
+        const EsBaja = /^baja\b/i.test(String(tipoSalida[0]?.Nombre ?? '').trim());
+
         for (const detalle_salida of DataSalidaEquipos.Equipos) {
             if (!detalle_salida.IdEquipo || !detalle_salida.Cantidad) {
                 throw new Error('Detalle de salida incompleto');
@@ -82,13 +92,13 @@ const GuardarSalidaEquiposQuery = async (DataSalidaEquipos) => {
             
             // Actualizar Stock
             // Siempre reduce CantidadDisponible.
-            // Si es Baja (4), reduce también Cantidad (Total).
+            // Si es Baja, reduce también Cantidad (Total).
             await connection.query(
-                `UPDATE equipo SET 
+                `UPDATE equipo SET
                     CantidadDisponible = CantidadDisponible - ?,
-                    Cantidad = CASE WHEN ? = 4 THEN Cantidad - ? ELSE Cantidad END
+                    Cantidad = Cantidad - ?
                  WHERE IdEquipo = ?`,
-                [requerido, IdTipoMovimiento, requerido, detalle_salida.IdEquipo]
+                [requerido, EsBaja ? requerido : 0, detalle_salida.IdEquipo]
             );
 
             // Registrar movimiento de equipo

@@ -1,15 +1,11 @@
 const { query } = require('../../../config/db');
 
 const VisualizarSalidaEquiposQuery = async (NoSalidaEquipos) => {
+    // El tipo de movimiento no se guarda en salida_equipo, sólo en movimiento_equipo.
+    // IdDocumentoOrigen por sí solo NO identifica la salida: remisiones, devoluciones
+    // y entradas escriben ahí su propio id, así que los ids se cruzan. Se filtra
+    // además por dirección y por DocumentoReferencia (= NoSalidaEquipo).
     const sql = `
-        WITH movimiento_max AS (
-            SELECT 
-                IdDocumentoOrigen,
-                MAX(IdTipoMovimiento) AS IdTipoMovimiento
-            FROM movimiento_equipo
-            WHERE IdTipoMovimiento IN (SELECT IdTipoMovimiento FROM cat_tipos_movimiento_equipo)
-            GROUP BY IdDocumentoOrigen
-        )
         SELECT
             se.NoSalidaEquipo AS NoSalidaEquipos,
             se.FechaSalida,
@@ -20,7 +16,15 @@ const VisualizarSalidaEquiposQuery = async (NoSalidaEquipos) => {
             se.UsuarioCreacion,
             CONCAT(uc.Nombres, ' ', uc.Apellidos) AS CreadoPor,
             se.FechaCreacion,
-            COALESCE(mm.IdTipoMovimiento, 20) AS IdTipoMovimiento,
+            (
+                SELECT me.IdTipoMovimiento
+                FROM movimiento_equipo me
+                WHERE me.IdDocumentoOrigen = se.IdSalidaEquipo
+                  AND me.DocumentoReferencia = se.NoSalidaEquipo
+                  AND me.Direccion = 'SALIDA'
+                ORDER BY me.IdMovimientoEquipo DESC
+                LIMIT 1
+            ) AS IdTipoMovimiento,
             (
                 SELECT JSON_ARRAYAGG(
                     JSON_OBJECT(
@@ -43,7 +47,6 @@ const VisualizarSalidaEquiposQuery = async (NoSalidaEquipos) => {
         FROM salida_equipo AS se
         LEFT JOIN usuario p ON se.Responsable = p.DocumentoUsuario COLLATE utf8mb4_0900_ai_ci
         LEFT JOIN usuario uc ON se.UsuarioCreacion = uc.DocumentoUsuario COLLATE utf8mb4_0900_ai_ci
-        LEFT JOIN movimiento_max mm ON mm.IdDocumentoOrigen = se.IdSalidaEquipo
         WHERE se.NoSalidaEquipo = ?
     `;
     return query(sql, [NoSalidaEquipos]);

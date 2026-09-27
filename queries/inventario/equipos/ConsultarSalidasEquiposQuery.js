@@ -16,7 +16,11 @@ const SQL_LISTADO = `
                 SELECT tm.Nombre
                 FROM movimiento_equipo me
                 INNER JOIN cat_tipos_movimiento_equipo tm ON me.IdTipoMovimiento = tm.IdTipoMovimiento
+                -- Mismo criterio que VisualizarSalidaEquiposQuery: IdDocumentoOrigen por sí
+                -- solo se cruza con remisiones/devoluciones/entradas que tengan el mismo id.
                 WHERE me.IdDocumentoOrigen = se.IdSalidaEquipo
+                  AND me.DocumentoReferencia = se.NoSalidaEquipo
+                  AND me.Direccion = 'SALIDA'
                 ORDER BY me.Fecha DESC, me.IdMovimientoEquipo DESC
                 LIMIT 1
             ) AS TipoMovimiento
