@@ -23,6 +23,8 @@ module.exports = [
   require('./comercial/ordenes_de_servicio/ordenesDeServicioRoutes'),
   require('./comercial/estado_de_cuenta/estadoDeCuentaRoutes'),
   require('./comercial/movimientos_generales/movimientosGeneralesRoutes'),
+  // Rutas panel principal (dashboard)
+  require('./dashboard/dashboardRoutes'),
   // Rutas configuraciones
   require('./configuraciones/configuracionesRoutes'),
   // Rutas inventario
