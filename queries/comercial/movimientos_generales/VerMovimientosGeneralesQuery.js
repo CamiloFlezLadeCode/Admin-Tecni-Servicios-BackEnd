@@ -39,7 +39,11 @@ const construirMovimientos = (filtros) => {
                 CASE 
                     WHEN esta.Estado LIKE '%Anulado%' OR esta.Estado LIKE '%Cancelado%' THEN 0
                     ELSE (
-                        SELECT 
+                        -- Lo devuelto se cruza con CADA renglón de la remisión por IdDetalleRemision
+                        -- (igual que en el estado de cuenta), no sólo por IdEquipo: si el mismo equipo
+                        -- va en dos renglones, cruzar por equipo le asignaba a cada renglón lo devuelto
+                        -- de ambos, y "remitido - devuelto" daba negativo (remisión 1659: -228.474).
+                        SELECT
                             SUM(
                                 dr.PrecioUnidad * (
                                     -- Parte 1: Unidades ya devueltas (Costo acumulado hasta su fecha de devolución)
@@ -47,7 +51,7 @@ const construirMovimientos = (filtros) => {
                                         SELECT SUM(dd.Cantidad * GREATEST(1, CEIL(TIMESTAMPDIFF(HOUR, remi.FechaRemision, d.FechaDevolucion) / 24)))
                                         FROM detalles_devoluciones dd
                                         INNER JOIN devoluciones d ON dd.IdDevolucion = d.IdDevolucion
-                                        WHERE dd.IdRemision = dr.IdRemision AND dd.IdEquipo = dr.IdEquipo
+                                        WHERE dd.IdRemision = dr.IdRemision AND dd.IdDetalleRemision = dr.IdDetalleRemision
                                         AND d.IdEstado IN (SELECT IdEstado FROM estado WHERE Estado NOT LIKE '%Anulado%' AND Estado NOT LIKE '%Cancelado%')
                                     ), 0) +
                                     -- Parte 2: Unidades aún pendientes (Costo acumulado hasta hoy)
@@ -56,7 +60,7 @@ const construirMovimientos = (filtros) => {
                                             SELECT SUM(dd2.Cantidad)
                                             FROM detalles_devoluciones dd2
                                             INNER JOIN devoluciones d2 ON dd2.IdDevolucion = d2.IdDevolucion
-                                            WHERE dd2.IdRemision = dr.IdRemision AND dd2.IdEquipo = dr.IdEquipo
+                                            WHERE dd2.IdRemision = dr.IdRemision AND dd2.IdDetalleRemision = dr.IdDetalleRemision
                                             AND d2.IdEstado IN (SELECT IdEstado FROM estado WHERE Estado NOT LIKE '%Anulado%' AND Estado NOT LIKE '%Cancelado%')
                                         ), 0)) * 
                                         GREATEST(1, CEIL(TIMESTAMPDIFF(HOUR, remi.FechaRemision, DATE_ADD(UTC_TIMESTAMP(), INTERVAL -5 HOUR)) / 24))
