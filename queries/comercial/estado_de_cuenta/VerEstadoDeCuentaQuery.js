@@ -1,10 +1,28 @@
 const { query } = require('../../../config/db');
 const { consultaPaginada, condicionIgual } = require('../../../utils/paginacion');
+const {
+    SQL_AHORA_COLOMBIA,
+    SQL_ESTADOS_VIGENTES,
+    sqlDiasCobrados,
+    sqlUnidadesDia,
+    sqlFactorIVA,
+} = require('../../../utils/cobroAlquiler');
+
+// Horas reales del préstamo: hasta la última devolución si ya se devolvió todo, si no hasta hoy.
+// Nunca negativas: hay devoluciones registradas el mismo día con una hora anterior a la de la
+// remisión (p. ej. 1643), y restarlas tal cual mostraba "-1 días -4 horas".
+const SQL_HORAS_PRESTAMO = `GREATEST(0, TIMESTAMPDIFF(HOUR, r.FechaRemision,
+            CASE
+                WHEN (dr.Cantidad - COALESCE(devueltos.CantidadDevuelta, 0)) = 0 AND devueltos.UltimaFechaDevolucion IS NOT NULL
+                    THEN devueltos.UltimaFechaDevolucion
+                ELSE ${SQL_AHORA_COLOMBIA}
+            END))`;
 
 // Consulta del estado de cuenta, separada de su orden para reutilizarla en la versión paginada.
 // Termina en su propio HAVING: la versión paginada le añade condiciones con AND.
 const SQL_ESTADO_DE_CUENTA = `
         SELECT 
+        dr.IdDetalleRemision,
         -- Información del Cliente
         r.DocumentoCliente,
         CONCAT(
@@ -27,25 +45,13 @@ const SQL_ESTADO_DE_CUENTA = `
         c.Categoria,
         e.Nombre AS Equipo,
         dr.Cantidad AS CantidadPrestada,
-        dr.PrecioUnidad AS PrecioUnitario,
         
         -- Estado de Devolución
         COALESCE(devueltos.CantidadDevuelta, 0) AS CantidadDevuelta,
         (dr.Cantidad - COALESCE(devueltos.CantidadDevuelta, 0)) AS CantidadPendiente,
         
-        -- Cálculo de Tiempo
-        CASE 
-            WHEN (dr.Cantidad - COALESCE(devueltos.CantidadDevuelta, 0)) = 0 AND devueltos.UltimaFechaDevolucion IS NOT NULL THEN
-                CONCAT(
-                    FLOOR(TIMESTAMPDIFF(HOUR, r.FechaRemision, devueltos.UltimaFechaDevolucion) / 24), ' días ',
-                    MOD(TIMESTAMPDIFF(HOUR, r.FechaRemision, devueltos.UltimaFechaDevolucion), 24), ' horas'
-                )
-            ELSE
-                CONCAT(
-                    FLOOR(TIMESTAMPDIFF(HOUR, r.FechaRemision, DATE_ADD(UTC_TIMESTAMP(), INTERVAL -5 HOUR)) / 24), ' días ',
-                    MOD(TIMESTAMPDIFF(HOUR, r.FechaRemision, DATE_ADD(UTC_TIMESTAMP(), INTERVAL -5 HOUR)), 24), ' horas'
-                )
-        END AS TiempoPrestamo,
+        -- Tiempo real transcurrido (informativo). Lo que se cobra son los días de más abajo.
+        CONCAT(FLOOR(${SQL_HORAS_PRESTAMO} / 24), ' días ', MOD(${SQL_HORAS_PRESTAMO}, 24), ' horas') AS TiempoPrestamo,
         
         -- ✅ ESTADO CORREGIDO: Solo "Completo" o "Pendiente"
         CASE 
@@ -53,9 +59,33 @@ const SQL_ESTADO_DE_CUENTA = `
             ELSE 'Pendiente'
         END AS EstadoDevolucion,
         
-        -- Cálculos Financieros
-        dr.PrecioTotal AS ValorTotalRemision,
-        (dr.Cantidad - COALESCE(devueltos.CantidadDevuelta, 0)) * dr.PrecioUnidad AS ValorPendiente,
+        -- Cobro del alquiler (fórmula única en utils/cobroAlquiler.js, la misma de movimientos generales)
+        dr.PrecioUnidad AS PrecioUnitario,
+        COALESCE(r.IVA, 0) AS IVA,
+        -- Días que se cobran por cada unidad aún en obra (NULL si ya no queda nada en obra)
+        CASE WHEN (dr.Cantidad - COALESCE(devueltos.CantidadDevuelta, 0)) > 0
+             THEN ${sqlDiasCobrados('r.FechaRemision', SQL_AHORA_COLOMBIA)} END AS DiasCobradosEnObra,
+        ${sqlUnidadesDia('r', 'dr')} AS UnidadesDiaCobradas,
+        dr.PrecioUnidad * ${sqlUnidadesDia('r', 'dr')} AS ValorAlquiler,
+        dr.PrecioUnidad * ${sqlUnidadesDia('r', 'dr')} * ${sqlFactorIVA('r')} AS ValorAlquilerConIVA,
+        -- Lo que el renglón sigue sumando por cada día más en obra, con IVA
+        (dr.Cantidad - COALESCE(devueltos.CantidadDevuelta, 0)) * dr.PrecioUnidad * ${sqlFactorIVA('r')} AS CausacionDiariaConIVA,
+
+        -- Cada devolución de este renglón: en qué documento, cuándo, cuántas unidades y días cobrados
+        (
+            SELECT JSON_ARRAYAGG(JSON_OBJECT(
+                'NoDevolucion', dv.NoDevolucion,
+                'Fecha', DATE_FORMAT(dv.FechaDevolucion, '%d/%m/%Y a las %l:%i %p'),
+                'FechaOrden', DATE_FORMAT(dv.FechaDevolucion, '%Y-%m-%d %H:%i:%s'),
+                'Cantidad', ddv.Cantidad,
+                'DiasCobrados', ${sqlDiasCobrados('r.FechaRemision', 'dv.FechaDevolucion')},
+                'AnteriorARemision', dv.FechaDevolucion < r.FechaRemision
+            ))
+            FROM detalles_devoluciones ddv
+            INNER JOIN devoluciones dv ON ddv.IdDevolucion = dv.IdDevolucion
+            WHERE ddv.IdDetalleRemision = dr.IdDetalleRemision
+              AND dv.IdEstado IN ${SQL_ESTADOS_VIGENTES}
+        ) AS Devoluciones,
         
         -- Información de Devolución (si existe)
         devueltos.NoDevolucion AS UltimaDevolucion,
@@ -95,6 +125,7 @@ const SQL_ESTADO_DE_CUENTA = `
             )
 
         GROUP BY 
+            r.IdRemision, dr.IdDetalleRemision,
             r.DocumentoCliente, r.NoRemision, r.FechaRemision, p.Nombre,
             c.Categoria, e.Nombre, dr.Cantidad, dr.PrecioUnidad, dr.PrecioTotal,
             devueltos.CantidadDevuelta, es.Estado, dr.IdDetalleRemision,
@@ -152,12 +183,32 @@ ${base.sql}
                     COALESCE(SUM(CantidadPrestada), 0) AS totalPrestado,
                     COALESCE(SUM(CantidadDevuelta), 0) AS totalDevuelto,
                     COALESCE(SUM(CantidadPendiente), 0) AS totalPendiente,
-                    COALESCE(SUM(ValorPendiente), 0)   AS valorPendiente
+                    COALESCE(SUM(ValorAlquiler), 0) AS alquilerSinIVA,
+                    COALESCE(SUM(ValorAlquilerConIVA), 0) AS alquilerConIVA,
+                    COALESCE(SUM(CausacionDiariaConIVA), 0) AS causacionDiariaConIVA
                 FROM (
 ${filtradoSinBusqueda.sql}
 ) AS resumen`,
                 filtradoSinBusqueda.params
             );
+            // El transporte es por documento (remisión/devolución), no por equipo: con el
+            // filtro de equipo no se puede repartir y se informa como no aplicable (null).
+            let transportes = null;
+            if (!filtros.Equipo) {
+                const porProyecto = filtros.Proyecto ? ' AND p.Nombre = ?' : '';
+                const paramsTransporte = filtros.Proyecto ? [DocumentoCliente, filtros.Proyecto] : [DocumentoCliente];
+                const [[tr]] = await conexion.query(
+                    `SELECT
+                        (SELECT COALESCE(SUM(r.ValorTransporte), 0) FROM remisiones r LEFT JOIN proyectos p ON p.IdProyecto = r.IdProyecto
+                          WHERE r.DocumentoCliente = ? AND r.IdEstado IN ${SQL_ESTADOS_VIGENTES}${porProyecto}) AS remisiones,
+                        (SELECT COALESCE(SUM(d.ValorTransporte), 0) FROM devoluciones d LEFT JOIN proyectos p ON p.IdProyecto = d.IdProyecto
+                          WHERE d.DocumentoCliente = ? AND d.IdEstado IN ${SQL_ESTADOS_VIGENTES}${porProyecto}) AS devoluciones`,
+                    [...paramsTransporte, ...paramsTransporte]
+                );
+                transportes = { remisiones: Number(tr.remisiones), devoluciones: Number(tr.devoluciones) };
+            }
+            const redondear = (n) => Math.round(Number(n) * 100) / 100;
+            const alquilerConIVA = redondear(resumen.alquilerConIVA);
             return {
                 Opciones: {
                     Proyectos: proyectos.map((f) => f.Proyecto),
@@ -167,7 +218,13 @@ ${filtradoSinBusqueda.sql}
                     totalPrestado: Number(resumen.totalPrestado),
                     totalDevuelto: Number(resumen.totalDevuelto),
                     totalPendiente: Number(resumen.totalPendiente),
-                    valorPendiente: Number(resumen.valorPendiente),
+                    alquilerSinIVA: redondear(resumen.alquilerSinIVA),
+                    alquilerConIVA,
+                    causacionDiariaConIVA: redondear(resumen.causacionDiariaConIVA),
+                    transportes,
+                    // Total causado = alquiler con IVA + transportes (sin IVA). Sin transportes
+                    // (filtro de equipo) el total es sólo el alquiler.
+                    totalCausado: redondear(alquilerConIVA + (transportes ? transportes.remisiones + transportes.devoluciones : 0)),
                 },
             };
         },

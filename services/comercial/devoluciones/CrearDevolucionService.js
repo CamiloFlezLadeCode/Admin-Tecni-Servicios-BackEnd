@@ -25,12 +25,20 @@ const { pool } = require('../../../config/db');
 const { FechaActualColombia } = require('../../../utils/FechaActualColombia');
 const { EmpresaAnfitriona } = require('../../../utils/constant/default');
 const DevolucionQuery = require('../../../queries/comercial/devoluciones/CrearDevolucionQuery');
+const { validarFechaDevolucionContraRemisiones } = require('../../../utils/validarFechaDevolucion');
 
 const CrearDevolucionService = async (DatosDevolucion) => {
     let connection;
     try {
         connection = await pool.getConnection();
         await connection.beginTransaction();
+
+        // 0. La devolución no puede ser anterior a las remisiones de los equipos que devuelve
+        await validarFechaDevolucionContraRemisiones(
+            connection,
+            DatosDevolucion.FechaDevolucion,
+            (DatosDevolucion.Detalles || []).map((detalle) => detalle.IdRemision)
+        );
 
 // console.log("Datos de devolución:", DatosDevolucion);
 // console.log("Detalles recibidos:", DatosDevolucion.Detalles);

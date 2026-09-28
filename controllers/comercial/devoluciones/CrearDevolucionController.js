@@ -27,7 +27,8 @@ const CrearDevolucionController = async (req, res) => {
         });
     } catch (error) {
         console.error('Error en CrearDevolucionController => ', error.message);
-        return res.status(500).json({
+        // Las validaciones de negocio (p. ej. fecha anterior a la remisión) traen status 400
+        return res.status(error.status || 500).json({
             success: false,
             error: `Error al crear la devolución => ${error.message}`
         });

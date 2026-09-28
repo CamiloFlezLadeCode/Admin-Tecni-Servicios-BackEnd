@@ -5,6 +5,9 @@ const ActualizarDevolucionQuery = require("../../../queries/comercial/devolucion
 const {
   emitirWebSocketDevolucion,
 } = require("../../../utils/websocket/Emit_WebSocket");
+const {
+  validarFechaDevolucionContraRemisiones,
+} = require("../../../utils/validarFechaDevolucion");
 
 const ActualizarDevolucionService = async (Data) => {
   let connection;
@@ -317,6 +320,19 @@ const ActualizarDevolucionService = async (Data) => {
         });
       }
     }
+
+    // La devolución (con su fecha nueva o la actual) no puede ser anterior a las
+    // remisiones de los equipos que conserva ni de los que se le agregan.
+    await validarFechaDevolucionContraRemisiones(
+      connection,
+      FechaDevolucion || devolucionActual.FechaDevolucion,
+      [
+        ...detallesActuales
+          .filter((det) => idsDetallesPayload.has(Number(det.IdDetalleDevolucion)))
+          .map((det) => det.IdRemision),
+        ...detallesANuevos.map((det) => det.IdRemision),
+      ],
+    );
 
     const huboCambiosDetalles =
       detallesAActualizar.length > 0 ||

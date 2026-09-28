@@ -132,8 +132,10 @@
 const { pool } = require('../../../config/db');
 
 const CrearDevolucionQuery = {
-    // Solo operaciones atómicas de base de datos
-    async insertDevolucion(datos) {
+    // Todas reciben la conexión de la transacción del servicio (CrearDevolucionService).
+    // Antes la ignoraban y ejecutaban con `pool`: cada sentencia se confirmaba sola y el
+    // rollback no deshacía nada, así que un error a mitad dejaba la devolución a medias.
+    async insertDevolucion(datos, connection) {
         const sql = `
             INSERT INTO devoluciones ( 
                 NoDevolucion, DocumentoCliente, UsuarioCreacion, 
@@ -142,26 +144,26 @@ const CrearDevolucionQuery = {
                 IncluyeTransporte, ValorTransporte
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        const [result] = await pool.query(sql, datos);
+        const [result] = await (connection || pool).query(sql, datos);
         return result.insertId;
     },
 
-    async insertDetalleDevolucion(detalle) {
+    async insertDetalleDevolucion(detalle, connection) {
         const sql = `
             INSERT INTO detalles_devoluciones (
                 IdDevolucion, IdEquipo, Cantidad, IdEstado, IdRemision, IdDetalleRemision
             ) VALUES (?, ?, ?, ?, ?, ?)
         `;
-        return pool.query(sql, detalle);
+        return (connection || pool).query(sql, detalle);
     },
 
-    async updateStockEquipo(IdEquipo, cantidad) {
+    async updateStockEquipo(IdEquipo, cantidad, connection) {
         const sql = `
             UPDATE equipo 
             SET CantidadDisponible = CantidadDisponible + ?, IdEstado = 3
             WHERE IdEquipo = ?
         `;
-        return pool.query(sql, [cantidad, IdEquipo]);
+        return (connection || pool).query(sql, [cantidad, IdEquipo]);
     },
 
     async getPropietarioEquipo(IdEquipo) {
@@ -173,14 +175,14 @@ const CrearDevolucionQuery = {
         return rows[0]?.Propietario;
     },
 
-    async insertMovimientoEquipo(movimiento) {
+    async insertMovimientoEquipo(movimiento, connection) {
         const sql = `
             INSERT INTO movimiento_equipo (
                 IdEquipo, Fecha, IdTipoMovimiento, Direccion, Cantidad,
                 DocumentoReferencia, IdDocumentoOrigen, UsuarioCreacion, FechaRegistro
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        return pool.query(sql, movimiento);
+        return (connection || pool).query(sql, movimiento);
     },
 };
 

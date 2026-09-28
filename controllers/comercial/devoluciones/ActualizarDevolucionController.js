@@ -12,6 +12,10 @@ const ActualizarDevolucionController = async (req, res) => {
         });
     } catch (error) {
         console.error('Error al actualizar la devolución: ', error);
+        // Las validaciones de negocio (status 400) se devuelven con su mensaje para mostrarlo tal cual
+        if (error.status === 400) {
+            return res.status(400).json({ error: error.message });
+        }
         return res.status(500).json({ error: 'Error al actualizar la devolución' });
     }
 };

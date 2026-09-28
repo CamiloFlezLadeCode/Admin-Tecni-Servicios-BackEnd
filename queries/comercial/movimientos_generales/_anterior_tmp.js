@@ -1,6 +1,5 @@
 const { query } = require('../../../config/db');
 const { consultaPaginada } = require('../../../utils/paginacion');
-const { sqlUnidadesDia, sqlFactorIVA } = require('../../../utils/cobroAlquiler');
 
 /**
  * Construye la unión de remisiones, devoluciones y órdenes de servicio con los
@@ -36,16 +35,41 @@ const construirMovimientos = (filtros) => {
             remi.DocumentoCliente,
             proyec.Nombre AS Proyecto,
             remi.FechaRemision AS Fecha,
-            -- Alquiler causado (fórmula única en utils/cobroAlquiler.js, la misma del estado de
-            -- cuenta) × (1 + IVA) + transporte de la remisión. Anulada/cancelada = 0.
             ROUND(
                 CASE 
                     WHEN esta.Estado LIKE '%Anulado%' OR esta.Estado LIKE '%Cancelado%' THEN 0
-                    ELSE COALESCE((
-                        SELECT SUM(dr.PrecioUnidad * ${sqlUnidadesDia('remi', 'dr')})
+                    ELSE (
+                        -- Lo devuelto se cruza con CADA renglón de la remisión por IdDetalleRemision
+                        -- (igual que en el estado de cuenta), no sólo por IdEquipo: si el mismo equipo
+                        -- va en dos renglones, cruzar por equipo le asignaba a cada renglón lo devuelto
+                        -- de ambos, y "remitido - devuelto" daba negativo (remisión 1659: -228.474).
+                        SELECT
+                            SUM(
+                                dr.PrecioUnidad * (
+                                    -- Parte 1: Unidades ya devueltas (Costo acumulado hasta su fecha de devolución)
+                                    COALESCE((
+                                        SELECT SUM(dd.Cantidad * GREATEST(1, CEIL(TIMESTAMPDIFF(HOUR, remi.FechaRemision, d.FechaDevolucion) / 24)))
+                                        FROM detalles_devoluciones dd
+                                        INNER JOIN devoluciones d ON dd.IdDevolucion = d.IdDevolucion
+                                        WHERE dd.IdRemision = dr.IdRemision AND dd.IdDetalleRemision = dr.IdDetalleRemision
+                                        AND d.IdEstado IN (SELECT IdEstado FROM estado WHERE Estado NOT LIKE '%Anulado%' AND Estado NOT LIKE '%Cancelado%')
+                                    ), 0) +
+                                    -- Parte 2: Unidades aún pendientes (Costo acumulado hasta hoy)
+                                    (
+                                        (dr.Cantidad - COALESCE((
+                                            SELECT SUM(dd2.Cantidad)
+                                            FROM detalles_devoluciones dd2
+                                            INNER JOIN devoluciones d2 ON dd2.IdDevolucion = d2.IdDevolucion
+                                            WHERE dd2.IdRemision = dr.IdRemision AND dd2.IdDetalleRemision = dr.IdDetalleRemision
+                                            AND d2.IdEstado IN (SELECT IdEstado FROM estado WHERE Estado NOT LIKE '%Anulado%' AND Estado NOT LIKE '%Cancelado%')
+                                        ), 0)) * 
+                                        GREATEST(1, CEIL(TIMESTAMPDIFF(HOUR, remi.FechaRemision, DATE_ADD(UTC_TIMESTAMP(), INTERVAL -5 HOUR)) / 24))
+                                    )
+                                )
+                            )
                         FROM detalles_remisiones dr
                         WHERE dr.IdRemision = remi.IdRemision
-                    ), 0) * ${sqlFactorIVA('remi')} + COALESCE(remi.ValorTransporte, 0)
+                    ) * (1 + COALESCE(remi.IVA, 0) / 100) + COALESCE(remi.ValorTransporte, 0)
                 END, 
             2) AS Total,
             esta.Estado AS Estado

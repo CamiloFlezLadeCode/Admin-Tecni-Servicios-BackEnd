@@ -7,6 +7,8 @@ const MostrarEquiposPorDevolverQuery = async (Parametros) => {
             dr.IdDetalleRemision,
             r.IdRemision,
             r.NoRemision,
+            -- Para que el formulario impida una fecha de devolución anterior a la remisión (al minuto)
+            DATE_FORMAT(r.FechaRemision, '%Y-%m-%d %H:%i') AS FechaRemisionOrden,
             r.DocumentoCliente,
             u.Nombres AS NombreCliente,
             p.Nombre AS NombreProyecto,
