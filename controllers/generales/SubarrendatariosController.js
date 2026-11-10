@@ -7,7 +7,8 @@ const ConsultarSubarrendatariosController = async (req, res) => {
         const SubarrendatariosMapeados = Subarrendatarios.map(subarrendatario => ({
             Id: subarrendatario.IdSubarrendatario,
             value: subarrendatario.DocumentoSubarrendatario,
-            label: subarrendatario.NombreSubarrendatario
+            label: subarrendatario.NombreSubarrendatario,
+            Activo: subarrendatario.Activo === 1
         }));
         res.status(200).json(SubarrendatariosMapeados);
     } catch (error) {

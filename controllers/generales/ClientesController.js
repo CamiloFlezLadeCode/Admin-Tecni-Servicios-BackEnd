@@ -8,7 +8,8 @@ const ConsultarListarClientesController = async (req, res) => {
         let data = Clientes.map(cliente => ({
             Id: cliente.IdCliente,
             value: cliente.DocumentoCliente,
-            label: cliente.NombreCliente
+            label: cliente.NombreCliente,
+            Activo: cliente.Activo === 1
         }));        
         res.json(data);
     } catch (error) {

@@ -6,7 +6,8 @@ const ListarProyectosController = async (req, res) => {
         const info = await ListarProyectosService(Cliente);
         const Proyectos = info.map(proyecto => ({
             value: proyecto.IdProyecto,
-            label: proyecto.Nombre
+            label: proyecto.Nombre,
+            Activo: proyecto.IdEstado === 1
         }));
 // console.log(`Proyectos del cliente ${Cliente.Cliente}, obtenidos correctamente. Total: ${info.length}`);
         res.status(200).json(Proyectos);

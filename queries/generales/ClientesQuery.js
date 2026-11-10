@@ -5,7 +5,8 @@ const ConsultarListarClientesQuery = async () => {
         SELECT
             usu.IdUsuario AS IdCliente,
             usu.DocumentoUsuario AS DocumentoCliente,
-            CONCAT(COALESCE(usu.Nombres, ''), ' ', COALESCE(usu.Apellidos, '')) AS NombreCliente
+            CONCAT(COALESCE(usu.Nombres, ''), ' ', COALESCE(usu.Apellidos, '')) AS NombreCliente,
+            usu.IdEstado = 1 AS Activo
         FROM
             usuario AS usu 
         INNER JOIN	

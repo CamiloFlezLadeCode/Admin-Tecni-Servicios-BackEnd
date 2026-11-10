@@ -6,7 +6,8 @@ const ConsultarProfesionalesPertenecientesController = async (req, res) => {
 // console.log(`Profesionales pertenecientes obteneidos correctamente. Total: ${ProfesionalesPertenecientes.length}`);
         const ProfesionalesPertenecientesMapeados = ProfesionalesPertenecientes.map(profesional => ({
             value: profesional.DocumentoProfesional,
-            label: profesional.NombreProfesional
+            label: profesional.NombreProfesional,
+            Activo: profesional.Activo === 1
         }));
         return res.status(200).json(
             ProfesionalesPertenecientesMapeados

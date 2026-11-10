@@ -5,7 +5,8 @@ const ConsultarSubarrendatariosQuery = async () => {
         SELECT
             usu.IdUsuario AS IdSubarrendatario,
             usu.DocumentoUsuario AS DocumentoSubarrendatario,
-            CONCAT(COALESCE(usu.Nombres, ''), ' ', COALESCE(usu.Apellidos, '')) AS NombreSubarrendatario
+            CONCAT(COALESCE(usu.Nombres, ''), ' ', COALESCE(usu.Apellidos, '')) AS NombreSubarrendatario,
+            usu.IdEstado = 1 AS Activo
         FROM
             usuario AS usu 
         INNER JOIN	

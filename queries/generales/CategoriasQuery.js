@@ -4,7 +4,8 @@ const ListarCategoriasQuery = async () => {
         SELECT		
             IdCategoria,
             Categoria,
-            Codigo
+            Codigo,
+            cate.IdEstado = 1 AS Activo
         FROM		
             categorias AS cate
         INNER JOIN

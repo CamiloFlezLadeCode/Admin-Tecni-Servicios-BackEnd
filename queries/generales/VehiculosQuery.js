@@ -7,10 +7,13 @@ const ListarVehiculosQuery = async () => {
             Placa AS Placa
         FROM
             vehiculos
+        WHERE
+            IdEstado = ?
         ORDER BY
             Placa ASC
     `;
-    return query(sql);
+    const EstadoActivo = 1;
+    return query(sql, [EstadoActivo]);
 };
 module.exports = {
     ListarVehiculosQuery

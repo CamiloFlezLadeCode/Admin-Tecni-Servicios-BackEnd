@@ -14,10 +14,12 @@ const ListarTransportadoresQuery = async () => {
             roles AS rol ON usurol.IdRol = rol.IdRol
         WHERE
             rol.Rol = 'Conductor'
+            AND usu.IdEstado = ?
         ORDER BY	
 	        usu.Nombres ASC, usu.Apellidos ASC
     `;
-    return query(sql);
+    const EstadoActivo = 1;
+    return query(sql, [EstadoActivo]);
 };
 module.exports = {
     ListarTransportadoresQuery

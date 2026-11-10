@@ -6,7 +6,8 @@ const ListarCategoriasController = async (req, res) => {
 // console.log(`Categorias obtenidas correctamente. Total: ${data.length}`);
         const Categorias = data.map(Categoria => ({
             value: Categoria.IdCategoria,
-            label: Categoria.Categoria
+            label: Categoria.Categoria,
+            Activo: Categoria.Activo === 1
         }));
         res.status(200).json(Categorias);
     } catch (error) {

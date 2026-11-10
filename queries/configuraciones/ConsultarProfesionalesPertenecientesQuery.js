@@ -4,7 +4,8 @@ const ConsultarProfesionalesPertenecientesQuery = async () => {
     const sql = `
         SELECT	
             CONCAT(COALESCE(profesional.Nombres, ''), ' ', COALESCE(profesional.Apellidos, '')) AS NombreProfesional,
-            profesional.DocumentoUsuario AS DocumentoProfesional
+            profesional.DocumentoUsuario AS DocumentoProfesional,
+            profesional.IdEstado = 1 AS Activo
             #GROUP_CONCAT(rol.Rol SEPARATOR ', ') AS RolesLabel,
             #GROUP_CONCAT(rol.IdRol SEPARATOR ', ') AS RolesValue
             
