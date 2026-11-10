@@ -75,8 +75,8 @@ const crearBackup = async (req, res) => {
     res.status(200).json({
       ok: true,
       message: 'Backup realizado correctamente',
-      filename,
-      path: `/api/backups/${filename}`,
+      // filename,
+      // path: `/api/backups/${filename}`,
     });
   } catch (error) {
     console.error('Error en crearBackup:', error);
